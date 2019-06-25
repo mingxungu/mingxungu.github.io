@@ -6,16 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>技术小栈</title>
+  <title>RocketMQ入门 | 技术小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="技术小栈">
-<meta property="og:type" content="website">
-<meta property="og:title" content="技术小栈">
-<meta property="og:url" content="https://mingxungu.github.io/index.html">
+  <meta name="description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
+<meta name="keywords" content="RocketMQ入门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ入门">
+<meta property="og:url" content="https://mingxungu.github.io/2019/06/24/RocketMQ入门/index.html">
 <meta property="og:site_name" content="技术小栈">
+<meta property="og:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ入门/20190829090638699.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ入门/20190829090838349.png">
+<meta property="og:updated_time" content="2019-06-25T02:56:19.433Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="技术小栈">
+<meta name="twitter:title" content="RocketMQ入门">
+<meta name="twitter:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
+<meta name="twitter:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ入门/20190829090638699.png">
   
     <link rel="alternative" href="/atom.xml" title="技术小栈" type="application/atom+xml">
   
@@ -176,16 +183,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-RocketMQ入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-RocketMQ入门" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/24/RocketMQ入门/">RocketMQ入门</a>
+    <h1 class="article-title" itemprop="name">
+      RocketMQ入门
     </h1>
   
 
@@ -199,9 +204,114 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。</p>
-        
-          <a class="article-more-a" href="/2019/06/24/RocketMQ入门/#more">more >></a>
-        
+<a id="more"></a>
+
+<h2 id="1、背景介绍"><a href="#1、背景介绍" class="headerlink" title="1、背景介绍"></a>1、背景介绍</h2><p>阿里早期也是基于ActiveMQ 5.x的分布式消息中间件来构建其消息中间件，但是随着主题和队列的增加慢慢的发现ActiveMQ IO模块遇到了瓶颈。我们尽力通过节流，断路器或降级解决这个问题，但效果不佳。因此，我们开始关注当时流行的消息传递解决方案Kafka。不幸的是，Kafka无法满足我们的要求，特别是在低延迟和高可靠性方面。Kafka是一个分布式流媒体平台，它源于<a href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying" target="_blank" rel="noopener">日志聚合案例</a>。它不需要太高的并发性。在阿里巴巴的一些大型案例中，我们发现原始模型无法满足我们的实际需求。</p>
+<p>RocketMQ起源于最开始阿里的Metaq（ Metamorphosis） 经历过Metaq 1.x、Metaq 2.x、RocketMQ3.x在其3.0版本的时候更名为RocketMQ,目前最新版本为RocketMQ4.5.x。</p>
+<h2 id="2、使用场景"><a href="#2、使用场景" class="headerlink" title="2、使用场景"></a>2、使用场景</h2><p>与其说是RocketMQ的使用场景，不如说是MQ（消息队列）的使用场景，MQ的产品比较多目前比较流行的有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ等</p>
+<p>MQ 可应用在多个领域，包括异步通信解耦、企业解决方案、金融支付、电信、电子商务、快递物流、广告营销、社交、即时通信、手游、视频、物联网、车联网等。</p>
+<p>下面列举了一些常用的场景：</p>
+<ul>
+<li><p>一对多，多对多异步解耦，基于发布订阅模型，对分布式应用进行异步解耦，增加应用的水平扩展能力。</p>
+</li>
+<li><p>削峰填谷，大促等流量洪流突然来袭时，MQ 可以缓冲突发流量，避免下游订阅系统因突发流量崩溃。</p>
+</li>
+<li><p>日志监控，作为重要日志的监控通信管道，将应用日志监控对系统性能影响降到最低。</p>
+</li>
+<li><p>消息推送，为社交应用和物联网应用提供点对点推送，一对多广播式推送的能力。</p>
+</li>
+<li><p>金融报文，发送金融报文，实现金融准实时的报文传输，可靠安全。</p>
+</li>
+<li><p>电信信令，将电信信令封装成消息，传递到各个控制终端，实现准实时控制和信息传递</p>
+</li>
+</ul>
+<h2 id="3、主流MQ比较"><a href="#3、主流MQ比较" class="headerlink" title="3、主流MQ比较"></a>3、主流MQ比较</h2><p>主流的MQ的对比RocketMQ 、 ActiveMQ 、 Kafka</p>
+<table>
+<thead>
+<tr>
+<th align="center">消息产品</th>
+<th>客户端SDK</th>
+<th>协议和规范</th>
+<th>消息存储</th>
+<th><strong>服务器触发重新传递</strong></th>
+<th><strong>广播消息</strong></th>
+<th>高可用性和故障转移</th>
+<th>消息跟踪</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ActiveMQ</td>
+<td>Java，.NET，C ++等</td>
+<td>推模型，支持OpenWire，STOMP，AMQP，MQTT，JMS</td>
+<td>使用JDBC和高性能日志（如levelDB，kahaDB）支持非常快速的持久性</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持，根据存储，如果使用kahadb，则需要ZooKeeper服务器</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td align="center">Kafka</td>
+<td>Java，Scala等</td>
+<td>拉模型，支持TCP</td>
+<td>高性能文件存储</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持，需要ZooKeeper服务器</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td align="center">RocketMQ</td>
+<td>Java，C ++，Go</td>
+<td>拉模型，支持TCP，JMS，OpenMessaging</td>
+<td>高性能和低延迟的文件存储</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持的Master-Slave模型，没有其他套件</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<h1 id="二、概况"><a href="#二、概况" class="headerlink" title="二、概况"></a>二、概况</h1><h2 id="1、RocketMQ集群部署结构"><a href="#1、RocketMQ集群部署结构" class="headerlink" title="1、RocketMQ集群部署结构"></a>1、RocketMQ集群部署结构</h2><p><img src="//mingxungu.github.io/2019/06/24/RocketMQ入门/20190829090638699.png" alt="RocketMQ网络部署图"></p>
+<p><strong>Name Server</strong></p>
+<p>Name Server是一个几乎无状态节点，可集群部署，节点之间无任何信息同步。</p>
+<p><strong>Broker</strong></p>
+<p>Broker部署相对复杂，Broker分为Master与Slave，一个Master可以对应多个Slave，但是一个Slave只能对应一个Master，Master与Slave的对应关系通过指定相同的Broker Name，不同的Broker Id来定义，BrokerId为0表示Master，非0表示Slave。Master也可以部署多个。</p>
+<p>每个Broker与Name Server集群中的所有节点建立长连接，定时(每隔30s)注册Topic信息到所有Name Server。Name Server定时(每隔10s)扫描所有存活broker的连接，如果Name Server超过2分钟没有收到心跳，则Name Server断开与Broker的连接。</p>
+<p><strong>Producer</strong></p>
+<p>Producer与Name Server集群中的其中一个节点(随机选择)建立长连接，定期从Name Server取Topic路由信息，并向提供Topic服务的Master建立长连接，且定时向Master发送心跳。Producer完全无状态，可集群部署。</p>
+<p>Producer每隔30s（由ClientConfig的pollNameServerInterval）从Name server获取所有topic队列的最新情况，这意味着如果Broker不可用，Producer最多30s能够感知，在此期间内发往Broker的所有消息都会失败。</p>
+<p>Producer每隔30s（由ClientConfig中heartbeatBrokerInterval决定）向所有关联的broker发送心跳，Broker每隔10s中扫描所有存活的连接，如果Broker在2分钟内没有收到心跳数据，则关闭与Producer的连接。</p>
+<p><strong>Consumer</strong></p>
+<p>Consumer与Name Server集群中的其中一个节点(随机选择)建立长连接，定期从Name Server取Topic路由信息，并向提供Topic服务的Master、Slave建立长连接，且定时向Master、Slave发送心跳。Consumer既可以从Master订阅消息，也可以从Slave订阅消息，订阅规则由Broker配置决定。</p>
+<p>Consumer每隔30s从Name server获取topic的最新队列情况，这意味着Broker不可用时，Consumer最多最需要30s才能感知。</p>
+<p>Consumer每隔30s（由ClientConfig中heartbeatBrokerInterval决定）向所有关联的broker发送心跳，Broker每隔10s扫描所有存活的连接，若某个连接2分钟内没有发送心跳数据，则关闭连接；并向该Consumer Group的所有Consumer发出通知，Group内的Consumer重新分配队列，然后继续消费。</p>
+<p>当Consumer得到master宕机通知后，转向slave消费，slave不能保证master的消息100%都同步过来了，因此会有少量的消息丢失。但是一旦master恢复，未同步过去的消息会被最终消费掉。</p>
+<h2 id="2、消息发送类型"><a href="#2、消息发送类型" class="headerlink" title="2、消息发送类型"></a>2、消息发送类型</h2><h3 id="1）同步消息（可靠）"><a href="#1）同步消息（可靠）" class="headerlink" title="1）同步消息（可靠）"></a>1）同步消息（可靠）</h3><p>​    同步发送，线程阻塞，投递completes阻塞结束</p>
+<p>​    如果发送失败，会在默认的超时时间3秒内进行重试，最多重试2次</p>
+<p>​    投递completes不代表投递成功，要check SendResult.sendStatus来判断是否投递成功</p>
+<h3 id="2）异步消息（可靠）"><a href="#2）异步消息（可靠）" class="headerlink" title="2）异步消息（可靠）"></a>2）异步消息（可靠）</h3><p>​    发送异步消息需要指定消息发送成功后的<strong>回调函数</strong>，调用发送消息的API会立刻返回，消息发送者的线程不阻           塞，直到运行结束，消息发送成功或者失败的回调任务在新的线程中执行。</p>
+<h3 id="3）单向消息（不可靠）"><a href="#3）单向消息（不可靠）" class="headerlink" title="3）单向消息（不可靠）"></a>3）单向消息（不可靠）</h3><p>​    消息不可靠，性能高，只负责往服务器发送一条消息，不会重试也不关心是否发送成功</p>
+<p>​    此方式发送消息的过程耗时非常短，一般在微秒级别</p>
+<h2 id="3、消费模式（集群-广播）"><a href="#3、消费模式（集群-广播）" class="headerlink" title="3、消费模式（集群/广播）"></a>3、消费模式（集群/广播）</h2><p>RocketMQ物理部署图：</p>
+<p><img src="//mingxungu.github.io/2019/06/24/RocketMQ入门/20190829090838349.png" alt="RocketMQ物理部署图"></p>
+<p><strong>术语解释</strong></p>
+<p><strong>消息主题（Topic）</strong></p>
+<p>Topic是生产者在发送消息和消费者在拉取消息的类别。Topic与生产者和消费者之间的关系非常松散。具体来说，一个Topic可能有0个，一个或多个生产者向它发送消息；相反，一个生产者可以发送不同类型Topic的消息。类似的，消费者组可以订阅一个或多个主题，只要该组的实例保持其订阅一致即可。</p>
+<blockquote>
+<p>一个主题对应多个队列（默认4个）</p>
+<p>消息是存储在不同的队列中</p>
+</blockquote>
+<p><strong>消费组（ConsumerGroup）</strong></p>
+<p>一类 Consumer 的集合名称，组内的 Consumer 通常消费一类消息，消费消息逻辑一致。 </p>
+<blockquote>
+<p>一个consumerGroup只对应一个topic</p>
+<p>同一个ConsumerGroup中的消费者订阅的主题(Topic)和标签(Tag)必须一致(集群模式下消费会有问题)</p>
+<p>一个消息队列只会对应一个消费者</p>
+</blockquote>
+<p><strong>生产组（ProducerGroup）</strong></p>
+<p>一类 Producer 的集合名称，组内的 Producer 通常发送一类消息，发送消息逻辑一致 </p>
+<h3 id="1）广播模式"><a href="#1）广播模式" class="headerlink" title="1）广播模式"></a>1）广播模式</h3><p>一条消息被多个consumer消费，即使这些consumer属于同一个ConsumerGroup,消息也会被ConsumerGroup中的每个Consumer都消费一次，广播消费中ConsumerGroup概念可以认为在消息划分方面无意义。</p>
+<h3 id="2）集群模式（默认）"><a href="#2）集群模式（默认）" class="headerlink" title="2）集群模式（默认）"></a>2）集群模式（默认）</h3><p>一个ConsumerGroup中的Consumer实例平均分摊消费消息。例如某个Topic有9条消息，其中一个ConsumerGroup有3个实例（可能是3个进程，或者3台机器），那么每个实例只消费其中部分，消费完的消息不能被其他实例消费。</p>
+
       
 
       
@@ -234,16 +344,75 @@
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/24/RocketMQ入门/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://mingxungu.github.io/2019/06/24/RocketMQ入门/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/23/Spring-IOC和DI/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Spring IOC和DI</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -258,277 +427,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Spring-IOC和DI" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/23/Spring-IOC和DI/">Spring IOC和DI</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/23/Spring-IOC和DI/" class="archive-article-date">
-  	<time datetime="2019-06-23T08:51:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>很多人认为IOC就是DI他们之间是对等的，其实不然。</strong></p>
-<p>很多文章中都提到他们的分别依赖：<br>谁依赖于谁？为什么需要依赖？</p>
-        
-          <a class="article-more-a" href="/2019/06/23/Spring-IOC和DI/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">IOC和DI</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring创建Bean</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Bean生命周期</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Sping属性注入</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/spring//" class="article-tag-list-link color2">spring</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/23/Spring-IOC和DI/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、简介"><span class="toc-number">1.</span> <span class="toc-text">一、简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、背景介绍"><span class="toc-number">1.1.</span> <span class="toc-text">1、背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、使用场景"><span class="toc-number">1.2.</span> <span class="toc-text">2、使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、主流MQ比较"><span class="toc-number">1.3.</span> <span class="toc-text">3、主流MQ比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、概况"><span class="toc-number">2.</span> <span class="toc-text">二、概况</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、RocketMQ集群部署结构"><span class="toc-number">2.1.</span> <span class="toc-text">1、RocketMQ集群部署结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、消息发送类型"><span class="toc-number">2.2.</span> <span class="toc-text">2、消息发送类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1）同步消息（可靠）"><span class="toc-number">2.2.1.</span> <span class="toc-text">1）同步消息（可靠）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2）异步消息（可靠）"><span class="toc-number">2.2.2.</span> <span class="toc-text">2）异步消息（可靠）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3）单向消息（不可靠）"><span class="toc-number">2.2.3.</span> <span class="toc-text">3）单向消息（不可靠）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、消费模式（集群-广播）"><span class="toc-number">2.3.</span> <span class="toc-text">3、消费模式（集群/广播）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1）广播模式"><span class="toc-number">2.3.1.</span> <span class="toc-text">1）广播模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2）集群模式（默认）"><span class="toc-number">2.3.2.</span> <span class="toc-text">2）集群模式（默认）</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
   
-    <article id="post-SpringMVC异常统一处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/23/SpringMVC异常统一处理/">SpringMVC异常统一处理</a>
-    </h1>
   
 
-        
-        <a href="/2019/06/23/SpringMVC异常统一处理/" class="archive-article-date">
-  	<time datetime="2019-06-23T03:25:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>SpringMVC异常统一处理有三种方式</p>
-<h1 id="第一种：SimpleMappingExceptionResolver"><a href="#第一种：SimpleMappingExceptionResolver" class="headerlink" title="第一种：SimpleMappingExceptionResolver"></a>第一种：SimpleMappingExceptionResolver</h1><p>使用框架中提供的类，这种方式具有集成简单、有良好的扩展性、对已有代码没有入侵性等优点，但该方法仅能获取到异常信息，若在出现异常时，对需要获取除异常以外的数据的情况不适用。</p>
-        
-          <a class="article-more-a" href="/2019/06/23/SpringMVC异常统一处理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">异常</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/springMVC//" class="article-tag-list-link color5">springMVC</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/23/SpringMVC异常统一处理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java类加载机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/23/Java类加载机制/">Java类加载机制</a>
-    </h1>
   
 
-        
-        <a href="/2019/06/23/Java类加载机制/" class="archive-article-date">
-  	<time datetime="2019-06-23T01:29:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1、专业术语描述"><a href="#1、专业术语描述" class="headerlink" title="1、专业术语描述"></a>1、专业术语描述</h1><p>首先我们要了解一下Java的内存管理</p>
-        
-          <a class="article-more-a" href="/2019/06/23/Java类加载机制/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/23/Java类加载机制/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
+
   
 
 
@@ -554,8 +478,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
