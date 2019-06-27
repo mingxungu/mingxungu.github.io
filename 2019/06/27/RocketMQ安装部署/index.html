@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
   <title>RocketMQ安装部署 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="准备操作系统：CentOS-6.9-x86_64-bin-DVD1.iso 依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz 安装软件：rocketmq-all-4.2.0.tar.gz 部署部署方式​    默认RocketMQ部署都是集群部署，业务处理及存储根据broker有关，RocketMQ也有所谓的主从节点master/slave,这里的Slav">
+  <meta name="description" content="准备操作系统：CentOS-6.9-x86_64-bin-DVD1.iso 依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz 安装软件：rocketmq-all-4.2.0.tar.gz">
 <meta name="keywords" content="RocketMQ安装">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ安装部署">
 <meta property="og:url" content="https://mingxungu.github.io/2019/06/27/RocketMQ安装部署/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="准备操作系统：CentOS-6.9-x86_64-bin-DVD1.iso 依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz 安装软件：rocketmq-all-4.2.0.tar.gz 部署部署方式​    默认RocketMQ部署都是集群部署，业务处理及存储根据broker有关，RocketMQ也有所谓的主从节点master/slave,这里的Slav">
+<meta property="og:description" content="准备操作系统：CentOS-6.9-x86_64-bin-DVD1.iso 依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz 安装软件：rocketmq-all-4.2.0.tar.gz">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ安装部署/1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ安装部署/2.png">
-<meta property="og:updated_time" content="2019-06-27T03:08:09.773Z">
+<meta property="og:updated_time" content="2019-06-27T03:11:27.932Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ安装部署">
-<meta name="twitter:description" content="准备操作系统：CentOS-6.9-x86_64-bin-DVD1.iso 依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz 安装软件：rocketmq-all-4.2.0.tar.gz 部署部署方式​    默认RocketMQ部署都是集群部署，业务处理及存储根据broker有关，RocketMQ也有所谓的主从节点master/slave,这里的Slav">
+<meta name="twitter:description" content="准备操作系统：CentOS-6.9-x86_64-bin-DVD1.iso 依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz 安装软件：rocketmq-all-4.2.0.tar.gz">
 <meta name="twitter:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ安装部署/1.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -57,8 +57,6 @@
 		<hgroup>
 		  <h1 class="header-author"><a href="/">IT小栈</a></h1>
 		</hgroup>
-		
-		<p class="header-subtitle">分享</p>
 		
 
 		<nav class="header-menu">
@@ -121,8 +119,6 @@
 			<hgroup>
 			  <h1 class="header-author js-header-author">IT小栈</h1>
 			</hgroup>
-			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>分享<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -210,6 +206,8 @@
         <h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>操作系统：CentOS-6.9-x86_64-bin-DVD1.iso</p>
 <p>依赖环境：gcc 4.4.7.rar、jdk-8u121-linux-x64.tar.gz</p>
 <p>安装软件：rocketmq-all-4.2.0.tar.gz</p>
+<a id="more"></a>
+
 <h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><h2 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h2><p>​    默认RocketMQ部署都是集群部署，业务处理及存储根据broker有关，RocketMQ也有所谓的主从节点master/slave,这里的Slave 不可写，但可读，类似于 Mysql主备方式。 </p>
 <blockquote>
 <p>建议在安装系统时磁盘配置为RAID10 时，即使机器宕机不可恢复情况下，由与 RAID10磁盘非常可靠，消息也不会丢（异步刷盘丢失少量消息，同步刷盘一条不丢）。</p>
@@ -557,6 +555,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
@@ -574,10 +576,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
