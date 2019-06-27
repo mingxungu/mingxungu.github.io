@@ -18,7 +18,11 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/2.png">
-<meta property="og:updated_time" content="2019-06-27T05:36:49.283Z">
+<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_1.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_2.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_3.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_4.png">
+<meta property="og:updated_time" content="2019-06-27T06:11:10.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ快速入门">
 <meta name="twitter:description" content="本章简单讲讲RocketMQ的入门操作，消息发送和消息接收。 引入 rocketmq-client">
@@ -221,6 +225,25 @@
 <p>MQ消息的无序性，每个主题对应多个队列，生产消息时是根据算法放置不同的队列中，消费则就是无序了（有序消息后面讨论）</p>
 <p>也有可能出现一条消息被消费了多次，RocketMQ的目标就是不丢数据，<strong><u>每条消息至少发送一次</u></strong>，内部通过ACK的确认机制实现的后面会重点讨论</p>
 </blockquote>
+<h1 id="消息管控台"><a href="#消息管控台" class="headerlink" title="消息管控台"></a>消息管控台</h1><p>为了方便的查看消息的详情我们可以通过消息的管控台更好的管理和查看消息详情，当然我们也可以通过后台的提供的命令来为运维提供更多的管理。</p>
+<p>RocketMQ-Console地址: <a href="https://github.com/apache/rocketmq-externals/tree/master/rocketmq-console" target="_blank" rel="noopener">https://github.com/apache/rocketmq-externals/tree/master/rocketmq-console</a></p>
+<p>可以直接下载到本地之后通过mavne进行编译获取jar，该项目是SpringBoot项目</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package -Dmaven.test.skip=true</span><br><span class="line">java -jar target/rocketmq-console-ng-1.0.0.jar</span><br></pre></td></tr></table></figure>
+
+<p>丢到linux服务器上启动</p>
+<p>（1）启动时设置具体的RocketMQ的参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar rocketmq-console-ng-1.0.0.jar --server.port=12581 --rocketmq.config.namesrvAddr=10.10.12.203:9876;10.10.12.204:9876</span><br></pre></td></tr></table></figure>
+
+<p>（2）直接修改rocketmq-console-ng-1.0.0.jar中的配置文件，找到rocketmq-console-ng-1.0.0.jar\BOOT-INF\classes\application.properties文件，根据自己的NamesrvAddr进行修改rocketmq.config.namesrvAddr的值，默认端口12581</p>
+<p>浏览器登录查看控制台信息</p>
+<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_1.png" alt></p>
+<p>查看RocketMQ集群的节点信息</p>
+<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_2.png" alt></p>
+<p>根据主题时间段查询消息</p>
+<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_3.png" alt></p>
+<p>查看某条消息的具体信息</p>
+<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_4.png" alt></p>
+<p>管控台提供了很多运维功能能极大的提高我们的运维效率，里面的功能包括创建主题、修改主题、发送消息、对消费者的信息进行查看等功能我们不一一介绍，可以简单的了解使用。</p>
 
       
 
@@ -344,7 +367,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引入-rocketmq-client"><span class="toc-number">1.</span> <span class="toc-text">引入 rocketmq-client</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编写Producer"><span class="toc-number">2.</span> <span class="toc-text">编写Producer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编写Consumer"><span class="toc-number">3.</span> <span class="toc-text">编写Consumer</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引入-rocketmq-client"><span class="toc-number">1.</span> <span class="toc-text">引入 rocketmq-client</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编写Producer"><span class="toc-number">2.</span> <span class="toc-text">编写Producer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编写Consumer"><span class="toc-number">3.</span> <span class="toc-text">编写Consumer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#消息管控台"><span class="toc-number">4.</span> <span class="toc-text">消息管控台</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -455,19 +478,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">RocketMQ</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">RocketMQ</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -484,6 +503,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
