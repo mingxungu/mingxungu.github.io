@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%BB%93%E6%9E%9C.png">
-<meta property="og:updated_time" content="2019-07-02T06:28:02.171Z">
+<meta property="og:updated_time" content="2019-07-02T06:31:06.972Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ顺序消息">
 <meta name="twitter:description" content="我们知道消息队列的特性导致其消息不是顺序进行消费的，RocketMQ没有提供所谓的顺序消息来供我们使用，但是有时候一些场景需要需要顺序的去接收消息。今天我们重点讨论一下如何实现这种功能。虽然RocketMQ没有提供顺序消费但是我们可以变相的来实现它。我们知道消息需要放入队列中才能被消费，而队列本身的特性就是FIFO先进先出，我们可以将需要顺序的消息放入一个队列中，则就可以实现这个功能。">
@@ -216,11 +216,11 @@
 <p>因为消息本身是放入到不同的队列中消费的消费就不能保证其顺序性，更新的消息可能是最先被消费掉，创建的消息过来后业务需要判断消息是否是最新的，需要进行查库验证消息的是否最新，是则更新，不是则丢弃保存最新的消息，保证业务系统A与业务系统B，数据的一致性，增加了业务处理的难度。</p>
 <h2 id="顺序消息生产过程分析"><a href="#顺序消息生产过程分析" class="headerlink" title="顺序消息生产过程分析"></a>顺序消息生产过程分析</h2><p><img src="//mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png" alt="顺序消息生产图解"></p>
 <p>我们在生产消息的时候可以将同一个消息ID的消息放入到相同的队列中，保证同一类需要顺序消费的消息放入到同一个队列中，这样队列中的消息就是有序的。但是同时也需要保证消息的消费也是有序的才可以保证消息的顺序消费。</p>
+<p><strong>集群模式下同一个消费组内的消费者共同承担其订阅主题下的消息队列的消费，同一个消息消息队列在同一时刻只会被消费组内的一个消费者消费，一个消费者同一时刻可以分配多个消费队列。</strong></p>
 <blockquote>
-<p>集群模式下同一个消费组内的消费者共同承担其订阅主题下的消息队列的消费，同一个消息消息队列在同一时刻只会被消费组内的一个消费者消费，一个消费者同一时刻可以分配多个消费队列。</p>
 <p>集群模式下的普通消息，默认线程池创建20个线程。多线程从队列中拉取消息，提高并发加快消息的消费。</p>
 <p>集群模式下的顺序消息，顺序消费是单线程，一个线程只能去一个队列获取数据，当需要获取某个队列中的消息时，需要锁定该消息队列（PS:后面会根据源码详细分析其原理）。</p>
-<p>广播模式下的顺序消息，直接进行消费，无需锁定消息队列，因为相互之间无竞争</p>
+<p>广播模式下的顺序消息，顺序消费是单线程，直接进行消费，无需锁定消息队列，因为相互之间无竞争</p>
 </blockquote>
 <h1 id="编写Producer"><a href="#编写Producer" class="headerlink" title="编写Producer"></a>编写Producer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	<span class="comment">//Instantiate with a producer group name.</span></span><br><span class="line">	DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"order_group_test_1"</span>);</span><br><span class="line">	<span class="comment">//Launch the instance.</span></span><br><span class="line">	producer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">	producer.start();</span><br><span class="line">	String[] tags = <span class="keyword">new</span> String[] &#123;<span class="string">"TagA"</span>, <span class="string">"TagB"</span>, <span class="string">"TagC"</span>, <span class="string">"TagD"</span>, <span class="string">"TagE"</span>&#125;;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">		<span class="keyword">int</span> orderId = i % <span class="number">10</span>;</span><br><span class="line">		<span class="comment">//Create a message instance, specifying topic, tag and message body.</span></span><br><span class="line">		Message msg = <span class="keyword">new</span> Message(<span class="string">"order_test_1"</span>, tags[i % tags.length], <span class="string">"KEY"</span> + i,</span><br><span class="line">				(<span class="string">"Hello RocketMQ "</span> + i).getBytes(RemotingHelper.DEFAULT_CHARSET));</span><br><span class="line">		SendResult sendResult = producer.send(msg, <span class="keyword">new</span> MessageQueueSelector() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> MessageQueue <span class="title">select</span><span class="params">(List&lt;MessageQueue&gt; mqs, Message msg, Object arg)</span> </span>&#123;</span><br><span class="line">				Integer id = (Integer) arg;</span><br><span class="line">				<span class="keyword">int</span> index = id % mqs.size();</span><br><span class="line">				<span class="keyword">return</span> mqs.get(index);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;, orderId);</span><br><span class="line"></span><br><span class="line">		System.out.printf(<span class="string">"%s%n"</span>, sendResult);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//server shutdown</span></span><br><span class="line">	producer.shutdown();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -464,11 +464,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
