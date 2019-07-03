@@ -6,16 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>Category: rocketMQ | IT小栈</title>
+  <title>RocketMQ消费模式 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="IT小栈">
-<meta property="og:type" content="website">
-<meta property="og:title" content="IT小栈">
-<meta property="og:url" content="https://mingxungu.github.io/categories/rocketMQ/index.html">
+  <meta name="description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
+<meta name="keywords" content="集群消费,广播消费">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ消费模式">
+<meta property="og:url" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/index.html">
 <meta property="og:site_name" content="IT小栈">
+<meta property="og:description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%E6%BA%90%E7%A0%81%E5%9B%BE%E8%A7%A3.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%E6%83%85%E5%86%B5.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/custer_consumer.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/cluster_message.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/message_detail.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E5%B9%B3%E5%9D%87%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E7%8E%AF%E5%BD%A2%E5%88%86%E9%85%8D.png">
+<meta property="og:updated_time" content="2019-07-03T05:49:24.082Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IT小栈">
+<meta name="twitter:title" content="RocketMQ消费模式">
+<meta name="twitter:description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
+<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%E6%BA%90%E7%A0%81%E5%9B%BE%E8%A7%A3.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -176,36 +189,97 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-RocketMQ消费模式" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/03/RocketMQ消费模式/" class="archive-article-date">
-  	<time datetime="2019-07-03T00:40:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/03/RocketMQ消费模式/">RocketMQ消费模式</a>
+    <h1 class="article-title" itemprop="name">
+      RocketMQ消费模式
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/07/03/RocketMQ消费模式/" class="archive-article-date">
+  	<time datetime="2019-07-03T00:40:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。</p>
+<a id="more"></a>
+
+<h1 id="1、集群消费-默认"><a href="#1、集群消费-默认" class="headerlink" title="1、集群消费(默认)"></a>1、集群消费(默认)</h1><p>集群模式：一个ConsumerGroup中的Consumer实例根据队列分配策略算法为Consumer分配队列，平均分摊（默认）消费消息。例如Topic是Test的消息发送到该主题的不同队列中，发送了有100条消息，其中一个ConsumerGroup有3个Consumer实例，那么根据队列分配算法，每个队列都会有消费者，每个消费者实例只消费自己队列上的数据，消费完的消息不能被其他消费实例消费。</p>
+<blockquote>
+<p>一个消费队列会分配一个消费者，有且只有一个</p>
+<p>一个消费者可能消费0到多个队列，例如：某个主题有4个消费队列，然而消费者有5个那么根据第一条原则，一个消费队列只能有一个消费者，就会有消费者没有分配到队列。</p>
+</blockquote>
+<h2 id="1-1、创建集群消费者"><a href="#1-1、创建集群消费者" class="headerlink" title="1.1、创建集群消费者"></a>1.1、创建集群消费者</h2><p>创建两个集群消费者Consumer1、Consumer2，下面写出了Consumer1的代码，Consumer2也是一样的不再重复了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer1</span> </span>&#123;	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(<span class="string">"consumer_test_clustering"</span>);</span><br><span class="line">			consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">			consumer.subscribe(<span class="string">"TopicTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">			consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">					    <span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">					    	System.out.println(<span class="string">"Consumer1===  MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER; <span class="comment">//稍后再试</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">			System.out.println(<span class="string">"Consumer1===启动成功!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们发现这里面并没有明显的说是集群消费，怎么能判断是集群消费呢，我们查看下源码分析下。</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%E6%BA%90%E7%A0%81%E5%9B%BE%E8%A7%A3.png" alt></p>
+<p>我们发现DefaultMQPushConsumer consumer = new DefaultMQPushConsumer()；创建消费者的时候已经默认了很多内置参数，其中就有消费模式CLUSTERING集群消费。</p>
+<p>我们先启动Consumer1和Consumer2，发送10条消息看一下消费情况，RocketMQ消息是基于订阅发布模型的。</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%E6%83%85%E5%86%B5.png" alt></p>
+<p>我们发现10条消息都消费了，没有重复的。集群消息每条消息都是集群内的消费者共同消费且不会重复消费。</p>
+<p>可视化界面查看其客户端信息</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/custer_consumer.png" alt></p>
+<p>查看其消息情况发了10条消息，我们查看其状态。</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/cluster_message.png" alt></p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/message_detail.png" alt></p>
+<h2 id="1-2、队列分配策略"><a href="#1-2、队列分配策略" class="headerlink" title="1.2、队列分配策略"></a>1.2、队列分配策略</h2><p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png" alt></p>
+<h3 id="1-2-1、平均分配策略-默认-AllocateMessageQueueAveragely"><a href="#1-2-1、平均分配策略-默认-AllocateMessageQueueAveragely" class="headerlink" title="1.2.1、平均分配策略(默认)(AllocateMessageQueueAveragely)"></a>1.2.1、平均分配策略(默认)(AllocateMessageQueueAveragely)</h3><p>我们首先查看其原理图</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E5%B9%B3%E5%9D%87%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png" alt></p>
+<p>分析其源码AllocateMessageQueueAveragely类的核心方法是allocate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;MessageQueue&gt; <span class="title">allocate</span><span class="params">(String consumerGroup, String currentCID, List&lt;MessageQueue&gt; mqAll,</span></span></span><br><span class="line"><span class="function"><span class="params">		List&lt;String&gt; cidAll)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//校验当前消费者id是否存在的校验</span></span><br><span class="line">	<span class="keyword">if</span> ((currentCID == <span class="keyword">null</span>) || (currentCID.length() &lt; <span class="number">1</span>)) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"currentCID is empty"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//校验消息队列是否存在</span></span><br><span class="line">	<span class="keyword">if</span> ((mqAll == <span class="keyword">null</span>) || (mqAll.isEmpty())) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"mqAll is null or mqAll empty"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//校验所有的消费者id的集合是否为null</span></span><br><span class="line">	<span class="keyword">if</span> ((cidAll == <span class="keyword">null</span>) || (cidAll.isEmpty())) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"cidAll is null or cidAll empty"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	List result = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    <span class="comment">//校验当前的消费者id是否在消费者id的集群中</span></span><br><span class="line">	<span class="keyword">if</span> (!(cidAll.contains(currentCID))) &#123;</span><br><span class="line">		<span class="keyword">this</span>.log.info(<span class="string">"[BUG] ConsumerGroup: &#123;&#125; The consumerId: &#123;&#125; not in cidAll: &#123;&#125;"</span>,</span><br><span class="line">				<span class="keyword">new</span> Object[] &#123; consumerGroup, currentCID, cidAll &#125;);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//获取当前的消费者id在集合中的下标</span></span><br><span class="line">	<span class="keyword">int</span> index = cidAll.indexOf(currentCID);</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">int</span> mod = mqAll.size() % cidAll.size();</span><br><span class="line">	<span class="keyword">int</span> averageSize = ((mod &gt; <span class="number">0</span>) &amp;&amp; (index &lt; mod)) ? mqAll.size() / cidAll.size() + <span class="number">1</span></span><br><span class="line">			: (mqAll.size() &lt;= cidAll.size()) ? <span class="number">1</span> : mqAll.size() / cidAll.size();</span><br><span class="line">	<span class="keyword">int</span> startIndex = ((mod &gt; <span class="number">0</span>) &amp;&amp; (index &lt; mod)) ? index * averageSize : index * averageSize + mod;</span><br><span class="line">	<span class="keyword">int</span> range = Math.min(averageSize, mqAll.size() - startIndex);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; range; ++i) &#123;</span><br><span class="line">		result.add(mqAll.get((startIndex + i) % mqAll.size()));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析其源码</strong></p>
+<p>26行：消息队列总数和消费者总数取余</p>
+<p>27、28行：计算当前的消费者分配的消息队列数</p>
+<p>（1）取余大于0且当前消费者的下标小于取余数(mod &gt; 0) &amp;&amp; (index &lt; mod) -》确定当前的消费者是否在取余里，在则在整除数中+1，mqAll.size() / cidAll.size() + 1</p>
+<p>（2）如果已经整除或者不在取余里则判断消息队列是否小于等于消费者总数mqAll.size() &lt;= cidAll.size()，在则该消费者分配的消息队列为1</p>
+<p>（3）如果（2）中不成立则，mqAll.size() / cidAll.size()</p>
+<p>29、30行：计算当前消费者在消息队列数组中的开始的下标</p>
+<p>（1）取余大于0且当前消费者的下标小于取余数((mod &gt; 0) &amp;&amp; (index &lt; mod)) -》当前下标乘以每个队列的平均队列数index * averageSize</p>
+<p>（2）如果（1）中不成立则index * averageSize + mod</p>
+<p>31行：根据Math.min()计算消费者最终需要消费的数量</p>
+<p>32行：获取当前的消费者的队列集合</p>
+<h3 id="1-2-2、环形分配策略-AllocateMessageQueueAveragelyByCircle"><a href="#1-2-2、环形分配策略-AllocateMessageQueueAveragelyByCircle" class="headerlink" title="1.2.2、环形分配策略(AllocateMessageQueueAveragelyByCircle)"></a>1.2.2、环形分配策略(AllocateMessageQueueAveragelyByCircle)</h3><p>我们首先查看其原理图</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E7%8E%AF%E5%BD%A2%E5%88%86%E9%85%8D.png" alt></p>
+<p>分析其源码AllocateMessageQueueAveragelyByCircle类的核心方法是allocate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;MessageQueue&gt; <span class="title">allocate</span><span class="params">(String consumerGroup, String currentCID, List&lt;MessageQueue&gt; mqAll,</span></span></span><br><span class="line"><span class="function"><span class="params">			List&lt;String&gt; cidAll)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> ((currentCID == <span class="keyword">null</span>) || (currentCID.length() &lt; <span class="number">1</span>)) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"currentCID is empty"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> ((mqAll == <span class="keyword">null</span>) || (mqAll.isEmpty())) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"mqAll is null or mqAll empty"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> ((cidAll == <span class="keyword">null</span>) || (cidAll.isEmpty())) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"cidAll is null or cidAll empty"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		List result = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (!(cidAll.contains(currentCID))) &#123;</span><br><span class="line">			<span class="keyword">this</span>.log.info(<span class="string">"[BUG] ConsumerGroup: &#123;&#125; The consumerId: &#123;&#125; not in cidAll: &#123;&#125;"</span>,</span><br><span class="line">					<span class="keyword">new</span> Object[] &#123; consumerGroup, currentCID, cidAll &#125;);</span><br><span class="line"></span><br><span class="line">			<span class="keyword">return</span> result;</span><br><span class="line">		&#125;</span><br><span class="line">        <span class="comment">//上面一堆校验我们之间略过</span></span><br><span class="line">		<span class="keyword">int</span> index = cidAll.indexOf(currentCID);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; mqAll.size(); ++i) &#123;</span><br><span class="line">			<span class="keyword">if</span> (i % cidAll.size() == index) &#123;</span><br><span class="line">				result.add(mqAll.get(i));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析其源码</strong></p>
+<p>23、24、25行：遍历消息的下标, 对下标取模(mod), 如果与index相等, 则存储到result集合中</p>
+<h3 id="1-2-3、手动配置分配策略-AllocateMessageQueueByConfig"><a href="#1-2-3、手动配置分配策略-AllocateMessageQueueByConfig" class="headerlink" title="1.2.3、手动配置分配策略(AllocateMessageQueueByConfig)"></a>1.2.3、手动配置分配策略(AllocateMessageQueueByConfig)</h3><p>分析其源码AllocateMessageQueueByConfig类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AllocateMessageQueueByConfig</span> <span class="keyword">implements</span> <span class="title">AllocateMessageQueueStrategy</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> List&lt;MessageQueue&gt; messageQueueList;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;MessageQueue&gt; <span class="title">allocate</span><span class="params">(String consumerGroup, String currentCID, List&lt;MessageQueue&gt; mqAll,</span></span></span><br><span class="line"><span class="function"><span class="params">			List&lt;String&gt; cidAll)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.messageQueueList;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"CONFIG"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;MessageQueue&gt; <span class="title">getMessageQueueList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.messageQueueList;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessageQueueList</span><span class="params">(List&lt;MessageQueue&gt; messageQueueList)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.messageQueueList = messageQueueList;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过配置来记性消息队列的分配</p>
+<h3 id="1-2-4、机房分配策略-AllocateMessageQueueByMachineRoom"><a href="#1-2-4、机房分配策略-AllocateMessageQueueByMachineRoom" class="headerlink" title="1.2.4、机房分配策略(AllocateMessageQueueByMachineRoom)"></a>1.2.4、机房分配策略(AllocateMessageQueueByMachineRoom)</h3><p>分析其源码AllocateMessageQueueByMachineRoom类的核心方法是allocate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;MessageQueue&gt; <span class="title">allocate</span><span class="params">(String consumerGroup, String currentCID, List&lt;MessageQueue&gt; mqAll,</span></span></span><br><span class="line"><span class="function"><span class="params">		List&lt;String&gt; cidAll)</span> </span>&#123;</span><br><span class="line">	List result = <span class="keyword">new</span> ArrayList();</span><br><span class="line">	<span class="keyword">int</span> currentIndex = cidAll.indexOf(currentCID);</span><br><span class="line">	<span class="keyword">if</span> (currentIndex &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">	List premqAll = <span class="keyword">new</span> ArrayList();</span><br><span class="line">	<span class="keyword">for</span> (MessageQueue mq : mqAll) &#123;</span><br><span class="line">		String[] temp = mq.getBrokerName().split(<span class="string">"@"</span>);</span><br><span class="line">		<span class="keyword">if</span> ((temp.length == <span class="number">2</span>) &amp;&amp; (<span class="keyword">this</span>.consumeridcs.contains(temp[<span class="number">0</span>]))) &#123;</span><br><span class="line">			premqAll.add(mq);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> mod = premqAll.size() / cidAll.size();</span><br><span class="line">	<span class="keyword">int</span> rem = premqAll.size() % cidAll.size();</span><br><span class="line">	<span class="keyword">int</span> startIndex = mod * currentIndex;</span><br><span class="line">	<span class="keyword">int</span> endIndex = startIndex + mod;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = startIndex; i &lt; endIndex; ++i) &#123;</span><br><span class="line">		result.add(mqAll.get(i));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (rem &gt; currentIndex) &#123;</span><br><span class="line">		result.add(premqAll.get(currentIndex + mod * cidAll.size()));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4-7行, 计算当前消费者在消费者集合中的下标(index), 如果下标 &lt; 0 , 则直接返回</p>
+<p>8-14行, 根据brokerName解析出所有有效机房信息(其实是有效mq), 用Set集合去重, 结果存储在premqAll中</p>
+<p>16行, 计算消息整除的平均结果mod</p>
+<p>17行, 计算消息是否能够被平均消费rem,(即消息平均消费后还剩多少消息(remaing))</p>
+<p>18行, 计算当前消费者开始消费的下标(startIndex)</p>
+<p>19行, 计算当前消费者结束消费的下标(endIndex)</p>
+<p>20-26行, 将消息的消费分为两部分, 第一部分 – (cidAllSize * mod) , 第二部分 – (premqAll - cidAllSize * mod) ; 从第一部分中查询startIndex ~ endIndex之间所有的消息, 从第二部分中查询 currentIndex + mod * cidAll.size() , 最后返回查询的结果result</p>
+<h3 id="1-2-5、一致性哈希分配策略-AllocateMessageQueueConsistentHash"><a href="#1-2-5、一致性哈希分配策略-AllocateMessageQueueConsistentHash" class="headerlink" title="1.2.5、一致性哈希分配策略(AllocateMessageQueueConsistentHash)"></a>1.2.5、一致性哈希分配策略(AllocateMessageQueueConsistentHash)</h3><p>分析其源码AllocateMessageQueueByMachineRoom类的核心方法是allocate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;MessageQueue&gt; <span class="title">allocate</span><span class="params">(String consumerGroup, String currentCID, List&lt;MessageQueue&gt; mqAll,</span></span></span><br><span class="line"><span class="function"><span class="params">		List&lt;String&gt; cidAll)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ((currentCID == <span class="keyword">null</span>) || (currentCID.length() &lt; <span class="number">1</span>)) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"currentCID is empty"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> ((mqAll == <span class="keyword">null</span>) || (mqAll.isEmpty())) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"mqAll is null or mqAll empty"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> ((cidAll == <span class="keyword">null</span>) || (cidAll.isEmpty())) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"cidAll is null or cidAll empty"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	List result = <span class="keyword">new</span> ArrayList();</span><br><span class="line">	<span class="keyword">if</span> (!(cidAll.contains(currentCID))) &#123;</span><br><span class="line">		<span class="keyword">this</span>.log.info(<span class="string">"[BUG] ConsumerGroup: &#123;&#125; The consumerId: &#123;&#125; not in cidAll: &#123;&#125;"</span>,</span><br><span class="line">				<span class="keyword">new</span> Object[] &#123; consumerGroup, currentCID, cidAll &#125;);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Collection cidNodes = <span class="keyword">new</span> ArrayList();</span><br><span class="line">	<span class="keyword">for</span> (String cid : cidAll)</span><br><span class="line">		cidNodes.add(<span class="keyword">new</span> ClientNode(cid));</span><br><span class="line">	ConsistentHashRouter router;</span><br><span class="line">	ConsistentHashRouter router;</span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.customHashFunction != <span class="keyword">null</span>)</span><br><span class="line">		router = <span class="keyword">new</span> ConsistentHashRouter(cidNodes, <span class="keyword">this</span>.virtualNodeCnt, <span class="keyword">this</span>.customHashFunction);</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		router = <span class="keyword">new</span> ConsistentHashRouter(cidNodes, <span class="keyword">this</span>.virtualNodeCnt);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	List results = <span class="keyword">new</span> ArrayList();</span><br><span class="line">	<span class="keyword">for</span> (MessageQueue mq : mqAll) &#123;</span><br><span class="line">		ClientNode clientNode = (ClientNode) router.routeNode(mq.toString());</span><br><span class="line">		<span class="keyword">if</span> ((clientNode != <span class="keyword">null</span>) &amp;&amp; (currentCID.equals(clientNode.getKey()))) &#123;</span><br><span class="line">			results.add(mq);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="广播消费"><a href="#广播消费" class="headerlink" title="广播消费"></a>广播消费</h1>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -221,7 +295,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -234,213 +308,117 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/02/RocketMQ顺序消息/" class="archive-article-date">
-  	<time datetime="2019-07-02T07:37:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-02</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/02/RocketMQ顺序消息/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RocketMQ顺序消息</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/02/RocketMQ顺序消息/">RocketMQ顺序消息</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">RocketMQ入门</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、集群消费-默认"><span class="toc-number">1.</span> <span class="toc-text">1、集群消费(默认)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1、创建集群消费者"><span class="toc-number">1.1.</span> <span class="toc-text">1.1、创建集群消费者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2、队列分配策略"><span class="toc-number">1.2.</span> <span class="toc-text">1.2、队列分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1、平均分配策略-默认-AllocateMessageQueueAveragely"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1、平均分配策略(默认)(AllocateMessageQueueAveragely)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2、环形分配策略-AllocateMessageQueueAveragelyByCircle"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2、环形分配策略(AllocateMessageQueueAveragelyByCircle)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3、手动配置分配策略-AllocateMessageQueueByConfig"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3、手动配置分配策略(AllocateMessageQueueByConfig)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4、机房分配策略-AllocateMessageQueueByMachineRoom"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.2.4、机房分配策略(AllocateMessageQueueByMachineRoom)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5、一致性哈希分配策略-AllocateMessageQueueConsistentHash"><span class="toc-number">1.2.5.</span> <span class="toc-text">1.2.5、一致性哈希分配策略(AllocateMessageQueueConsistentHash)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#广播消费"><span class="toc-number">2.</span> <span class="toc-text">广播消费</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/06/27/RocketMQ快速入门/" class="archive-article-date">
-  	<time datetime="2019-06-27T03:18:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/27/RocketMQ快速入门/">RocketMQ快速入门</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">RocketMQ入门</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/06/27/RocketMQ安装部署/" class="archive-article-date">
-  	<time datetime="2019-06-27T01:51:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/27/RocketMQ安装部署/">RocketMQ安装部署</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">RocketMQ安装</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/06/24/RocketMQ简单介绍/" class="archive-article-date">
-  	<time datetime="2019-06-24T02:49:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/24/RocketMQ简单介绍/">RocketMQ简单介绍</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">RocketMQ入门</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -466,10 +444,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
