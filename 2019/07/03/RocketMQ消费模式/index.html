@@ -31,7 +31,8 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/client_offset_1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_message_info.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_message_offset.png">
-<meta property="og:updated_time" content="2019-07-04T01:58:04.700Z">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_instance_offset.png">
+<meta property="og:updated_time" content="2019-07-04T02:20:20.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消费模式">
 <meta name="twitter:description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
@@ -347,6 +348,14 @@
 <p>广播模式消费时.rocketmq_offsets文件夹下的消费者ID/消费组名称文件夹下的offsets.json很重要，切记不能删除或损坏，否则消费进度会有影响，消费时可能导致数据重复或丢失</p>
 </blockquote>
 <p>C:/Users/gumx/.rocketmq_offsets/192.168.1.102@DEFAULT/consumer_test_broadcasting/offsets.json</p>
+<p>改造其消费端ConsumerGB1、ConsumerGB2分别设置InstanceName为00001、00002</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerGB1</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(<span class="string">"consumer_test_broadcasting"</span>);</span><br><span class="line">			<span class="comment">//设置广播消费</span></span><br><span class="line">			consumer.setMessageModel(MessageModel.BROADCASTING);</span><br><span class="line">			consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">			consumer.subscribe(<span class="string">"TopicTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">			<span class="comment">//设置其InstanceName</span></span><br><span class="line">			consumer.setInstanceName(<span class="string">"00001"</span>);</span><br><span class="line">			consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">					    <span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">					    	System.out.println(<span class="string">"ConsumerGB1===  MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER; <span class="comment">//稍后再试</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">			System.out.println(<span class="string">"ConsumerGB1===启动成功!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们查看其消费进度文件夹</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_instance_offset.png" alt></p>
+<blockquote>
+<p>广播模式下如果两个消费者GB1、GB2的InstanceName相同消费组相同，都启动情况下，发送消息时都会消费消息，其中GB1异常停止，GB2正常消费，则GB1手动干预启动后，异常停止期间的消息不会再消费，因为公用一个消费进度文件。</p>
+</blockquote>
 
       
 
@@ -585,15 +594,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
