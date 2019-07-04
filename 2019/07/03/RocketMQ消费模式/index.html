@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>RocketMQ消费模式 | IT小栈</title>
+  <title>IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
 <meta name="keywords" content="集群消费,广播消费">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RocketMQ消费模式">
+<meta property="og:title" content="IT小栈">
 <meta property="og:url" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
@@ -30,9 +30,10 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_consumer_result.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/client_offset_1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_message_info.png">
-<meta property="og:updated_time" content="2019-07-03T07:58:24.874Z">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_message_offset.png">
+<meta property="og:updated_time" content="2019-07-04T01:44:08.571Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RocketMQ消费模式">
+<meta name="twitter:title" content="IT小栈">
 <meta name="twitter:description" content="RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。">
 <meta name="twitter:image" content="https://mingxungu.github.io/2019/07/03/RocketMQ消费模式/%E9%9B%86%E7%BE%A4%E6%B6%88%E8%B4%B9%E6%BA%90%E7%A0%81%E5%9B%BE%E8%A7%A3.png">
   
@@ -198,21 +199,6 @@
             <article id="post-RocketMQ消费模式" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      RocketMQ消费模式
-    </h1>
-  
-
-        
-        <a href="/2019/07/03/RocketMQ消费模式/" class="archive-article-date">
-  	<time datetime="2019-07-03T00:40:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
         <p>RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。</p>
@@ -329,6 +315,23 @@
 
 <p>发现已经改变了其消费位点</p>
 <p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_message_info.png" alt></p>
+<h2 id="2-2、注意事项"><a href="#2-2、注意事项" class="headerlink" title="2.2、注意事项"></a>2.2、注意事项</h2><p>广播模式下会有一些问题，我们具体分析下。</p>
+<p><img src="//mingxungu.github.io/2019/07/03/RocketMQ消费模式/gb_message_offset.png" alt></p>
+<p>当看到这个图的时候是不是会有一些疑问我们明明启用了两个消费者为什么消费者的ID为什么是相同的，难道图中标注的有问题？其实不然，这个就是消费者的ID我们进一步探讨下。</p>
+<p><strong>consumer.start();</strong>消费者启动的源码查找，其核心方法是DefaultMQPushConsumerImpl.start(),分析其源码，我们查看一下其消费者的ID生成</p>
+<p>this.mQClientFactory=MQClientManager.getInstance().getAndCreateMQClientInstance(this.defaultMQPushConsumer,this.rpcHook);</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> MQClientInstance <span class="title">getAndCreateMQClientInstance</span><span class="params">(<span class="keyword">final</span> ClientConfig clientConfig, RPCHook rpcHook)</span> </span>&#123;</span><br><span class="line">        String clientId = clientConfig.buildMQClientId();</span><br><span class="line">        MQClientInstance instance = <span class="keyword">this</span>.factoryTable.get(clientId);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == instance) &#123;</span><br><span class="line">            instance =</span><br><span class="line">                <span class="keyword">new</span> MQClientInstance(clientConfig.cloneClientConfig(),</span><br><span class="line">                    <span class="keyword">this</span>.factoryIndexGenerator.getAndIncrement(), clientId, rpcHook);</span><br><span class="line">            MQClientInstance prev = <span class="keyword">this</span>.factoryTable.putIfAbsent(clientId, instance);</span><br><span class="line">            <span class="keyword">if</span> (prev != <span class="keyword">null</span>) &#123;</span><br><span class="line">                instance = prev;</span><br><span class="line">                log.warn(<span class="string">"Returned Previous MQClientInstance for clientId:[&#123;&#125;]"</span>, clientId);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                log.info(<span class="string">"Created new MQClientInstance for clientId:[&#123;&#125;]"</span>, clientId);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>String clientId = clientConfig.buildMQClientId();</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String instanceName = System.getProperty(<span class="string">"rocketmq.client.name"</span>, <span class="string">"DEFAULT"</span>);</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">buildMQClientId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	sb.append(<span class="keyword">this</span>.getClientIP());</span><br><span class="line"></span><br><span class="line">	sb.append(<span class="string">"@"</span>);</span><br><span class="line">	sb.append(<span class="keyword">this</span>.getInstanceName());</span><br><span class="line">	<span class="keyword">if</span> (!UtilAll.isBlank(<span class="keyword">this</span>.unitName)) &#123;</span><br><span class="line">		sb.append(<span class="string">"@"</span>);</span><br><span class="line">		sb.append(<span class="keyword">this</span>.unitName);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们发现其clientId 是由两部分组成客户端IP地址，和InstanceName中间用了“<strong>@</strong>”连接，当然InstanceName可以设置，默认则是<strong>DEFAULT</strong>，这样我们就解释了其为什么消费者启动了两个其客户端消费者的ID只有一个。</p>
+<blockquote>
+<p>广播模式消费下当客户端需要启动多个消费者的时候，建议手动设置其InstanceName，没有设置时会发现其消费进度是使用的一个文件。</p>
+<p>广播模式消费时我们如果迁移客户端则会重新生成其消费进度文件，默认开始消费的位置为队列的尾部，之前的消费默认放弃，消费的起始位置可以配置（PS：下一章节会介绍）</p>
+<p>广播模式消费时.rocketmq_offsets文件夹下的消费者ID/消费组名称文件夹下的offsets.json很重要，切记不能删除或损坏，否则消费进度会有影响，消费时可能导致数据重复或丢失</p>
+</blockquote>
+<p>C:/Users/gumx/.rocketmq_offsets/192.168.1.102@DEFAULT/consumer_test_broadcasting/offsets.json</p>
 
       
 
@@ -456,7 +459,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、集群消费-默认"><span class="toc-number">1.</span> <span class="toc-text">1、集群消费(默认)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1、创建集群消费者"><span class="toc-number">1.1.</span> <span class="toc-text">1.1、创建集群消费者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2、队列分配策略"><span class="toc-number">1.2.</span> <span class="toc-text">1.2、队列分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1、平均分配策略-默认-AllocateMessageQueueAveragely"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1、平均分配策略(默认)(AllocateMessageQueueAveragely)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2、环形分配策略-AllocateMessageQueueAveragelyByCircle"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2、环形分配策略(AllocateMessageQueueAveragelyByCircle)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3、手动配置分配策略-AllocateMessageQueueByConfig"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3、手动配置分配策略(AllocateMessageQueueByConfig)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4、机房分配策略-AllocateMessageQueueByMachineRoom"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.2.4、机房分配策略(AllocateMessageQueueByMachineRoom)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5、一致性哈希分配策略-AllocateMessageQueueConsistentHash"><span class="toc-number">1.2.5.</span> <span class="toc-text">1.2.5、一致性哈希分配策略(AllocateMessageQueueConsistentHash)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、广播消费"><span class="toc-number">2.</span> <span class="toc-text">2、广播消费</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、创建广播消费者"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、创建广播消费者</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、集群消费-默认"><span class="toc-number">1.</span> <span class="toc-text">1、集群消费(默认)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1、创建集群消费者"><span class="toc-number">1.1.</span> <span class="toc-text">1.1、创建集群消费者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2、队列分配策略"><span class="toc-number">1.2.</span> <span class="toc-text">1.2、队列分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1、平均分配策略-默认-AllocateMessageQueueAveragely"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1、平均分配策略(默认)(AllocateMessageQueueAveragely)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2、环形分配策略-AllocateMessageQueueAveragelyByCircle"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2、环形分配策略(AllocateMessageQueueAveragelyByCircle)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3、手动配置分配策略-AllocateMessageQueueByConfig"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3、手动配置分配策略(AllocateMessageQueueByConfig)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4、机房分配策略-AllocateMessageQueueByMachineRoom"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.2.4、机房分配策略(AllocateMessageQueueByMachineRoom)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5、一致性哈希分配策略-AllocateMessageQueueConsistentHash"><span class="toc-number">1.2.5.</span> <span class="toc-text">1.2.5、一致性哈希分配策略(AllocateMessageQueueConsistentHash)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、广播消费"><span class="toc-number">2.</span> <span class="toc-text">2、广播消费</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、创建广播消费者"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、创建广播消费者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2、注意事项"><span class="toc-number">2.2.</span> <span class="toc-text">2.2、注意事项</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -567,7 +570,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -575,11 +582,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -596,10 +603,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
