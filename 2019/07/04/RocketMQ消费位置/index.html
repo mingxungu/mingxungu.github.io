@@ -19,8 +19,8 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/04/RocketMQ消费位置/consumer_last.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/04/RocketMQ消费位置/service_offset.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/04/RocketMQ消费位置/service_offset_1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/04/RocketMQ消费位置/Users/gumx/Desktop/first_offset.png">
-<meta property="og:updated_time" content="2019-07-04T06:47:38.648Z">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/04/RocketMQ消费位置/first_offset.png">
+<meta property="og:updated_time" content="2019-07-04T06:55:10.391Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消费位置">
 <meta name="twitter:description" content="RocketMQ创建消费者的时指定了Topic主题及Tag,我们发现新创建的消费者消费不了历史的数据，只能消费掉创建以后消费者发送的数据。这是什么原因，我们能把所有的消息都消费吗？，我们可以指定需要消费的消息的时间吗？答案是肯定的，下面我们具体分析一下。">
@@ -231,7 +231,7 @@
 <p>设置了消费组：<strong>consumer.setConsumerGroup(“consumer_first_offset”);</strong></p>
 <p>设置了消费位置：<strong>consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);</strong></p>
 <p>查看其结果</p>
-<p><img src="//mingxungu.github.io/2019/07/04/RocketMQ消费位置/Users/gumx/Desktop/first_offset.png" alt></p>
+<p><img src="//mingxungu.github.io/2019/07/04/RocketMQ消费位置/first_offset.png" alt></p>
 <blockquote>
 <p>从头开始消费是指目前还储存在broker的上的消息全部消费一遍，因为RocketMQ会将消息持久化到磁盘文件中，时间长就会导致磁盘文件会很多，RocketMQ有一种机制，只是保留一段时间的消息，之前的消息会删除，可以指定时间点删除（无论消息是否被消费，到时间点文件都会被删除）</p>
 </blockquote>
@@ -472,15 +472,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -489,6 +485,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
