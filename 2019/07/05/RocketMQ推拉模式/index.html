@@ -6,16 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>Tag: Spring创建Bean | IT小栈</title>
+  <title>RocketMQ推拉模式 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="IT小栈">
-<meta property="og:type" content="website">
-<meta property="og:title" content="IT小栈">
-<meta property="og:url" content="https://mingxungu.github.io/tags/Spring创建Bean/index.html">
+  <meta name="description" content="消费者客户端有两种方式从消息中间件获取消息并消费。严格意义上来讲，RocketMQ并没有实现PUSH模式，而是对拉模式进行一层包装，名字虽然是 Push 开头，实际在实现时，使用 Pull 方式实现。通过 Pull 不断轮询 Broker 获取消息。当不存在新消息时，Broker 会挂起请求，直到有新消息产生，取消挂起，返回新消息。">
+<meta name="keywords" content="推拉模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ推拉模式">
+<meta property="og:url" content="https://mingxungu.github.io/2019/07/05/RocketMQ推拉模式/index.html">
 <meta property="og:site_name" content="IT小栈">
+<meta property="og:description" content="消费者客户端有两种方式从消息中间件获取消息并消费。严格意义上来讲，RocketMQ并没有实现PUSH模式，而是对拉模式进行一层包装，名字虽然是 Push 开头，实际在实现时，使用 Pull 方式实现。通过 Pull 不断轮询 Broker 获取消息。当不存在新消息时，Broker 会挂起请求，直到有新消息产生，取消挂起，返回新消息。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/05/RocketMQ推拉模式/service_offset_1.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/05/RocketMQ推拉模式/pull_consumer_1.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/05/RocketMQ推拉模式/pull_consumer_2.png">
+<meta property="og:updated_time" content="2019-07-05T08:56:26.422Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IT小栈">
+<meta name="twitter:title" content="RocketMQ推拉模式">
+<meta name="twitter:description" content="消费者客户端有两种方式从消息中间件获取消息并消费。严格意义上来讲，RocketMQ并没有实现PUSH模式，而是对拉模式进行一层包装，名字虽然是 Push 开头，实际在实现时，使用 Pull 方式实现。通过 Pull 不断轮询 Broker 获取消息。当不存在新消息时，Broker 会挂起请求，直到有新消息产生，取消挂起，返回新消息。">
+<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/05/RocketMQ推拉模式/service_offset_1.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -176,83 +184,206 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-RocketMQ推拉模式" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/06/23/Spring-IOC和DI/" class="archive-article-date">
-  	<time datetime="2019-06-23T08:51:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/23/Spring-IOC和DI/">Spring IOC和DI</a>
+    <h1 class="article-title" itemprop="name">
+      RocketMQ推拉模式
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/07/05/RocketMQ推拉模式/" class="archive-article-date">
+  	<time datetime="2019-07-04T23:31:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>消费者客户端有两种方式从消息中间件获取消息并消费。严格意义上来讲，RocketMQ并没有实现PUSH模式，而是对拉模式进行一层包装，名字虽然是 Push 开头，实际在实现时，使用 Pull 方式实现。通过 Pull 不断轮询 Broker 获取消息。当不存在新消息时，Broker 会挂起请求，直到有新消息产生，取消挂起，返回新消息。</p>
+<a id="more"></a>
+
+<h1 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h1><h2 id="1-1、PULL方式"><a href="#1-1、PULL方式" class="headerlink" title="1.1、PULL方式"></a><strong>1.1、PULL方式</strong></h2><p>由消费者客户端主动向消息中间件（MQ消息服务器代理）拉取消息；采用Pull方式，如何设置Pull消息的<strong>拉取频率</strong>需要重点去考虑，举个例子来说，可能1分钟内连续来了1000条消息，然后2小时内没有新消息产生（概括起来说就是“消息延迟与忙等待”）。如果每次Pull的时间间隔比较久，会增加消息的延迟，即消息到达消费者的时间加长，MQ中消息的堆积量变大；若每次Pull的时间间隔较短，但是在一段时间内MQ中并没有任何消息可以消费，那么会产生很多无效的Pull请求的RPC开销，影响MQ整体的网络性能；</p>
+<h2 id="1-2、PUSH方式"><a href="#1-2、PUSH方式" class="headerlink" title="1.2、PUSH方式"></a><strong>1.2、PUSH方式</strong></h2><p>由消息中间件（MQ消息服务器代理）主动地将消息推送给消费者；采用Push方式，可以尽可能实时地将消息发送给消费者进行消费。但是，在消费者的处理消息的能力较弱的时候(比如，消费者端的业务系统处理一条消息的流程比较复杂，其中的调用链路比较多导致消费时间比较久。概括起来地说就是“慢消费问题”)，而MQ不断地向消费者Push消息，消费者端的缓冲区可能会溢出，导致异常；</p>
+<h1 id="2、PUSH模式"><a href="#2、PUSH模式" class="headerlink" title="2、PUSH模式"></a>2、PUSH模式</h1><p>主动推送的模式实现起来简单，避免了拉取的消费端业务逻辑的复杂度，消息的消费可以认为是实时的，同时也存在一定的弊端，要求消费端要有很强的消费能力。</p>
+<h2 id="2-1、代码实现"><a href="#2-1、代码实现" class="headerlink" title="2.1、代码实现"></a>2.1、代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer1</span> </span>&#123;	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(<span class="string">"consumer_push"</span>);</span><br><span class="line">			consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">			consumer.subscribe(<span class="string">"TopicTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">			consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">					    <span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">					    	SimpleDateFormat sd = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>);</span><br><span class="line">					    	Date date = <span class="keyword">new</span> Date(msg.getStoreTimestamp());</span><br><span class="line">					    	System.out.println(<span class="string">"Consumer1===  存入时间 :  "</span>+ sd.format(date) +<span class="string">" == MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER; <span class="comment">//稍后再试</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">			System.out.println(<span class="string">"Consumer1===启动成功!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>PUSH消费方式，需要注册一个监听器Listener,，用来监听最新的消息，进行业务处理，同时反馈消息的消费状态，消费成功（CONSUME_SUCCESS）、消费重试（RECONSUME_LATER），消息重试会根据配置的消息的延迟等级的时间间隔，定时重新发送消费失败的记录。（PS：延迟消息中会重点讨论）</p>
+<p>PUSH消息方式由于返回了消息的状态，服务端会维护每个消费端的消费进度，内部会记录消费进度，消息发送成功后会更新消费进度。</p>
+<p>PUSH消息方式的局限性，是在HOLD住Consumer请求的时候需要占用资源，它适合用在消息队列这种客户端连接数可控的场景中。</p>
+</blockquote>
+<p>上一个章节说明了服务端存储的每个主题对应的消费组的每个消息队列的偏移量</p>
+<p>查看服务器文件上的消费进度信息：/usr/local/rocketmq-all-4.2.0/store/config/consumerOffset.json</p>
+<p><img src="//mingxungu.github.io/2019/07/05/RocketMQ推拉模式/service_offset_1.png" alt></p>
+<h1 id="3、PULL模式"><a href="#3、PULL模式" class="headerlink" title="3、PULL模式"></a>3、PULL模式</h1><h2 id="3-1、代码实现（1）"><a href="#3-1、代码实现（1）" class="headerlink" title="3.1、代码实现（1）"></a>3.1、代码实现（1）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PullConsumer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;MessageQueue, Long&gt; offseTable = <span class="keyword">new</span> HashMap&lt;MessageQueue, Long&gt;();</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MQClientException </span>&#123;</span><br><span class="line">        DefaultMQPullConsumer consumer = <span class="keyword">new</span> DefaultMQPullConsumer(<span class="string">"pullConsumer"</span>);</span><br><span class="line">        consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">        consumer.start();</span><br><span class="line"> </span><br><span class="line">        Set&lt;MessageQueue&gt; mqs = consumer.fetchSubscribeMessageQueues(<span class="string">"TopicTest"</span>);</span><br><span class="line">        <span class="keyword">for</span> (MessageQueue mq : mqs) &#123;</span><br><span class="line">            </span><br><span class="line">            SINGLE_MQ: <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    PullResult pullResult =</span><br><span class="line">                            consumer.pullBlockIfNotFound(mq, <span class="keyword">null</span>, getMessageQueueOffset(mq), <span class="number">32</span>);</span><br><span class="line">                    System.out.println(<span class="string">"============================================================="</span>);</span><br><span class="line">                    System.out.println(<span class="string">"Consume from the queue: "</span> + mq + <span class="string">"offset:"</span> + getMessageQueueOffset(mq) + <span class="string">"结果："</span> + pullResult.getPullStatus());</span><br><span class="line">                    putMessageQueueOffset(mq, pullResult.getNextBeginOffset());</span><br><span class="line">                    <span class="keyword">switch</span> (pullResult.getPullStatus()) &#123;</span><br><span class="line">                    <span class="keyword">case</span> FOUND:</span><br><span class="line">                    	List&lt;MessageExt&gt; messageExtList = pullResult.getMsgFoundList();</span><br><span class="line">                        <span class="keyword">for</span> (MessageExt m : messageExtList) &#123;</span><br><span class="line">                            System.out.print(<span class="keyword">new</span> String(m.getBody()) +<span class="string">" == "</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                        System.out.println(<span class="string">""</span>);</span><br><span class="line">                    <span class="keyword">case</span> NO_MATCHED_MSG:</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> NO_NEW_MSG:</span><br><span class="line">                        <span class="keyword">break</span> SINGLE_MQ;</span><br><span class="line">                    <span class="keyword">case</span> OFFSET_ILLEGAL:</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">default</span>:</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        consumer.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">putMessageQueueOffset</span><span class="params">(MessageQueue mq, <span class="keyword">long</span> offset)</span> </span>&#123;</span><br><span class="line">        offseTable.put(mq, offset);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">getMessageQueueOffset</span><span class="params">(MessageQueue mq)</span> </span>&#123;</span><br><span class="line">        Long offset = offseTable.get(mq);</span><br><span class="line">        <span class="keyword">if</span> (offset != <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> offset;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="//mingxungu.github.io/2019/07/05/RocketMQ推拉模式/pull_consumer_1.png" alt></p>
+<blockquote>
+<p>每次拉取消息的时候需要提供偏移量和拉取的消息的个数，需要自己业务实现每个主题下的队列的消费进度。</p>
+<p>代码实现（1）这种方式只能拉取历史的消息，最新的消息拉取不了，也可以进行改造，来实现一直拉取。</p>
+</blockquote>
+<h2 id="3-2、代码实现（2）"><a href="#3-2、代码实现（2）" class="headerlink" title="3.2、代码实现（2）"></a>3.2、代码实现（2）</h2><p>在MQPullConsumer这个类里面，有一个MessageQueueListener，它的目的就是当queue发生变化的时候，通知Consumer。也正是这个借口，帮助我们在Pull模式里面，实现负载均衡。</p>
+<p>注意，这个接口在MQPushConsumer里面是没有的，那里面有的是上面代码里的MessageListener。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> void registerMessageQueueListener(final String topic, final MessageQueueListener listener);</span><br><span class="line"></span><br><span class="line">public interface MessageQueueListener &#123;</span><br><span class="line">    void messageQueueChanged(final String topic, final Set&lt;MessageQueue&gt; mqAll,</span><br><span class="line">                             final Set&lt;MessageQueue&gt; mqDivided);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这个Listener，我们就可以动态的知道当前的Consumer分摊到了几个MessageQueue。然后对这些MessageQueue，我们可以开个线程池来消费。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PullConsumerExtend</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MQClientException </span>&#123;</span><br><span class="line">	       <span class="comment">//消费组</span></span><br><span class="line">	        <span class="keyword">final</span> MQPullConsumerScheduleService scheduleService = <span class="keyword">new</span> MQPullConsumerScheduleService(<span class="string">"pullConsumer"</span>);</span><br><span class="line">	       <span class="comment">//MQ NameService地址</span></span><br><span class="line">	        scheduleService.getDefaultMQPullConsumer().setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">	       <span class="comment">//负载均衡模式</span></span><br><span class="line">	        scheduleService.setMessageModel(MessageModel.CLUSTERING);</span><br><span class="line">	       <span class="comment">//需要处理的消息topic</span></span><br><span class="line">	        scheduleService.registerPullTaskCallback(<span class="string">"TopicTest"</span>, <span class="keyword">new</span> PullTaskCallback() &#123;</span><br><span class="line"></span><br><span class="line">	            <span class="meta">@Override</span></span><br><span class="line">	            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doPullTask</span><span class="params">(MessageQueue mq, PullTaskContext context)</span> </span>&#123;</span><br><span class="line">	                MQPullConsumer consumer = context.getPullConsumer();</span><br><span class="line">	                <span class="keyword">try</span> &#123;</span><br><span class="line">	                	</span><br><span class="line">	                    <span class="keyword">long</span> offset = consumer.fetchConsumeOffset(mq, <span class="keyword">false</span>);</span><br><span class="line">	                    <span class="keyword">if</span> (offset &lt; <span class="number">0</span>)</span><br><span class="line">	                        offset = <span class="number">0</span>;</span><br><span class="line">	                    PullResult pullResult = consumer.pull(mq, <span class="string">"*"</span>, offset, <span class="number">32</span>);</span><br><span class="line">	                    System.out.println(<span class="string">""</span>);</span><br><span class="line">	                    System.out.println(<span class="string">"Consume from the queue: "</span> + mq + <span class="string">"offset:"</span> + offset + <span class="string">"结果："</span> + pullResult.getPullStatus());</span><br><span class="line">	                    <span class="keyword">switch</span> (pullResult.getPullStatus()) &#123;</span><br><span class="line">	                        <span class="keyword">case</span> FOUND:</span><br><span class="line">	                        	List&lt;MessageExt&gt; messageExtList = pullResult.getMsgFoundList();</span><br><span class="line">	                            <span class="keyword">for</span> (MessageExt m : messageExtList) &#123;</span><br><span class="line">	                                System.out.print(<span class="keyword">new</span> String(m.getBody()) +<span class="string">" == "</span>);</span><br><span class="line">	                            &#125;</span><br><span class="line">	                            <span class="keyword">break</span>;</span><br><span class="line">	                        <span class="keyword">case</span> NO_MATCHED_MSG:</span><br><span class="line">	                            <span class="keyword">break</span>;</span><br><span class="line">	                        <span class="keyword">case</span> NO_NEW_MSG:</span><br><span class="line">	                        <span class="keyword">case</span> OFFSET_ILLEGAL:</span><br><span class="line">	                            <span class="keyword">break</span>;</span><br><span class="line">	                        <span class="keyword">default</span>:</span><br><span class="line">	                            <span class="keyword">break</span>;</span><br><span class="line">	                    &#125;</span><br><span class="line">	                    consumer.updateConsumeOffset(mq, pullResult.getNextBeginOffset());</span><br><span class="line">	                    <span class="comment">//设置下一下拉取的间隔时间</span></span><br><span class="line">	                    context.setPullNextDelayTimeMillis(<span class="number">10000</span>);</span><br><span class="line">	                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	                    e.printStackTrace();</span><br><span class="line">	                &#125;</span><br><span class="line">	            &#125;</span><br><span class="line">	        &#125;);</span><br><span class="line"></span><br><span class="line">	        scheduleService.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="//mingxungu.github.io/2019/07/05/RocketMQ推拉模式/pull_consumer_2.png" alt></p>
+<blockquote>
+<p>比较<strong>代码实现（1）</strong>这种方式改进了很多，不需要业务维护每个消费队列的消费进度，可以更新到服务端的。</p>
+<p>弊端也很明显就是每次队列拉取消息的时间间隔，时间长导致消息挤压，时间段消息少，影响服务端性能。</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">IOC和DI</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring创建Bean</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Bean生命周期</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Sping属性注入</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">推拉模式</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/spring//" class="article-tag-list-link color2">spring</a>
+        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://mingxungu.github.io/2019/07/05/RocketMQ推拉模式/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2019/07/04/RocketMQ消费位置/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RocketMQ消费位置</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、概述"><span class="toc-number">1.</span> <span class="toc-text">1、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1、PULL方式"><span class="toc-number">1.1.</span> <span class="toc-text">1.1、PULL方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2、PUSH方式"><span class="toc-number">1.2.</span> <span class="toc-text">1.2、PUSH方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、PUSH模式"><span class="toc-number">2.</span> <span class="toc-text">2、PUSH模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、代码实现"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3、PULL模式"><span class="toc-number">3.</span> <span class="toc-text">3、PULL模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1、代码实现（1）"><span class="toc-number">3.1.</span> <span class="toc-text">3.1、代码实现（1）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2、代码实现（2）"><span class="toc-number">3.2.</span> <span class="toc-text">3.2、代码实现（2）</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -278,9 +409,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
