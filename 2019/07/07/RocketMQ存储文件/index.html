@@ -6,16 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>IT小栈</title>
+  <title>RocketMQ存储文件 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="IT小栈">
-<meta property="og:type" content="website">
-<meta property="og:title" content="IT小栈">
-<meta property="og:url" content="https://mingxungu.github.io/index.html">
+  <meta name="description" content="RocketMQ存储路径默认是${ROCKRTMQ_HOME}/store,主要存储消息、主题对应的消息队列的索引等。">
+<meta name="keywords" content="消息存储文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ存储文件">
+<meta property="og:url" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/index.html">
 <meta property="og:site_name" content="IT小栈">
+<meta property="og:description" content="RocketMQ存储路径默认是${ROCKRTMQ_HOME}/store,主要存储消息、主题对应的消息队列的索引等。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/messageFile.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/messageConfigFile.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/commitlog%E6%B6%88%E6%81%AF%E7%BB%93%E6%9E%84.jpg">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/consumerQueue.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/consumequeue%E7%BB%93%E6%9E%84.png">
+<meta property="og:updated_time" content="2019-07-07T09:23:14.386Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IT小栈">
+<meta name="twitter:title" content="RocketMQ存储文件">
+<meta name="twitter:description" content="RocketMQ存储路径默认是${ROCKRTMQ_HOME}/store,主要存储消息、主题对应的消息队列的索引等。">
+<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/messageFile.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -176,16 +186,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-RocketMQ存储文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-RocketMQ存储文件" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/07/RocketMQ存储文件/">RocketMQ存储文件</a>
+    <h1 class="article-title" itemprop="name">
+      RocketMQ存储文件
     </h1>
   
 
@@ -199,9 +207,165 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>RocketMQ存储路径默认是${ROCKRTMQ_HOME}/store,主要存储消息、主题对应的消息队列的索引等。</p>
-        
-          <a class="article-more-a" href="/2019/07/07/RocketMQ存储文件/#more">more >></a>
-        
+<a id="more"></a>
+
+<h1 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h1><p>查看其目录文件</p>
+<p><img src="//mingxungu.github.io/2019/07/07/RocketMQ存储文件/messageFile.png" alt></p>
+<ul>
+<li><p><strong>commitlog</strong>:消息的存储目录</p>
+</li>
+<li><p><strong>config</strong>:运行期间一些配置信息</p>
+<p>​    <img src="//mingxungu.github.io/2019/07/07/RocketMQ存储文件/messageConfigFile.png" alt></p>
+</li>
+<li><p><strong>consumequeue</strong>：消息消费队列存储目录</p>
+</li>
+<li><p><strong>index</strong>：消息索引文件存储目录</p>
+</li>
+<li><p><strong>abort</strong>：如果存在abort文件说明Broker非正常关闭，该文件默认启动时创建，正常退出时删除</p>
+</li>
+<li><p><strong>checkpoint</strong>：文件检测点。存储commitlog文件最后一次刷盘时间戳、consumequeue最后一次刷盘时间、index索引文件最后一次刷牌时间戳。</p>
+</li>
+</ul>
+<h1 id="2、文件简介"><a href="#2、文件简介" class="headerlink" title="2、文件简介"></a>2、文件简介</h1><h2 id="2-1、commitlog文件"><a href="#2-1、commitlog文件" class="headerlink" title="2.1、commitlog文件"></a>2.1、commitlog文件</h2><p>commitlog文件的存储地址：$HOME\store\commitlog${fileName}，每个文件的大小默认1G =1024<em>1024</em>1024，commitlog的文件名fileName，名字长度为20位，左边补零，剩余为起始偏移量；比如00000000000000000000代表了第一个文件，起始偏移量为0，文件大小为1G=1073741824；当这个文件满了，第二个文件名字为00000000001073741824，起始偏移量为1073741824，以此类推，第三个文件名字为00000000002147483648，起始偏移量为2147483648 ，消息存储的时候会顺序写入文件，当文件满了，写入下一个文件。</p>
+<p>commitlog目录下的文件主要存储消息，每条消息的长度不同，查看其存储的逻辑视图，每条消息的前面4个字节存储该条消息的总长度。</p>
+<p><img src="//mingxungu.github.io/2019/07/07/RocketMQ存储文件/commitlog%E6%B6%88%E6%81%AF%E7%BB%93%E6%9E%84.jpg" alt></p>
+<p>文件的消息单元存储详细信息</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>字段简称</th>
+<th>字段大小（字节）</th>
+<th>字段含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>msgSize</td>
+<td>4</td>
+<td>代表这个消息的大小</td>
+</tr>
+<tr>
+<td>2</td>
+<td>MAGICCODE</td>
+<td>4</td>
+<td>MAGICCODE = daa320a7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>BODY CRC</td>
+<td>4</td>
+<td>消息体BODY CRC 当broker重启recover时会校验</td>
+</tr>
+<tr>
+<td>4</td>
+<td>queueId</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>flag</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>QUEUEOFFSET</td>
+<td>8</td>
+<td>这个值是个自增值不是真正的consume queue的偏移量，可以代表这个consumeQueue队列或者tranStateTable队列中消息的个数，若是非事务消息或者commit事务消息，可以通过这个值查找到consumeQueue中数据，QUEUEOFFSET * 20才是偏移地址；若是PREPARED或者Rollback事务，则可以通过该值从tranStateTable中查找数据</td>
+</tr>
+<tr>
+<td>7</td>
+<td>PHYSICALOFFSET</td>
+<td>8</td>
+<td>代表消息在commitLog中的物理起始地址偏移量</td>
+</tr>
+<tr>
+<td>8</td>
+<td>SYSFLAG</td>
+<td>4</td>
+<td>指明消息是事物事物状态等消息特征，二进制为四个字节从右往左数：当4个字节均为0（值为0）时表示非事务消息；当第1个字节为1（值为1）时表示表示消息是压缩的（Compressed）；当第2个字节为1（值为2）表示多消息（MultiTags）；当第3个字节为1（值为4）时表示prepared消息；当第4个字节为1（值为8）时表示commit消息；当第3/4个字节均为1时（值为12）时表示rollback消息；当第3/4个字节均为0时表示非事务消息</td>
+</tr>
+<tr>
+<td>9</td>
+<td>BORNTIMESTAMP</td>
+<td>8</td>
+<td>消息产生端(producer)的时间戳</td>
+</tr>
+<tr>
+<td>10</td>
+<td>BORNHOST</td>
+<td>8</td>
+<td>消息产生端(producer)地址(address:port)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>STORETIMESTAMP</td>
+<td>8</td>
+<td>消息在broker存储时间</td>
+</tr>
+<tr>
+<td>12</td>
+<td>STOREHOSTADDRESS</td>
+<td>8</td>
+<td>消息存储到broker的地址(address:port)</td>
+</tr>
+<tr>
+<td>13</td>
+<td>RECONSUMETIMES</td>
+<td>8</td>
+<td>消息被某个订阅组重新消费了几次（订阅组之间独立计数）,因为重试消息发送到了topic名字为%retry%groupName的队列queueId=0的队列中去了，成功消费一次记录为0；</td>
+</tr>
+<tr>
+<td>14</td>
+<td>PreparedTransaction Offset</td>
+<td>8</td>
+<td>表示是prepared状态的事物消息</td>
+</tr>
+<tr>
+<td>15</td>
+<td>messagebodyLength</td>
+<td>4</td>
+<td>消息体大小值</td>
+</tr>
+<tr>
+<td>16</td>
+<td>messagebody</td>
+<td>bodyLength</td>
+<td>消息体内容</td>
+</tr>
+<tr>
+<td>17</td>
+<td>topicLength</td>
+<td>1</td>
+<td>topic名称内容大小</td>
+</tr>
+<tr>
+<td>18</td>
+<td>topic</td>
+<td>topicLength</td>
+<td>topic的内容值</td>
+</tr>
+<tr>
+<td>19</td>
+<td>propertiesLength</td>
+<td>2</td>
+<td>属性值大小</td>
+</tr>
+<tr>
+<td>20</td>
+<td>properties</td>
+<td>propertiesLength</td>
+<td>propertiesLength大小的属性数据</td>
+</tr>
+</tbody></table>
+<h2 id="2-2、consumequeue"><a href="#2-2、consumequeue" class="headerlink" title="2.2、consumequeue"></a>2.2、consumequeue</h2><p>RocketMQ基于主题订阅模式实现消息的消费，消费者关心的是主题下的所有消息。但是由于不同的主题的消息不连续的存储在commitlog文件中，如果只是检索该消息文件可想而知会有多慢，为了提高效率，对应的主题的队列建立了索引文件，为了加快消息的检索和节省磁盘空间，每一个consumequeue条目存储了消息的关键信息commitog文件中的偏移量、消息长度、tag的hashcode值。</p>
+<p><img src="//mingxungu.github.io/2019/07/07/RocketMQ存储文件/consumerQueue.png" alt></p>
+<p>查看目录结构：</p>
+<p><img src="//mingxungu.github.io/2019/07/07/RocketMQ存储文件/consumequeue%E7%BB%93%E6%9E%84.png" alt></p>
+<p>单个consumequeue文件中默认包含30万个条目，每个条目20个字节，所以每个文件的大小是固定的20w x 20字节，单个consumequeue文件可认为是一个数组，下标即为逻辑偏移量，消息的消费进度存储的偏移量即逻辑偏移量。</p>
+
       
 
       
@@ -234,16 +398,75 @@
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/07/RocketMQ存储文件/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/07/RocketMQ延迟消息/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RocketMQ延迟消息</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -258,370 +481,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-RocketMQ延迟消息" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/07/RocketMQ延迟消息/">RocketMQ延迟消息</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/07/RocketMQ延迟消息/" class="archive-article-date">
-  	<time datetime="2019-07-07T01:19:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>延时消息即消息发送后并不立即对消费者可见，而是在用户指定的时间投递给消费者。比如我们现在发送一条延时30秒的消息，消息发送后立即发送给服务器，但是服务器在30秒后才将该消息交给消费者。</p>
-<p>RocketMQ通过配置的延迟级别延迟消息投递到消费者，其中不同的延迟级别对应不同的延迟时间，可配置，默认的延迟级别有18种，分别是1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h，支持时间单位 s 秒 m分钟 h小时 d天。</p>
-        
-          <a class="article-more-a" href="/2019/07/07/RocketMQ延迟消息/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">延迟消息</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/07/RocketMQ延迟消息/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、概述"><span class="toc-number">1.</span> <span class="toc-text">1、概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、文件简介"><span class="toc-number">2.</span> <span class="toc-text">2、文件简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、commitlog文件"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、commitlog文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2、consumequeue"><span class="toc-number">2.2.</span> <span class="toc-text">2.2、consumequeue</span></a></li></ol></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-RocketMQ推拉模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/05/RocketMQ推拉模式/">RocketMQ推拉模式</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/05/RocketMQ推拉模式/" class="archive-article-date">
-  	<time datetime="2019-07-04T23:31:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>消费者客户端有两种方式从消息中间件获取消息并消费。严格意义上来讲，RocketMQ并没有实现PUSH模式，而是对拉模式进行一层包装，名字虽然是 Push 开头，实际在实现时，使用 Pull 方式实现。通过 Pull 不断轮询 Broker 获取消息。当不存在新消息时，Broker 会挂起请求，直到有新消息产生，取消挂起，返回新消息。</p>
-        
-          <a class="article-more-a" href="/2019/07/05/RocketMQ推拉模式/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">推拉模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/05/RocketMQ推拉模式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-RocketMQ消费位置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/04/RocketMQ消费位置/">RocketMQ消费位置</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/04/RocketMQ消费位置/" class="archive-article-date">
-  	<time datetime="2019-07-04T02:39:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>RocketMQ创建消费者的时指定了Topic主题及Tag,我们发现新创建的消费者消费不了历史的数据，只能消费掉创建以后消费者发送的数据。这是什么原因，我们能把所有的消息都消费吗？，我们可以指定需要消费的消息的时间吗？答案是肯定的，下面我们具体分析一下。</p>
-        
-          <a class="article-more-a" href="/2019/07/04/RocketMQ消费位置/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">消费位置</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/04/RocketMQ消费位置/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-RocketMQ消费模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/03/RocketMQ消费模式/">RocketMQ消费模式</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/03/RocketMQ消费模式/" class="archive-article-date">
-  	<time datetime="2019-07-03T00:40:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>RocketMQ提供两种消费策略CLUSTERING集群消费(默认)和BROADCASTING广播消费，在创建Consumer消费者时可以指定消费策略，策略不同其内部机制也不同，消息的消费方式、记录消费进度、消息的消费状态等也都各不相同。下面我们具体来探讨一下。</p>
-        
-          <a class="article-more-a" href="/2019/07/03/RocketMQ消费模式/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">集群消费</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">广播消费</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/03/RocketMQ消费模式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -647,8 +532,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
