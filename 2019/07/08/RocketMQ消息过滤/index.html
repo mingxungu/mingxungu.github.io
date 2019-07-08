@@ -9,7 +9,7 @@
   <title>RocketMQ消息过滤 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="消息过滤包括基于表达式过滤与基于类模式两种过滤模式。其中表达式过滤又分为TAG和SQL92模式，分别介绍各自的过滤机制，及代码示例内容，深入探消息过滤的原理。">
-<meta name="keywords" content="消息过滤,SQL92过滤,MessageFilter过滤">
+<meta name="keywords" content="消息过滤">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ消息过滤">
 <meta property="og:url" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/index.html">
@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/tagFilter_result.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/sqlFiltererror.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/sqlFilterFResult.png">
-<meta property="og:updated_time" content="2019-07-08T07:50:39.809Z">
+<meta property="og:updated_time" content="2019-07-08T08:00:07.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消息过滤">
 <meta name="twitter:description" content="消息过滤包括基于表达式过滤与基于类模式两种过滤模式。其中表达式过滤又分为TAG和SQL92模式，分别介绍各自的过滤机制，及代码示例内容，深入探消息过滤的原理。">
@@ -236,7 +236,7 @@
 </ol>
 <h2 id="2-1、producer"><a href="#2-1、producer" class="headerlink" title="2.1、producer"></a>2.1、producer</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Producer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MQClientException, InterruptedException </span>&#123;</span><br><span class="line">        DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"producer_test"</span>);</span><br><span class="line">        producer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">        producer.start();</span><br><span class="line">        String[] tags = &#123;<span class="string">"TagA"</span>,<span class="string">"TagB"</span>,<span class="string">"TagC"</span>,<span class="string">"TagD"</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">40</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">            	String tag = tags[i % tags.length];</span><br><span class="line">            	<span class="comment">//构建消息</span></span><br><span class="line">                Message msg = <span class="keyword">new</span> Message(<span class="string">"GumxTest"</span> <span class="comment">/* Topic */</span>,</span><br><span class="line">                		tag <span class="comment">/* Tag */</span>,</span><br><span class="line">                    (<span class="string">"RocketMQ消息测试，消息的TAG="</span>+tag+  <span class="string">", 属性 age = "</span> + i + <span class="string">", == "</span> + i).getBytes(RemotingHelper.DEFAULT_CHARSET)</span><br><span class="line">                );</span><br><span class="line">                msg.putUserProperty(<span class="string">"age"</span>, i+<span class="string">""</span>);</span><br><span class="line">                SendResult sendResult = producer.send(msg);</span><br><span class="line">                System.out.printf(<span class="string">"%s%n"</span>, sendResult);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        producer.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-2、consumer"><a href="#2-2、consumer" class="headerlink" title="2.2、consumer"></a>2.2、consumer</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class Consumer &#123;	</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = new DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(&quot;consumer_sql&quot;);</span><br><span class="line">			consumer.setNamesrvAddr(&quot;10.10.12.203:9876;10.10.12.204:9876&quot;);</span><br><span class="line">			consumer.subscribe(&quot;GumxTest&quot;, MessageSelector.bySql(&quot;age between 0 and 8&quot;));</span><br><span class="line">			consumer.registerMessageListener(new MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				@Override</span><br><span class="line">				public ConsumeConcurrentlyStatus consumeMessage(List&lt;MessageExt&gt; paramList,</span><br><span class="line">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext) &#123;</span><br><span class="line">					try &#123;</span><br><span class="line">					    for(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = new String(msg.getBody(), &quot;utf-8&quot;);</span><br><span class="line">					    	SimpleDateFormat sd = new SimpleDateFormat(&quot;YYYY-MM-dd HH:mm:ss&quot;);</span><br><span class="line">					    	Date date = new Date(msg.getStoreTimestamp());</span><br><span class="line">					    	System.out.println(&quot;Consumer===  存入时间 :  &quot;+ sd.format(date) +&quot; == MessageBody: &quot;+ msgbody);//输出消息内容</span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; catch (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    return ConsumeConcurrentlyStatus.RECONSUME_LATER; //稍后再试</span><br><span class="line">					&#125;</span><br><span class="line">					return ConsumeConcurrentlyStatus.CONSUME_SUCCESS; //消费成功</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">			System.out.println(&quot;Consumer===启动成功!&quot;);</span><br><span class="line">		&#125; catch (Exception e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2、consumer"><a href="#2-2、consumer" class="headerlink" title="2.2、consumer"></a>2.2、consumer</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> </span>&#123;	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(<span class="string">"consumer_sql"</span>);</span><br><span class="line">			consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">			consumer.subscribe(<span class="string">"GumxTest"</span>, MessageSelector.bySql(<span class="string">"age between 0 and 8"</span>));</span><br><span class="line">			consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">					    <span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">					    	SimpleDateFormat sd = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>);</span><br><span class="line">					    	Date date = <span class="keyword">new</span> Date(msg.getStoreTimestamp());</span><br><span class="line">					    	System.out.println(<span class="string">"Consumer===  存入时间 :  "</span>+ sd.format(date) +<span class="string">" == MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER; <span class="comment">//稍后再试</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">			System.out.println(<span class="string">"Consumer===启动成功!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>启动时：</p>
 <p><img src="//mingxungu.github.io/2019/07/08/RocketMQ消息过滤/sqlFiltererror.png" alt></p>
@@ -266,14 +266,6 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">消息过滤</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">SQL92过滤</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MessageFilter过滤</a>
         		</li>
       		
 		</ul>
@@ -498,15 +490,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,7 +498,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -522,7 +506,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,11 +538,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">SQL92过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MessageFilter过滤</a>
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
