@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/3122483611-5c8b03796316f.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/sdfacfhrtgegr0020.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/07/RocketMQ存储文件/checkpoint.jpg">
-<meta property="og:updated_time" content="2019-07-08T03:22:27.906Z">
+<meta property="og:updated_time" content="2019-07-08T03:29:37.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ存储文件">
 <meta name="twitter:description" content="RocketMQ存储路径默认是${ROCKRTMQ_HOME}/store,主要存储消息、主题对应的消息队列的索引等。">
@@ -227,7 +227,7 @@
 </li>
 <li><p><strong>abort</strong>：如果存在abort文件说明Broker非正常关闭，该文件默认启动时创建，正常退出时删除</p>
 </li>
-<li><p><strong>checkpoint</strong>：文件检测点。存储commitlog文件最后一次刷盘时间戳、consumequeue最后一次刷盘时间、index索引文件最后一次刷牌时间戳。</p>
+<li><p><strong>checkpoint</strong>：文件检测点。存储commitlog文件最后一次刷盘时间戳、consumequeue最后一次刷盘时间、index索引文件最后一次刷盘时间戳。</p>
 </li>
 </ul>
 <h1 id="2、文件简介"><a href="#2、文件简介" class="headerlink" title="2、文件简介"></a>2、文件简介</h1><h2 id="2-1、commitlog文件"><a href="#2-1、commitlog文件" class="headerlink" title="2.1、commitlog文件"></a>2.1、commitlog文件</h2><p>commitlog文件的存储地址：$HOME\store\commitlog${fileName}，每个文件的大小默认1G =1024<em>1024</em>1024，commitlog的文件名fileName，名字长度为20位，左边补零，剩余为起始偏移量；比如00000000000000000000代表了第一个文件，起始偏移量为0，文件大小为1G=1073741824；当这个文件满了，第二个文件名字为00000000001073741824，起始偏移量为1073741824，以此类推，第三个文件名字为00000000002147483648，起始偏移量为2147483648 ，消息存储的时候会顺序写入文件，当文件满了，写入下一个文件。</p>
@@ -631,6 +631,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
@@ -639,7 +643,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -651,15 +655,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -676,10 +680,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
