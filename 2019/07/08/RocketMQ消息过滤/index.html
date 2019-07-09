@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/filterSrv1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/filterSrv2.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/08/RocketMQ消息过滤/classFilterResult.png">
-<meta property="og:updated_time" content="2019-07-09T05:58:32.130Z">
+<meta property="og:updated_time" content="2019-07-09T06:02:07.985Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消息过滤">
 <meta name="twitter:description" content="消息过滤包括基于表达式过滤与基于类模式两种过滤模式。其中表达式过滤又分为TAG和SQL92模式，分别介绍各自的过滤机制，及代码示例内容，深入探消息过滤的原理。">
@@ -267,7 +267,7 @@
 <p>使用类消息过滤模式，需要额外需要启动filter组件mqfiltersrv服务，否则消费不了，每个broker都需要启动一个，相当于加了一层过滤层。</p>
 <p>filtersrv 出现了。减少了 Broker 的负担，又减少了 Consumer 接收无用的消息。当然缺点也是有的，多了一层 filtersrv 网络开销</p>
 <p>MessageFilterImpl消息过滤实现类中的代码最好不要带有中文防止错误</p>
-<p>注意：RocketMQ4.3.1开始删除与 mqfilter 服务器相关的脚本，4.3.2删除客户端关于mqfilter 客户端代码</p>
+<p>注意：RocketMQ4.3.1开始删除与 mqfilter 服务器相关的脚本，4.3.2删除客户端关于mqfilter 客户端代码，后面版本不支持该功能。</p>
 </blockquote>
 
       
@@ -503,11 +503,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -527,7 +527,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,10 +536,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -556,6 +552,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
