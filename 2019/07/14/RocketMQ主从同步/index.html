@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/commitlog%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/salveReadProcess.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93.png">
-<meta property="og:updated_time" content="2019-07-17T05:59:15.933Z">
+<meta property="og:updated_time" content="2019-07-17T09:43:05.857Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ主从同步">
 <meta name="twitter:description" content="RocketMQ作为一款优秀的分布式消息中间件，分布式系统的一个很重要的特点就是要保证系统的高可用(HA)，RocketMQ则是通过主从同步机制保证系统的高可用。">
@@ -325,7 +325,7 @@
 <p>maxPhyOffsetPulling：此次拉取的消息的最大偏移量</p>
 <p>diff：未被消费端消费消息的长度</p>
 <p>TOTAL_PHYSICAL_MEMORY_SIZE：RocketMQ所在服务器总内存的大小，accessMessageInMemoryMaxRatio模式40%表示RocketMQ最大使用的内存比例，超过该内存，消息被置换出内存memory表示常驻内存大小，超过该内存消息被存储至磁盘。</p>
-<p>diff &gt; memory：说明<strong>当前未消费的消息长度已经超过了<em>常驻内存</em>的大小，表示主服务繁忙</strong>，此时建议从从服务其拉取</p>
+<p>diff &gt; memory：说明<strong>当前未消费的消息长度已经超过了常驻内存的大小，表示主服务繁忙</strong>，此时建议从从服务其拉取</p>
 <p>PullMessageProcessor.processRequest（）中消息拉取的后返回给client时封装下次建议拉取的brokerId</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (getMessageResult.isSuggestPullingFromSlave()) &#123;</span><br><span class="line">    responseHeader.setSuggestWhichBrokerId(subscriptionGroupConfig.getWhichBrokerWhenConsumeSlowly());</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    responseHeader.setSuggestWhichBrokerId(MixAll.MASTER_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -430,6 +430,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/07/18/RocketMQ权限控制/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          RocketMQ权限控制
+        
+      </div>
+    </a>
   
   
     <a href="/2019/07/09/RocketMQ事务消息/" id="article-nav-older" class="article-nav-link-wrap">
@@ -571,6 +580,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
@@ -579,7 +592,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -587,11 +600,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -599,11 +616,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,14 +649,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">

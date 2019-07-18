@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090838349.png">
-<meta property="og:updated_time" content="2019-07-17T07:23:19.107Z">
+<meta property="og:updated_time" content="2019-07-18T01:13:33.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ简单介绍">
 <meta name="twitter:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
@@ -297,7 +297,7 @@
 <p><strong>消息主题（Topic）</strong></p>
 <p>Topic是生产者在发送消息和消费者在拉取消息的类别。Topic与生产者和消费者之间的关系非常松散。具体来说，一个Topic可能有0个，一个或多个生产者向它发送消息；相反，一个生产者可以发送不同类型Topic的消息。类似的，消费者组可以订阅一个或多个主题，只要该组的实例保持其订阅一致即可。</p>
 <blockquote>
-<p>一个主题对应多个队列（默认8个）</p>
+<p>一个主题对应多个队列（默认4个）</p>
 <p>消息是存储在不同的队列中</p>
 </blockquote>
 <p><strong>消费组（ConsumerGroup）</strong></p>
@@ -554,6 +554,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
@@ -562,7 +566,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -570,11 +574,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -582,11 +590,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -607,14 +623,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
