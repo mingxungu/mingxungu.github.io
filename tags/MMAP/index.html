@@ -6,27 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>RocketMQ快速入门 | IT小栈</title>
+  <title>Tag: MMAP | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本章简单讲讲RocketMQ的入门操作，消息发送和消息接收。 引入 rocketmq-client">
-<meta name="keywords" content="RocketMQ入门">
-<meta property="og:type" content="article">
-<meta property="og:title" content="RocketMQ快速入门">
-<meta property="og:url" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/index.html">
+  <meta name="keywords" content="IT小栈">
+<meta property="og:type" content="website">
+<meta property="og:title" content="IT小栈">
+<meta property="og:url" content="https://mingxungu.github.io/tags/MMAP/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="本章简单讲讲RocketMQ的入门操作，消息发送和消息接收。 引入 rocketmq-client">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/2.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_2.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_3.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_4.png">
-<meta property="og:updated_time" content="2019-06-27T06:11:10.385Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RocketMQ快速入门">
-<meta name="twitter:description" content="本章简单讲讲RocketMQ的入门操作，消息发送和消息接收。 引入 rocketmq-client">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/1.png">
+<meta name="twitter:title" content="IT小栈">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -187,83 +176,52 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-RocketMQ快速入门" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      RocketMQ快速入门
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-w">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/07/19/RocketMQ内存映射/" class="archive-article-date">
+  	<time datetime="2019-07-19T06:25:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-19</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/07/19/RocketMQ内存映射/">RocketMQ内存映射</a>
     </h1>
   
 
-        
-        <a href="/2019/06/27/RocketMQ快速入门/" class="archive-article-date">
-  	<time datetime="2019-06-27T03:18:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本章简单讲讲RocketMQ的入门操作，消息发送和消息接收。</p>
-<h1 id="引入-rocketmq-client"><a href="#引入-rocketmq-client" class="headerlink" title="引入 rocketmq-client"></a>引入 rocketmq-client</h1><a id="more"></a>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.rocketmq&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;rocketmq-client&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.2.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<h1 id="编写Producer"><a href="#编写Producer" class="headerlink" title="编写Producer"></a>编写Producer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Producer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MQClientException, InterruptedException </span>&#123;</span><br><span class="line">        DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"producer_test"</span>);</span><br><span class="line">        producer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">        producer.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">            	<span class="comment">//构建消息</span></span><br><span class="line">                Message msg = <span class="keyword">new</span> Message(<span class="string">"TopicTest"</span> <span class="comment">/* Topic */</span>,</span><br><span class="line">                    <span class="string">"TagA"</span> <span class="comment">/* Tag */</span>,</span><br><span class="line">                    (<span class="string">"测试RocketMQ"</span> + i).getBytes(RemotingHelper.DEFAULT_CHARSET)</span><br><span class="line">                );</span><br><span class="line">                SendResult sendResult = producer.send(msg);</span><br><span class="line">                System.out.printf(<span class="string">"%s%n"</span>, sendResult);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        producer.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>查看结果</p>
-<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/1.png" alt="发送消息结果"></p>
-<h1 id="编写Consumer"><a href="#编写Consumer" class="headerlink" title="编写Consumer"></a>编写Consumer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(<span class="string">"consumer_test_push"</span>);</span><br><span class="line">			consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">			consumer.subscribe(<span class="string">"TopicTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">			consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">					    <span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">					    	System.out.println(<span class="string">"  MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER; <span class="comment">//稍后再试</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>查看结果</p>
-<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/2.png" alt="消费消息结果"></p>
-<p>看到消费的结果大家可能有疑问，我们生产消息的时候是按照顺序生产的消息，消费时候为什么不是顺序消费下来的。</p>
-<blockquote>
-<p>MQ消息的无序性，每个主题对应多个队列，生产消息时是根据算法放置不同的队列中，消费则就是无序了（有序消息后面讨论）</p>
-<p>也有可能出现一条消息被消费了多次，RocketMQ的目标就是不丢数据，<strong><u>每条消息至少发送一次</u></strong>，内部通过ACK的确认机制实现的后面会重点讨论</p>
-</blockquote>
-<h1 id="消息管控台"><a href="#消息管控台" class="headerlink" title="消息管控台"></a>消息管控台</h1><p>为了方便的查看消息的详情我们可以通过消息的管控台更好的管理和查看消息详情，当然我们也可以通过后台的提供的命令来为运维提供更多的管理。</p>
-<p>RocketMQ-Console地址: <a href="https://github.com/apache/rocketmq-externals/tree/master/rocketmq-console" target="_blank" rel="noopener">https://github.com/apache/rocketmq-externals/tree/master/rocketmq-console</a></p>
-<p>可以直接下载到本地之后通过mavne进行编译获取jar，该项目是SpringBoot项目</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package -Dmaven.test.skip=true</span><br><span class="line">java -jar target/rocketmq-console-ng-1.0.0.jar</span><br></pre></td></tr></table></figure>
-
-<p>丢到linux服务器上启动</p>
-<p>（1）启动时设置具体的RocketMQ的参数</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar rocketmq-console-ng-1.0.0.jar --server.port=12581 --rocketmq.config.namesrvAddr=10.10.12.203:9876;10.10.12.204:9876</span><br></pre></td></tr></table></figure>
-
-<p>（2）直接修改rocketmq-console-ng-1.0.0.jar中的配置文件，找到rocketmq-console-ng-1.0.0.jar\BOOT-INF\classes\application.properties文件，根据自己的NamesrvAddr进行修改rocketmq.config.namesrvAddr的值，默认端口12581</p>
-<p>浏览器登录查看控制台信息</p>
-<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_1.png" alt></p>
-<p>查看RocketMQ集群的节点信息</p>
-<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_2.png" alt></p>
-<p>根据主题时间段查询消息</p>
-<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_3.png" alt></p>
-<p>查看某条消息的具体信息</p>
-<p><img src="//mingxungu.github.io/2019/06/27/RocketMQ快速入门/console_4.png" alt></p>
-<p>管控台提供了很多运维功能能极大的提高我们的运维效率，里面的功能包括创建主题、修改主题、发送消息、对消费者的信息进行查看等功能我们不一一介绍，可以简单的了解使用。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">RocketMQ入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">内存映射</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">MMAP</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -276,126 +234,17 @@
 	</div>
 
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://mingxungu.github.io/2019/06/27/RocketMQ快速入门/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/07/02/RocketMQ顺序消息/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          RocketMQ顺序消息
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/06/27/RocketMQ安装部署/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">RocketMQ安装部署</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引入-rocketmq-client"><span class="toc-number">1.</span> <span class="toc-text">引入 rocketmq-client</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编写Producer"><span class="toc-number">2.</span> <span class="toc-text">编写Producer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编写Consumer"><span class="toc-number">3.</span> <span class="toc-text">编写Consumer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#消息管控台"><span class="toc-number">4.</span> <span class="toc-text">消息管控台</span></a></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -421,9 +270,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
