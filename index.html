@@ -198,7 +198,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前面几节我们讲解的都是RocketMQ应用层面也有一些关于源码的分析讲解，消息的存储只是简单的分析没有深入的探讨其中的内部机制，我们都知道RocketMQ是基于文件存储的消息模型，文件存储给我们的直觉感受就是比较慢，为什么Ro;cketMQ在消息的生产及消费都在毫秒级，真如我们所想象的文件存储就很慢吗？本节分析下消息的内部内存映射机制。</p>
+        <p>前面几节我们讲解的都是RocketMQ应用层面也有一些关于源码的分析讲解，消息的存储只是简单的分析没有深入的探讨其中的内部机制，我们都知道RocketMQ是基于文件存储的消息模型，文件存储给我们的直觉感受就是比较慢，为什么RocketMQ在消息的生产及消费都在毫秒级，真如我们所想象的文件存储就很慢吗？本节分析下消息的内部内存映射机制。</p>
         
           <a class="article-more-a" href="/2019/07/19/RocketMQ内存映射/#more">more >></a>
         
@@ -721,14 +721,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
@@ -737,15 +729,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -757,11 +745,31 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -774,14 +782,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
