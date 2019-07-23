@@ -6,16 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>Tag: Sping属性注入 | IT小栈</title>
+  <title>RocketMQ消息重试 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="IT小栈">
-<meta property="og:type" content="website">
-<meta property="og:title" content="IT小栈">
-<meta property="og:url" content="https://mingxungu.github.io/tags/Sping属性注入/index.html">
+  <meta name="description" content="RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。">
+<meta name="keywords" content="消息重试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ消息重试">
+<meta property="og:url" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/index.html">
 <meta property="og:site_name" content="IT小栈">
+<meta property="og:description" content="RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/delay_result.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/retry_process.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png">
+<meta property="og:updated_time" content="2019-07-23T07:48:45.843Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IT小栈">
+<meta name="twitter:title" content="RocketMQ消息重试">
+<meta name="twitter:description" content="RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。">
+<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/delay_result.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -176,83 +184,251 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-RocketMQ消息重试" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/06/23/Spring-IOC和DI/" class="archive-article-date">
-  	<time datetime="2019-06-23T08:51:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/23/Spring-IOC和DI/">Spring IOC和DI</a>
+    <h1 class="article-title" itemprop="name">
+      RocketMQ消息重试
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/07/22/RocketMQ消息重试/" class="archive-article-date">
+  	<time datetime="2019-07-22T08:16:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。</p>
+<a id="more"></a>
+
+<h1 id="1、分析"><a href="#1、分析" class="headerlink" title="1、分析"></a>1、分析</h1><p>我们分析下什么场景下会出现消息的重试</p>
+<ul>
+<li>业务消费方明确返回ConsumeConcurrentlyStatus.RECONSUME_LATER，即消费者对消息业务处理时自己的业务逻辑明确要求重新发送消息</li>
+<li>业务消费方主动/被动抛出异常</li>
+<li>由于网络问题导致消息一直得不到确认</li>
+</ul>
+<p>注意 对于抛出异常的情况，只要我们在业务逻辑中显式抛出异常或者非显式抛出异常，broker也会重新投递消息，如果业务对异常做了捕获，那么该消息将不会发起重试。因此对于需要重试的业务，消费方在捕获异常时要注意返回ConsumeConcurrentlyStatus.RECONSUME_LATER或null，输出日志并打印当前重试次数。推荐返回ConsumeConcurrentlyStatus.RECONSUME_LATER。</p>
+<blockquote>
+<p>只有当消费模式为 MessageModel.CLUSTERING(集群模式) 时，Broker才会自动进行重试，对于广播消息是不会重试的</p>
+<p>对于一直无法消费成功的消息，RocketMQ会在达到最大重试次数之后默认最大是16，将该消息投递至死信队列。然后我们需要关注死信队列，并对死信队列中的消息做人工的业务补偿操作</p>
+</blockquote>
+<p>重试次数就是延迟级别中的，重试次数增加其间隔时间也不同</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String messageDelayLevel = <span class="string">"1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以在brocker配置 messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h，自定义其时间级别。</p>
+<h1 id="2、代码实现"><a href="#2、代码实现" class="headerlink" title="2、代码实现"></a>2、代码实现</h1><h2 id="2-1、生产者"><a href="#2-1、生产者" class="headerlink" title="2.1、生产者"></a>2.1、生产者</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Producer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MQClientException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"gumx_test_delay"</span>);</span><br><span class="line">        producer.setNamesrvAddr(<span class="string">"10.10.15.205:9876;10.10.15.206:9876"</span>);</span><br><span class="line">        producer.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Message msg = <span class="keyword">new</span> Message(<span class="string">"TopicDelayTest"</span> <span class="comment">/* Topic */</span>,</span><br><span class="line">                    <span class="string">"TagA"</span> <span class="comment">/* Tag */</span>,</span><br><span class="line">                    (<span class="string">"测试延迟消息==Hello RocketMQ "</span>).getBytes(RemotingHelper.DEFAULT_CHARSET) <span class="comment">/* Message body */</span></span><br><span class="line">                );</span><br><span class="line">                SendResult sendResult = producer.send(msg);</span><br><span class="line">                System.out.printf(<span class="string">"%s%n"</span>, sendResult);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        producer.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2、消费者"><a href="#2-2、消费者" class="headerlink" title="2.2、消费者"></a>2.2、消费者</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, MQClientException </span>&#123;</span><br><span class="line">        DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(<span class="string">"gumx_test_delay_1"</span>);</span><br><span class="line">        consumer.setNamesrvAddr(<span class="string">"10.10.15.205:9876;10.10.15.206:9876"</span>);</span><br><span class="line">        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);</span><br><span class="line">        consumer.subscribe(<span class="string">"TopicDelayTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">        consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; msgs,</span></span></span><br><span class="line"><span class="function"><span class="params">                ConsumeConcurrentlyContext context)</span> </span>&#123;</span><br><span class="line">            	<span class="keyword">try</span>&#123;</span><br><span class="line">            		</span><br><span class="line">	            	SimpleDateFormat sf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>);</span><br><span class="line">	                System.out.printf(<span class="string">"当前时间：%s 延迟级别：%s 重试次数：%s 主题：%s 延迟主题：%s 消息内容：%s %n"</span>,sf.format(<span class="keyword">new</span> Date()),msgs.get(<span class="number">0</span>).getDelayTimeLevel(),msgs.get(<span class="number">0</span>).getReconsumeTimes(),msgs.get(<span class="number">0</span>).getTopic(),msgs.get(<span class="number">0</span>).getProperties().get(<span class="string">"REAL_TOPIC"</span>), <span class="keyword">new</span> String(msgs.get(<span class="number">0</span>).getBody(),<span class="string">"UTF-8"</span>));</span><br><span class="line">	                <span class="keyword">int</span> i = <span class="number">1</span>/<span class="number">0</span>; <span class="comment">//故意报错</span></span><br><span class="line">	                <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">            	&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            		<span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER;</span><br><span class="line">				&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        consumer.start();</span><br><span class="line">        System.out.printf(<span class="string">"Consumer Started.%n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看结果：</p>
+<p><img src="//mingxungu.github.io/2019/07/22/RocketMQ消息重试/delay_result.png" alt></p>
+<p>分析其结果其时间规则1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h就是默认配置的对应延迟级别。发现有个问题延迟级别从0直接到3，我们知道普通消息的延迟级别默认是0，第二条才是真正开始重试的消息。为什么从3开始呢？下面我们分析下源码，一探究竟。</p>
+<h1 id="3、源码分析"><a href="#3、源码分析" class="headerlink" title="3、源码分析"></a>3、源码分析</h1><p>我们先看一下其处理流程</p>
+<p><img src="//mingxungu.github.io/2019/07/22/RocketMQ消息重试/retry_process.png" alt></p>
+<h2 id="3-1、客户端代码分析"><a href="#3-1、客户端代码分析" class="headerlink" title="3.1、客户端代码分析"></a>3.1、客户端代码分析</h2><p>在RocketMQ的客户端源码DefaultMQPushConsumerImpl.java中，对重试机制做了说明，源码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getMaxReconsumeTimes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// default reconsume times: 16</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.defaultMQPushConsumer.getMaxReconsumeTimes() == -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">16</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.defaultMQPushConsumer.getMaxReconsumeTimes();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>消费者可以设置其最大的消费次数MaxReconsumeTimes，如果没有设置则默认的消费次数是16次为最大重试次数，我们查看客户端代码</p>
+<p>ConsumeMessageConcurrentlyService的内部类方法ConsumeRequest.run()入口方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> beginTimestamp = System.currentTimeMillis();</span><br><span class="line"><span class="keyword">boolean</span> hasException = <span class="keyword">false</span>;</span><br><span class="line">ConsumeReturnType returnType = ConsumeReturnType.SUCCESS;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    ConsumeMessageConcurrentlyService.<span class="keyword">this</span>.resetRetryTopic(msgs);</span><br><span class="line">    <span class="keyword">if</span> (msgs != <span class="keyword">null</span> &amp;&amp; !msgs.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">for</span> (MessageExt msg : msgs) &#123;</span><br><span class="line">            MessageAccessor.setConsumeStartTimeStamp(msg, String.valueOf(System.currentTimeMillis()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    status = listener.consumeMessage(Collections.unmodifiableList(msgs), context);</span><br><span class="line">&#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">    log.warn(<span class="string">"consumeMessage exception: &#123;&#125; Group: &#123;&#125; Msgs: &#123;&#125; MQ: &#123;&#125;"</span>,</span><br><span class="line">        RemotingHelper.exceptionSimpleDesc(e),</span><br><span class="line">        ConsumeMessageConcurrentlyService.<span class="keyword">this</span>.consumerGroup,</span><br><span class="line">        msgs,</span><br><span class="line">        messageQueue);</span><br><span class="line">    hasException = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取这批消息的状态调用ConsumeMessageConcurrentlyService.processConsumeResult()核心方法处理其返回的状态信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ackIndex = Integer.MAX_VALUE</span></span><br><span class="line"><span class="keyword">int</span> ackIndex = context.getAckIndex();</span><br><span class="line"><span class="keyword">if</span> (consumeRequest.getMsgs().isEmpty())</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"><span class="comment">//消费状态</span></span><br><span class="line"><span class="keyword">switch</span> (status) &#123;</span><br><span class="line">    <span class="keyword">case</span> CONSUME_SUCCESS:</span><br><span class="line">    	<span class="comment">//设置成功消息的下标</span></span><br><span class="line">        <span class="keyword">if</span> (ackIndex &gt;= consumeRequest.getMsgs().size()) &#123;</span><br><span class="line">            ackIndex = consumeRequest.getMsgs().size() - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> ok = ackIndex + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> failed = consumeRequest.getMsgs().size() - ok;</span><br><span class="line">        <span class="keyword">this</span>.getConsumerStatsManager().incConsumeOKTPS(consumerGroup, consumeRequest.getMessageQueue().getTopic(), ok);</span><br><span class="line">        <span class="keyword">this</span>.getConsumerStatsManager().incConsumeFailedTPS(consumerGroup, consumeRequest.getMessageQueue().getTopic(), failed);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> RECONSUME_LATER:</span><br><span class="line">        ackIndex = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">this</span>.getConsumerStatsManager().incConsumeFailedTPS(consumerGroup, consumeRequest.getMessageQueue().getTopic(),</span><br><span class="line">            consumeRequest.getMsgs().size());</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> (<span class="keyword">this</span>.defaultMQPushConsumer.getMessageModel()) &#123;</span><br><span class="line">    <span class="keyword">case</span> BROADCASTING:</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = ackIndex + <span class="number">1</span>; i &lt; consumeRequest.getMsgs().size(); i++) &#123;</span><br><span class="line">            MessageExt msg = consumeRequest.getMsgs().get(i);</span><br><span class="line">            log.warn(<span class="string">"BROADCASTING, the message consume failed, drop it, &#123;&#125;"</span>, msg.toString());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> CLUSTERING:</span><br><span class="line">        List&lt;MessageExt&gt; msgBackFailed = <span class="keyword">new</span> ArrayList&lt;MessageExt&gt;(consumeRequest.getMsgs().size());</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = ackIndex + <span class="number">1</span>; i &lt; consumeRequest.getMsgs().size(); i++) &#123;</span><br><span class="line">            MessageExt msg = consumeRequest.getMsgs().get(i);</span><br><span class="line">            <span class="comment">//给broker反馈消费的进度</span></span><br><span class="line">            <span class="keyword">boolean</span> result = <span class="keyword">this</span>.sendMessageBack(msg, context);</span><br><span class="line">            <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">                msg.setReconsumeTimes(msg.getReconsumeTimes() + <span class="number">1</span>);</span><br><span class="line">                msgBackFailed.add(msg);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!msgBackFailed.isEmpty()) &#123;</span><br><span class="line">            consumeRequest.getMsgs().removeAll(msgBackFailed);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">this</span>.submitConsumeRequestLater(msgBackFailed, consumeRequest.getProcessQueue(), consumeRequest.getMessageQueue());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果返回结果是 CONSUME_SUCCESS，此时 ackIndex = msg.size() - 1,,再看发送sendMessageBack 循环的条件，for (int i = ackIndex + 1; i &lt; msg.size() ;;)从这里可以看出如果消息成功，则无需发送sendMsgBack给broker<br>如果返回结果是RECONSUME_LATER， 此时 ackIndex = -1 ，则这批所有的消息都会发送消息给Broker,也就是这一批消息都得重新消费。</p>
+<blockquote>
+<p>如果发送ack消息失败，则会延迟5S后重新在消费端重新消费。<br>首先消费者向Broker发送ACK消息，如果发生成功，重试机制由broker处理，如果发送ack消息失败，则将该任务直接在消费者这边，再次将本次消费任务，默认演出5S后在消费者重新消费。</p>
+</blockquote>
+<p>1）根据消费结果，设置ackIndex的值<br>2）如果是消费失败，根据消费模式（集群消费还是广播消费），<strong>广播模式，直接丢弃</strong>，集群模式发送sendMessageBack<br>3) 更新消息消费进度，不管消费成功与否，上述这些消息消费成功，其实就是修改消费偏移量。（失败的，会进行重试，会创建新的消息)</p>
+<p>this.submitConsumeRequestLater(msgBackFailed, consumeRequest.getProcessQueue(), consumeRequest.getMessageQueue())给broker发送消费状态失败则将本次失败的消息放入msgBackFailed集合中，5秒后供消费端消费。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">submitConsumeRequestLater</span><span class="params">(<span class="keyword">final</span> List&lt;MessageExt&gt; msgs, </span></span></span><br><span class="line"><span class="function"><span class="params">		<span class="keyword">final</span> ProcessQueue processQueue,  <span class="keyword">final</span> MessageQueue messageQueue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.scheduledExecutorService.schedule(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            ConsumeMessageConcurrentlyService.<span class="keyword">this</span>.submitConsumeRequest(msgs, processQueue, messageQueue, <span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="number">5000</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2、服务端代码分析"><a href="#3-2、服务端代码分析" class="headerlink" title="3.2、服务端代码分析"></a>3.2、服务端代码分析</h2><p>当消息消费失败，客户端会反馈其消费状态，Broker服务端会接收其反馈的消息消费状态的处理逻辑代码在 SendMessageProcessor.consumerSendMsgBack()方法，我们查看部分的核心源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置主题%RETRY% + consumerGroup</span></span><br><span class="line">String newTopic = MixAll.getRetryTopic(requestHeader.getGroup());</span><br><span class="line"><span class="keyword">int</span> queueIdInt = Math.abs(<span class="keyword">this</span>.random.nextInt() % <span class="number">99999999</span>) % subscriptionGroupConfig.getRetryQueueNums();</span><br><span class="line"><span class="keyword">int</span> topicSysFlag = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span> (requestHeader.isUnitMode()) &#123;</span><br><span class="line">    topicSysFlag = TopicSysFlag.buildSysFlag(<span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line">TopicConfig topicConfig = <span class="keyword">this</span>.brokerController.getTopicConfigManager().createTopicInSendMessageBackMethod(</span><br><span class="line">    newTopic,</span><br><span class="line">    subscriptionGroupConfig.getRetryQueueNums(),</span><br><span class="line">    PermName.PERM_WRITE | PermName.PERM_READ, topicSysFlag);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">null</span> == topicConfig) &#123;</span><br><span class="line">    response.setCode(ResponseCode.SYSTEM_ERROR);</span><br><span class="line">    response.setRemark(<span class="string">"topic["</span> + newTopic + <span class="string">"] not exist"</span>);</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (!PermName.isWriteable(topicConfig.getPerm())) &#123;</span><br><span class="line">    response.setCode(ResponseCode.NO_PERMISSION);</span><br><span class="line">    response.setRemark(String.format(<span class="string">"the topic[%s] sending message is forbidden"</span>, newTopic));</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line">MessageExt msgExt = <span class="keyword">this</span>.brokerController.getMessageStore().lookMessageByOffset(requestHeader.getOffset());</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">null</span> == msgExt) &#123;</span><br><span class="line">    response.setCode(ResponseCode.SYSTEM_ERROR);</span><br><span class="line">    response.setRemark(<span class="string">"look message by offset failed, "</span> + requestHeader.getOffset());</span><br><span class="line">    <span class="keyword">return</span> response;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> String retryTopic = msgExt.getProperty(MessageConst.PROPERTY_RETRY_TOPIC);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">null</span> == retryTopic) &#123;</span><br><span class="line">    MessageAccessor.putProperty(msgExt, MessageConst.PROPERTY_RETRY_TOPIC, msgExt.getTopic());</span><br><span class="line">&#125;</span><br><span class="line">msgExt.setWaitStoreMsgOK(<span class="keyword">false</span>);</span><br><span class="line"><span class="comment">//延迟级别</span></span><br><span class="line"><span class="keyword">int</span> delayLevel = requestHeader.getDelayLevel();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> maxReconsumeTimes = subscriptionGroupConfig.getRetryMaxTimes();</span><br><span class="line"><span class="keyword">if</span> (request.getVersion() &gt;= MQVersion.Version.V3_4_9.ordinal()) &#123;</span><br><span class="line">    maxReconsumeTimes = requestHeader.getMaxReconsumeTimes();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//最大等于消息的最大重试次数，消息丢入到死信队列中</span></span><br><span class="line"><span class="keyword">if</span> (msgExt.getReconsumeTimes() &gt;= maxReconsumeTimes</span><br><span class="line">    || delayLevel &lt; <span class="number">0</span>) &#123;</span><br><span class="line">	<span class="comment">//重新设置其主题： %DLQ% + consumerGroup</span></span><br><span class="line">    newTopic = MixAll.getDLQTopic(requestHeader.getGroup());</span><br><span class="line">    queueIdInt = Math.abs(<span class="keyword">this</span>.random.nextInt() % <span class="number">99999999</span>) % DLQ_NUMS_PER_GROUP;</span><br><span class="line">    <span class="comment">//基础参数设置</span></span><br><span class="line">    topicConfig = <span class="keyword">this</span>.brokerController.getTopicConfigManager().createTopicInSendMessageBackMethod(newTopic,</span><br><span class="line">        DLQ_NUMS_PER_GROUP,</span><br><span class="line">        PermName.PERM_WRITE, <span class="number">0</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">null</span> == topicConfig) &#123;</span><br><span class="line">        response.setCode(ResponseCode.SYSTEM_ERROR);</span><br><span class="line">        response.setRemark(<span class="string">"topic["</span> + newTopic + <span class="string">"] not exist"</span>);</span><br><span class="line">        <span class="keyword">return</span> response;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">//第一次delayLevel==0时则下一次默认的延迟级别是3</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> == delayLevel) &#123;</span><br><span class="line">        delayLevel = <span class="number">3</span> + msgExt.getReconsumeTimes();</span><br><span class="line">    &#125;</span><br><span class="line">    msgExt.setDelayTimeLevel(delayLevel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>判断消息当前重试次数是否大于等于最大重试次数，如果达到最大重试次数，或者配置的重试级别小于0，则重新创建Topic，规则是 <strong>%DLQ% + consumerGroup</strong>，后续处理消息send到死信队列中。</p>
+<p>正常的消息会进入else分支，对于首次重试的消息，默认的delayLevel是0，rocketMQ会将给该level + 3，也就是加到3，这就是说，如果没有显示的配置延时级别，消息消费重试首次，是延迟了第三个级别发起的重试，也就是距离首次发送10s后重，其主题的默认规则是<strong>%RETRY% + consumerGroup</strong>。</p>
+<p>当延时级别设置完成，刷新消息的重试次数为当前次数加1，broker将该消息刷盘，逻辑如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">MessageExtBrokerInner msgInner = <span class="keyword">new</span> MessageExtBrokerInner();</span><br><span class="line">msgInner.setTopic(newTopic);</span><br><span class="line">msgInner.setBody(msgExt.getBody());</span><br><span class="line">msgInner.setFlag(msgExt.getFlag());</span><br><span class="line">MessageAccessor.setProperties(msgInner, msgExt.getProperties());</span><br><span class="line">msgInner.setPropertiesString(MessageDecoder.messageProperties2String(msgExt.getProperties()));</span><br><span class="line">msgInner.setTagsCode(MessageExtBrokerInner.tagsString2tagsCode(<span class="keyword">null</span>, msgExt.getTags()));</span><br><span class="line"></span><br><span class="line">msgInner.setQueueId(queueIdInt);</span><br><span class="line">msgInner.setSysFlag(msgExt.getSysFlag());</span><br><span class="line">msgInner.setBornTimestamp(msgExt.getBornTimestamp());</span><br><span class="line">msgInner.setBornHost(msgExt.getBornHost());</span><br><span class="line">msgInner.setStoreHost(<span class="keyword">this</span>.getStoreHost());</span><br><span class="line"><span class="comment">//刷新消息的重试次数为当前次数加</span></span><br><span class="line">msgInner.setReconsumeTimes(msgExt.getReconsumeTimes() + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">String originMsgId = MessageAccessor.getOriginMessageId(msgExt);</span><br><span class="line">MessageAccessor.setOriginMessageId(msgInner, UtilAll.isBlank(originMsgId) ? msgExt.getMsgId() : originMsgId);</span><br><span class="line"><span class="comment">//将消息持久化到commitlog文件中</span></span><br><span class="line">PutMessageResult putMessageResult = <span class="keyword">this</span>.brokerController.getMessageStore().putMessage(msgInner);</span><br></pre></td></tr></table></figure>
+
+<p>那么什么是msgInner呢，即：MessageExtBrokerInner，也就是对重试的消息，rocketMQ会创建一个新的 MessageExtBrokerInner 对象，它实际上是继承了MessageExt。</p>
+<p>我们继续进入消息刷盘逻辑，即putMessage(msgInner)方法，实现类为：DefaultMessageStore.java, 核心代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PutMessageResult result = this.commitLog.putMessage(msg);</span><br></pre></td></tr></table></figure>
+
+<p>主要关注 this.commitLog.putMessage(msg); 这句代码，通过commitLog我们可以认为这里是真实刷盘操作，也就是消息被持久化了。</p>
+<p>我们继续进入commitLog的putMessage方法，看到如下核心代码段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> tranType = MessageSysFlag.getTransactionValue(msg.getSysFlag());</span><br><span class="line"><span class="keyword">if</span> (tranType == MessageSysFlag.TRANSACTION_NOT_TYPE</span><br><span class="line">    || tranType == MessageSysFlag.TRANSACTION_COMMIT_TYPE) &#123;</span><br><span class="line">    <span class="comment">// Delay Delivery消息的延迟级别是否大于0</span></span><br><span class="line">    <span class="keyword">if</span> (msg.getDelayTimeLevel() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    	<span class="comment">//如果消息的延迟级别大于最大的延迟级别则置为最大延迟级别</span></span><br><span class="line">        <span class="keyword">if</span> (msg.getDelayTimeLevel() &gt; <span class="keyword">this</span>.defaultMessageStore.getScheduleMessageService().getMaxDelayLevel()) &#123;</span><br><span class="line">            msg.setDelayTimeLevel(<span class="keyword">this</span>.defaultMessageStore.getScheduleMessageService().getMaxDelayLevel());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//将消息主题设置为SCHEDULE_TOPIC_XXXX</span></span><br><span class="line">        topic = ScheduleMessageService.SCHEDULE_TOPIC;</span><br><span class="line">        <span class="comment">//将消息队列设置为延迟的消息队列的ID</span></span><br><span class="line">        queueId = ScheduleMessageService.delayLevel2QueueId(msg.getDelayTimeLevel());</span><br><span class="line">        <span class="comment">//消息的原有的主题和消息队列存入属性中</span></span><br><span class="line">        MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_TOPIC, msg.getTopic());</span><br><span class="line">        MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_QUEUE_ID, String.valueOf(msg.getQueueId()));</span><br><span class="line">        msg.setPropertiesString(MessageDecoder.messageProperties2String(msg.getProperties()));</span><br><span class="line">        msg.setTopic(topic);</span><br><span class="line">        msg.setQueueId(queueId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，如果是重试消息，在进行延时级别判断时候，返回true，则进入分支逻辑，通过这段逻辑我们可以知道，对于重试的消息，rocketMQ并不会从原队列中获取消息，而是创建了一个新的Topic进行消息存储的。也就是代码中的SCHEDULE_TOPIC，看一下具体是什么内容：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SCHEDULE_TOPIC = <span class="string">"SCHEDULE_TOPIC_XXXX"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>主题名称改为： SCHEDULE_TOPIC_XXXX。</p>
+<p>到这里我们可以得到一个结论：</p>
+<blockquote>
+<p>对于所有消费者消费失败的消息，rocketMQ都会把重试的消息 重新new出来（即上文提到的MessageExtBrokerInner对象），然后投递到主题 SCHEDULE_TOPIC_XXXX 下的队列中，然后由定时任务进行调度重试，而重试的周期符合我们在上文中提到的delayLevel周期，也就是：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String messageDelayLevel = <span class="string">"1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同时为了保证消息可被找到，也会将原先的topic存储到properties中，也就是如下这段代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_TOPIC, msg.getTopic());</span><br><span class="line">MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_QUEUE_ID, String.valueOf(msg.getQueueId()));</span><br><span class="line">msg.setPropertiesString(MessageDecoder.messageProperties2String(msg.getProperties()));</span><br></pre></td></tr></table></figure>
+
+<p>这里将原先的topic和队列id做了备份。</p>
+<p>参照<a href="[https://itzones.cn/2019/07/07/RocketMQ%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/](https://itzones.cn/2019/07/07/RocketMQ延迟消息/)">《RocketMQ延迟消息》</a>一文，里面有具体的分析，消息重试和延迟消息的处理流程是一样的都需要创建一个延迟消息的主题队列。后台启动定时任务定时扫描需要的发送的消息将其发送到原有的主题和消息队列中供消费，只是其重试消息的主题是%RETRY_TOPIC%+ consumerGroup并且其队列只有一个queue0，延迟消息和普通消息一样发送到原主题的原队列中。</p>
+<h2 id="3-3、死信的业务处理"><a href="#3-3、死信的业务处理" class="headerlink" title="3.3、死信的业务处理"></a>3.3、死信的业务处理</h2><p>默认的处理机制中，如果我们只对消息做重复消费，达到最大重试次数之后消息就进入死信队列了。</p>
+<p>我们也可以根据业务的需要，定义消费的最大重试次数，每次消费的时候判断当前消费次数是否等于最大重试次数的阈值。</p>
+<p>如：重试三次就认为当前业务存在异常，继续重试下去也没有意义了，那么我们就可以将当前的这条消息进行提交，返回broker状态ConsumeConcurrentlyStatus.CONSUME_SUCCES，让消息不再重发，同时将该消息存入我们业务自定义的死信消息表，将业务参数入库，相关的运营通过查询死信表来进行对应的业务补偿操作。</p>
+<p>RocketMQ 的处理方式为将达到最大重试次数（16次）的消息标记为死信消息，将该死信消息投递到 DLQ 死信队列中，业务需要进行人工干预。实现的逻辑在 SendMessageProcessor 的 consumerSendMsgBack 方法中，大致思路为首先判断重试次数是否超过16或者消息发送延时级别是否小于0，如果已经超过16或者发送延时级别小于0，则将消息设置为新的死信。死信 topic 为：%DLQ%+consumerGroup。</p>
+<p><img src="//mingxungu.github.io/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png" alt></p>
+<p>图中展示的就是整个消息重试涉及的消息在相关主题之间的流转</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">IOC和DI</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Spring创建Bean</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Bean生命周期</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Sping属性注入</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">消息重试</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/spring//" class="article-tag-list-link color2">spring</a>
+        			<a href="/categories/rocketMQ//" class="article-tag-list-link color4">rocketMQ</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2019/07/19/RocketMQ内存映射/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RocketMQ内存映射</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、分析"><span class="toc-number">1.</span> <span class="toc-text">1、分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、代码实现"><span class="toc-number">2.</span> <span class="toc-text">2、代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、生产者"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、生产者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2、消费者"><span class="toc-number">2.2.</span> <span class="toc-text">2.2、消费者</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3、源码分析"><span class="toc-number">3.</span> <span class="toc-text">3、源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1、客户端代码分析"><span class="toc-number">3.1.</span> <span class="toc-text">3.1、客户端代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2、服务端代码分析"><span class="toc-number">3.2.</span> <span class="toc-text">3.2、服务端代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3、死信的业务处理"><span class="toc-number">3.3.</span> <span class="toc-text">3.3、死信的业务处理</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -278,9 +454,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
