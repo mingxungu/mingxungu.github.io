@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/delay_result.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/retry_process.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png">
-<meta property="og:updated_time" content="2019-07-23T07:48:45.843Z">
+<meta property="og:updated_time" content="2019-07-23T07:55:17.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消息重试">
 <meta name="twitter:description" content="RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。">
@@ -279,7 +279,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_TOPIC, msg.getTopic());</span><br><span class="line">MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_QUEUE_ID, String.valueOf(msg.getQueueId()));</span><br><span class="line">msg.setPropertiesString(MessageDecoder.messageProperties2String(msg.getProperties()));</span><br></pre></td></tr></table></figure>
 
 <p>这里将原先的topic和队列id做了备份。</p>
-<p>参照<a href="[https://itzones.cn/2019/07/07/RocketMQ%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/](https://itzones.cn/2019/07/07/RocketMQ延迟消息/)">《RocketMQ延迟消息》</a>一文，里面有具体的分析，消息重试和延迟消息的处理流程是一样的都需要创建一个延迟消息的主题队列。后台启动定时任务定时扫描需要的发送的消息将其发送到原有的主题和消息队列中供消费，只是其重试消息的主题是%RETRY_TOPIC%+ consumerGroup并且其队列只有一个queue0，延迟消息和普通消息一样发送到原主题的原队列中。</p>
+<p>参照<a href="https://itzones.cn/2019/07/07/RocketMQ延迟消息/" target="_blank" rel="noopener">《RocketMQ延迟消息》</a>一文，里面有具体的分析，消息重试和延迟消息的处理流程是一样的都需要创建一个延迟消息的主题队列。后台启动定时任务定时扫描需要的发送的消息将其发送到原有的主题和消息队列中供消费，只是其重试消息的主题是%RETRY_TOPIC%+ consumerGroup并且其队列只有一个queue0，延迟消息和普通消息一样发送到原主题的原队列中。</p>
 <h2 id="3-3、死信的业务处理"><a href="#3-3、死信的业务处理" class="headerlink" title="3.3、死信的业务处理"></a>3.3、死信的业务处理</h2><p>默认的处理机制中，如果我们只对消息做重复消费，达到最大重试次数之后消息就进入死信队列了。</p>
 <p>我们也可以根据业务的需要，定义消费的最大重试次数，每次消费的时候判断当前消费次数是否等于最大重试次数的阈值。</p>
 <p>如：重试三次就认为当前业务存在异常，继续重试下去也没有意义了，那么我们就可以将当前的这条消息进行提交，返回broker状态ConsumeConcurrentlyStatus.CONSUME_SUCCES，让消息不再重发，同时将该消息存入我们业务自定义的死信消息表，将业务参数入库，相关的运营通过查询死信表来进行对应的业务补偿操作。</p>
@@ -524,15 +524,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -544,18 +556,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
               </li>
              
@@ -564,15 +564,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
