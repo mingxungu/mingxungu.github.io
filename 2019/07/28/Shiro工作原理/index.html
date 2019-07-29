@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/21.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/22.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/23.png">
-<meta property="og:updated_time" content="2019-07-29T05:29:11.591Z">
+<meta property="og:updated_time" content="2019-07-29T05:59:10.117Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro工作原理">
 <meta name="twitter:description" content="本节我们接着上一章节分析下Shiro的工作原理，初始化过程及如何与Spring进行整合使用的。">
@@ -301,8 +301,7 @@
 
 <p>明显是调用ShiroFilterFactoryBean的doFilter()方法，上面我们也分析了实际返回的是SpringShiroFilter对象我们重点分析下其执行过程。</p>
 <p><img src="//mingxungu.github.io/2019/07/28/Shiro工作原理/7.png" alt></p>
-<p>SpringShiroFilter是ShiroFilterFactoryBean的内部类属于，继承AbstractShiroFilter,其doFilter方法在父类中，OncePerRequestFilter的子类不能重写doFilter(),这才是业务核心代码所在</p>
-<p>分析首先分析下shiro提供的默认Filter</p>
+<p>SpringShiroFilter是ShiroFilterFactoryBean的内部类属于，继承AbstractShiroFilter,其doFilter方法在父类中，OncePerRequestFilter的子类不能重写doFilter(),这才是业务核心代码所在，分析首先分析下shiro提供的默认Filter</p>
 <p><img src="//mingxungu.github.io/2019/07/28/Shiro工作原理/8.png" alt></p>
 <p>已经很清楚的说明了这一切，shiro提供的10个默认的过滤器都继承了AdviceFilter,当然我们自定义过滤器的时候也可以继承AbstractShiroFilter，一般自定义Filter继承AdviceFilter或其子类。</p>
 <p>我们发现AdviceFilter的父类OncePerRequestFilter是abstract class 继承了Filter,OncePerRequestFilter实现了doFilter()方法</p>
@@ -340,6 +339,87 @@
 <p><img src="//mingxungu.github.io/2019/07/28/Shiro工作原理/23.png" alt></p>
 <p>preHandle方法：请求过来时该方法匹配url路径是否是该过滤器要处理的。遍历appliedPaths里所有的url直到完全匹配成功或遍历完为止。如果匹配成功则表明该url请求是需要该过滤器处理。然后就会进入onPreHandle方法。</p>
 <p>onPreHandle方法：该方法在路径匹配成功时决定对url是否需要身份验证。默认是返回true，意思是不需要验证的。但子类需要根据业务逻辑自己重写该方法。 </p>
+<h1 id="4、自定义过滤器"><a href="#4、自定义过滤器" class="headerlink" title="4、自定义过滤器"></a>4、自定义过滤器</h1><p>上面我们分析过Shiro提供了10种过滤器，我们先介绍下，再自定义过滤器</p>
+<h2 id="4-1、默认的过滤器"><a href="#4-1、默认的过滤器" class="headerlink" title="4.1、默认的过滤器"></a>4.1、默认的过滤器</h2><table>
+<thead>
+<tr>
+<th><strong>过滤器简称</strong></th>
+<th><strong>对应的java类</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>anon</td>
+<td>org.apache.shiro.web.filter.authc.AnonymousFilter</td>
+</tr>
+<tr>
+<td>authc</td>
+<td>org.apache.shiro.web.filter.authc.FormAuthenticationFilter</td>
+</tr>
+<tr>
+<td>authcBasic</td>
+<td>org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter</td>
+</tr>
+<tr>
+<td>perms</td>
+<td>org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter</td>
+</tr>
+<tr>
+<td>port</td>
+<td>org.apache.shiro.web.filter.authz.PortFilter</td>
+</tr>
+<tr>
+<td>rest</td>
+<td>org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter</td>
+</tr>
+<tr>
+<td>roles</td>
+<td>org.apache.shiro.web.filter.authz.RolesAuthorizationFilter</td>
+</tr>
+<tr>
+<td>ssl</td>
+<td>org.apache.shiro.web.filter.authz.SslFilter</td>
+</tr>
+<tr>
+<td>user</td>
+<td>org.apache.shiro.web.filter.authc.UserFilter</td>
+</tr>
+<tr>
+<td>logout</td>
+<td>org.apache.shiro.web.filter.authc.LogoutFilter</td>
+</tr>
+</tbody></table>
+<p>注解：</p>
+<ul>
+<li><p>anon:例子/admins/**=anon 没有参数，表示可以匿名使用。</p>
+</li>
+<li><p>authc:例如/admins/user/**=authc表示需要认证(登录)才能使用，FormAuthenticationFilter是表单认证，没有参数 </p>
+</li>
+<li><p>roles：例子/admins/user/**=roles[admin],参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles[“admin,guest”],每个参数通过才算通过，相当于hasAllRoles()方法。</p>
+</li>
+<li><p>perms：例子/admins/user/**=perms[user:add:<em>],参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，例如/admins/user/\</em>*=perms[“user:add:<em>,user:modify:\</em>“]，当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。</p>
+</li>
+<li><p>rest：例子/admins/user/**=rest[user],根据请求的方法，相当于/admins/user/**=perms[user:method] ,其中method为post，get，delete等。</p>
+</li>
+<li><p>port：例子/admins/user/**=port[8081],当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString是你访问的url里的？后面的参数。</p>
+</li>
+<li><p>authcBasic：例如/admins/user/**=authcBasic没有参数表示httpBasic认证</p>
+</li>
+<li><p>ssl:例子/admins/user/**=ssl没有参数，表示安全的url请求，协议为https</p>
+</li>
+<li><p>user:例如/admins/user/**=user没有参数表示必须存在用户, 身份认证通过或通过记住我认证通过的可以访问，当登入操作时不做检查</p>
+</li>
+</ul>
+<blockquote>
+<p>anon，authcBasic，auchc，user是认证过滤器，</p>
+<p>perms，roles，ssl，rest，port是授权过滤器</p>
+</blockquote>
+<h2 id="4-2、自定义过滤器"><a href="#4-2、自定义过滤器" class="headerlink" title="4.2、自定义过滤器"></a>4.2、自定义过滤器</h2><p>我们自定义一个系统日志过滤器，slogFilter</p>
+<p>xml中配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 系统日志拦截器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"slogFilter"</span> <span class="attr">class</span>=<span class="string">"cn.com.gumx.common.filter.SLogFilter"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- Shiro的Web过滤器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"shiroFilter"</span> <span class="attr">class</span>=<span class="string">"org.apache.shiro.spring.web.ShiroFilterFactoryBean"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"securityManager"</span> <span class="attr">ref</span>=<span class="string">"securityManager"</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"loginUrl"</span> <span class="attr">value</span>=<span class="string">"/a/login"</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"filters"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">util:map</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"forceLogout"</span> <span class="attr">value-ref</span>=<span class="string">"forceLogoutFilter"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"authc"</span> <span class="attr">value-ref</span>=<span class="string">"formAuthenticationFilter"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"logout"</span> <span class="attr">value-ref</span>=<span class="string">"logoutFilter"</span> /&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"slog"</span> <span class="attr">value-ref</span>=<span class="string">"slogFilter"</span> /&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"userAccess"</span> <span class="attr">value-ref</span>=<span class="string">"userAccessFilter"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">util:map</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--anon匿名访问，authc身份验证后访问，roles指定角色授权访问，perms指定类似user:create权限访问--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"filterChainDefinitions"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span></span><br><span class="line">			$&#123;adminPath&#125;/myapply/** = anon</span><br><span class="line">			$&#123;adminPath&#125;/register = anon,slog</span><br><span class="line">			$&#123;restPath&#125;/** = anon,userAccess,slog</span><br><span class="line">			$&#123;frontPath&#125;/** = anon,forceLogout,slog</span><br><span class="line">			$&#123;adminPath&#125;/login = authc,slog</span><br><span class="line">			$&#123;adminPath&#125;/logout = logout,slog</span><br><span class="line">			$&#123;adminPath&#125;/** = user,perms,roles,forceLogout,slog</span><br><span class="line">		<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SLogFilter</span> <span class="keyword">extends</span> <span class="title">AdviceFilter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">protected</span> Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Long&gt; startTimeThreadLocal =</span><br><span class="line">			<span class="keyword">new</span> NamedThreadLocal&lt;Long&gt;(<span class="string">"ThreadLocal StartTime"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(ServletRequest requestParm, ServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		HttpServletRequest request = (HttpServletRequest)requestParm;</span><br><span class="line">		<span class="keyword">long</span> beginTime = System.currentTimeMillis();<span class="comment">//1、开始时间</span></span><br><span class="line">		startTimeThreadLocal.set(beginTime);		<span class="comment">//线程绑定变量（该数据只有当前请求的线程可见）</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">postHandle</span><span class="params">(ServletRequest request, ServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(ServletRequest requestParm,</span></span></span><br><span class="line"><span class="function"><span class="params">			ServletResponse response, Exception exception)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		HttpServletRequest request = (HttpServletRequest)requestParm;</span><br><span class="line">		<span class="keyword">long</span> beginTime = startTimeThreadLocal.get();<span class="comment">//得到线程绑定的局部变量（开始时间）</span></span><br><span class="line">		<span class="keyword">long</span> endTime = System.currentTimeMillis(); 	<span class="comment">//2、结束时间</span></span><br><span class="line">		<span class="comment">// 保存系统日志</span></span><br><span class="line">		LogUtils.saveSLog(request,</span><br><span class="line">				UserUtils.getLoginUser(), exception, DateUtils.formatDateTime(endTime - beginTime));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -463,7 +543,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、DelegatingFilterProxy"><span class="toc-number">1.</span> <span class="toc-text">1、DelegatingFilterProxy</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1、init"><span class="toc-number">1.1.</span> <span class="toc-text">1.1、init()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2、doFilter"><span class="toc-number">1.2.</span> <span class="toc-text">1.2、doFilter()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、ShiroFilterFactoryBean"><span class="toc-number">2.</span> <span class="toc-text">2、ShiroFilterFactoryBean</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、FilterChainManager过滤器管理类"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、FilterChainManager过滤器管理类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1、属性讲解"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1、属性讲解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2、创建过程"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2、创建过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2、PathMatchingFilterChainResolver"><span class="toc-number">2.2.</span> <span class="toc-text">2.2、PathMatchingFilterChainResolver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3、SpringShiroFilter"><span class="toc-number">2.3.</span> <span class="toc-text">2.3、SpringShiroFilter</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-、请求解析过程"><span class="toc-number">3.</span> <span class="toc-text">3.、请求解析过程</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、DelegatingFilterProxy"><span class="toc-number">1.</span> <span class="toc-text">1、DelegatingFilterProxy</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1、init"><span class="toc-number">1.1.</span> <span class="toc-text">1.1、init()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2、doFilter"><span class="toc-number">1.2.</span> <span class="toc-text">1.2、doFilter()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、ShiroFilterFactoryBean"><span class="toc-number">2.</span> <span class="toc-text">2、ShiroFilterFactoryBean</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1、FilterChainManager过滤器管理类"><span class="toc-number">2.1.</span> <span class="toc-text">2.1、FilterChainManager过滤器管理类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1、属性讲解"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1、属性讲解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2、创建过程"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2、创建过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2、PathMatchingFilterChainResolver"><span class="toc-number">2.2.</span> <span class="toc-text">2.2、PathMatchingFilterChainResolver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3、SpringShiroFilter"><span class="toc-number">2.3.</span> <span class="toc-text">2.3、SpringShiroFilter</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-、请求解析过程"><span class="toc-number">3.</span> <span class="toc-text">3.、请求解析过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4、自定义过滤器"><span class="toc-number">4.</span> <span class="toc-text">4、自定义过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1、默认的过滤器"><span class="toc-number">4.1.</span> <span class="toc-text">4.1、默认的过滤器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2、自定义过滤器"><span class="toc-number">4.2.</span> <span class="toc-text">4.2、自定义过滤器</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -574,6 +654,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
               </li>
              
@@ -594,15 +686,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -610,11 +694,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -626,19 +718,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -679,6 +759,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
             
             <div class="clearfix"></div>
