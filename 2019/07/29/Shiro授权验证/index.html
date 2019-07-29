@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/29/Shiro授权验证/7.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/29/Shiro授权验证/8.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/29/Shiro授权验证/9.png">
-<meta property="og:updated_time" content="2019-07-29T09:59:20.309Z">
+<meta property="og:updated_time" content="2019-07-29T10:16:01.628Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro授权验证">
 <meta name="twitter:description" content="上节我们对认证过滤器的整个处理流程通过源码梳理了一下，本节我们将了解另一个重量级的过滤器授权过滤器PermissionsAuthorizationFilter，下面我们具体分析下。">
@@ -218,10 +218,13 @@
 <p>AccessControlFilter也会执行onPreHandle()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onPreHandle</span><span class="params">(ServletRequest request, ServletResponse response, Object mappedValue)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> isAccessAllowed(request, response, mappedValue) || onAccessDenied(request, response, mappedValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>查看具体实现</p>
+<p>查看具体实现在PermissionsAuthorizationFilter.isAccessAllowed()</p>
 <p><img src="//mingxungu.github.io/2019/07/29/Shiro授权验证/2.png" alt></p>
 <p>从该方法中我们可以知道默认是允许访问的boolean isPermitted =true当我们对某个资源的权限标识为null则意味着它可以被所有人访问。</p>
-<p>AuthorizingRealm类中的isPermitted</p>
+<p>调用DelegatingSubject.isPermitted()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPermitted</span><span class="params">(String permission)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//判断是否有账号，根据账号获取其拥有的所有权限和当前资源的权限进行比较</span></span><br><span class="line">    <span class="keyword">return</span> hasPrincipals() &amp;&amp; securityManager.isPermitted(getPrincipals(), permission);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关于Subject的hasPrincipals()方法我们下一节会分析Subject创建过程，有账号才能来验证有没有权限，调用AuthorizingRealm类中的isPermitted()</p>
 <p><img src="//mingxungu.github.io/2019/07/29/Shiro授权验证/3.png" alt></p>
 <p>获取认证信息</p>
 <p><img src="//mingxungu.github.io/2019/07/29/Shiro授权验证/4.png" alt></p>
@@ -476,11 +479,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -492,63 +495,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,11 +507,63 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -581,6 +580,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
