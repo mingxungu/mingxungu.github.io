@@ -9,7 +9,7 @@
   <title>Shiro工作原理 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本节我们接着上一章节分析下Shiro的工作原理，初始化过程及如何与Spring进行整合使用的。">
-<meta name="keywords" content="Shiro源码分析">
+<meta name="keywords" content="shiro源码分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shiro工作原理">
 <meta property="og:url" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/index.html">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/21.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/22.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/28/Shiro工作原理/23.png">
-<meta property="og:updated_time" content="2019-07-29T07:02:00.105Z">
+<meta property="og:updated_time" content="2019-07-29T07:04:43.323Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro工作原理">
 <meta name="twitter:description" content="本节我们接着上一章节分析下Shiro的工作原理，初始化过程及如何与Spring进行整合使用的。">
@@ -433,7 +433,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Shiro源码分析</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">shiro源码分析</a>
         		</li>
       		
 		</ul>
@@ -513,6 +513,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/07/29/Shiro认证流程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Shiro认证流程
+        
+      </div>
+    </a>
   
   
     <a href="/2019/07/27/Shiro简单使用/" id="article-nav-older" class="article-nav-link-wrap">
@@ -654,6 +663,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
@@ -663,18 +676,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -690,6 +691,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
@@ -702,23 +719,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -730,15 +735,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Shiro源码分析</a>
+                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -759,6 +764,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
               </li>
             
             <div class="clearfix"></div>
