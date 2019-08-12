@@ -20,8 +20,9 @@
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/19/RocketMQ内存映射/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/19/RocketMQ内存映射/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9B%BE1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/19/RocketMQ内存映射/mmap.png">
+<meta property="og:image" content="https://mingxungu.github.io/2019/07/19/RocketMQ内存映射/20190812165322.jpg">
 <meta property="og:image" content="https://mingxungu.github.io/2019/07/19/RocketMQ内存映射/%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6.png">
-<meta property="og:updated_time" content="2019-07-22T02:35:45.937Z">
+<meta property="og:updated_time" content="2019-08-12T08:58:54.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ内存映射">
 <meta name="twitter:description" content="前面几节我们讲解的都是RocketMQ应用层面也有一些关于源码的分析讲解，消息的存储只是简单的分析没有深入的探讨其中的内部机制，我们都知道RocketMQ是基于文件存储的消息模型，文件存储给我们的直觉感受就是比较慢，为什么RocketMQ在消息的生产及消费都在毫秒级，真如我们所想象的文件存储就很慢吗？本节分析下消息的内部内存映射机制。">
@@ -294,6 +295,20 @@
 
 <p><img src="//mingxungu.github.io/2019/07/19/RocketMQ内存映射/mmap.png" alt></p>
 <p>关于MMAP详细分析请查看-》<a href="https://blog.csdn.net/joejames/article/details/37958017" target="_blank" rel="noopener">linux内存映射mmap原理分析</a>一文</p>
+<p>知识点补充：PageCache与Mmap内存映射</p>
+<p>这里有必要先稍微简单地介绍下page cache的概念。系统的所有文件I/O请求，操作系统都是通过page cache机制实现的。对于操作系统来说，磁盘文件都是由一系列的数据块顺序组成，数据块的大小由操作系统本身而决定，x86的linux中一个标准页面大小是4KB。 </p>
+<p>操作系统内核在处理文件I/O请求时，首先到page cache中查找（page cache中的每一个数据块都设置了文件以及偏移量地址信息），如果未命中，则启动磁盘I/O，将磁盘文件中的数据块加载到page cache中的一个空闲块，然后再copy到用户缓冲区中。 </p>
+<p>page cache本身也会对数据文件进行预读取，对于每个文件的第一个读请求操作，系统在读入所请求页面的同时会读入紧随其后的少数几个页面。因此，想要提高page cache的命中率（尽量让访问的页在物理内存中），从硬件的角度来说肯定是物理内存越大越好。从操作系统层面来说，访问page cache时，即使只访问1k的消息，系统也会提前预读取更多的数据，在下次读取消息时, 就很可能可以命中内存。</p>
+<p> 在RocketMQ中，ConsumeQueue逻辑消费队列存储的数据较少，并且是顺序读取，在page cache机制的预读取作用下，ConsumeQueue的读性能会比较高近乎内存，即使在有消息堆积情况下也不会影响性能。而对于CommitLog消息存储的日志数据文件来说，读取消息内容时候会产生较多的随机访问读取，严重影响性能。如果选择合适的系统IO调度算法，比如设置调度算法为“Noop”（此时块存储采用SSD的话），随机读的性能也会有所提升。 另外，RocketMQ主要通过MappedByteBuffer对文件进行读写操作。其中，利用了NIO中的FileChannel模型直接将磁盘上的物理文件直接映射到用户态的内存地址中（这种Mmap的方式减少了传统IO将磁盘文件数据在操作系统内核地址空间的缓冲区和用户应用程序地址空间的缓冲区之间来回进行拷贝的性能开销），将对文件的操作转化为直接对内存地址进行操作，从而极大地提高了文件的读写效率（<strong>需要注意的是，采用MappedByteBuffer这种内存映射的方式有几个限制，其中之一是一次只能映射1.5~2G 的文件至用户态的虚拟内存，这也是为何RocketMQ默认设置单个CommitLog日志数据文件为1G的原因了</strong>）</p>
+<p><strong>（1）Mmap内存映射技术的特点</strong></p>
+<p>Mmap内存映射和普通标准IO操作的本质区别在于它并不需要将文件中的数据先拷贝至OS的内核IO缓冲区，而是可以直接将用户进程私有地址空间中的一块区域与文件对象建立映射关系，这样程序就好像可以直接从内存中完成对文件读/写操作一样。只有当缺页中断发生时，直接将文件从磁盘拷贝至用户态的进程空间内，只进行了一次数据拷贝。对于容量较大的文件来说（文件大小一般需要限制在1.5~2G以下），采用Mmap的方式其读/写的效率和性能都非常高。</p>
+<p><img src="//mingxungu.github.io/2019/07/19/RocketMQ内存映射/20190812165322.jpg" alt></p>
+<p><strong>（2）JDK NIO的MappedByteBuffer简要分析</strong></p>
+<p>从JDK的源码来看，MappedByteBuffer继承自ByteBuffer，其内部维护了一个逻辑地址变量—address。在建立映射关系时，MappedByteBuffer利用了JDK NIO的FileChannel类提供的map()方法把文件对象映射到虚拟内存。仔细看源码中map()方法的实现，可以发现最终其通过调用native方法map0()完成文件对象的映射工作，同时使用Util.newMappedByteBuffer()方法初始化MappedByteBuffer实例，但最终返回的是DirectByteBuffer的实例。在Java程序中使用MappedByteBuffer的get()方法来获取内存数据是最终通过DirectByteBuffer.get()方法实现（底层通过unsafe.getByte()方法，以“地址 + 偏移量”的方式获取指定映射至内存中的数据）。</p>
+<p><strong>（3）使用Mmap的限制</strong></p>
+<p><strong>a.Mmap映射的内存空间释放的问题</strong>；由于映射的内存空间本身就不属于JVM的堆内存区（Java Heap），因此其不受JVM GC的控制，卸载这部分内存空间需要通过系统调用 unmap()方法来实现。然而unmap()方法是FileChannelImpl类里实现的私有方法，无法直接显示调用。<strong>RocketMQ中的做法是</strong>，通过Java反射的方式调用“sun.misc”包下的Cleaner类的clean()方法来释放映射占用的内存空间；</p>
+<p><strong>b.MappedByteBuffer内存映射大小限制</strong>；因为其占用的是虚拟内存（非JVM的堆内存），大小不受JVM的-Xmx参数限制，但其大小也受到OS虚拟内存大小的限制。一般来说，一次只能映射1.5~2G 的文件至用户态的虚拟内存空间，这也是为何RocketMQ默认设置单个CommitLog日志数据文件为1G的原因了；</p>
+<p><strong>c.使用MappedByteBuffe的其他问题</strong>；会存在内存占用率较高和文件关闭不确定性的问题；</p>
 <p>我们发现有两种方式创建mappedFile对象</p>
 <p>1、mappedFile = new MappedFile(req.getFilePath(), req.getFileSize())</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MappedFile</span><span class="params">(<span class="keyword">final</span> String fileName, <span class="keyword">final</span> <span class="keyword">int</span> fileSize)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    init(fileName, fileSize);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">final</span> String fileName, <span class="keyword">final</span> <span class="keyword">int</span> fileSize)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.fileName = fileName;</span><br><span class="line">    <span class="keyword">this</span>.fileSize = fileSize;</span><br><span class="line">    <span class="keyword">this</span>.file = <span class="keyword">new</span> File(fileName);</span><br><span class="line">    <span class="comment">//初始化的初始偏移量是文件名称</span></span><br><span class="line">    <span class="keyword">this</span>.fileFromOffset = Long.parseLong(<span class="keyword">this</span>.file.getName());</span><br><span class="line">    <span class="keyword">boolean</span> ok = <span class="keyword">false</span>;</span><br><span class="line">    ensureDirOK(<span class="keyword">this</span>.file.getParent());</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">    	<span class="comment">//创建读写文件通道NIO</span></span><br><span class="line">        <span class="keyword">this</span>.fileChannel = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">this</span>.file, <span class="string">"rw"</span>).getChannel();</span><br><span class="line">        <span class="comment">//将文件映射到内存</span></span><br><span class="line">        <span class="keyword">this</span>.mappedByteBuffer = <span class="keyword">this</span>.fileChannel.map(MapMode.READ_WRITE, <span class="number">0</span>, fileSize);</span><br><span class="line">        TOTAL_MAPPED_VIRTUAL_MEMORY.addAndGet(fileSize);</span><br><span class="line">        TOTAL_MAPPED_FILES.incrementAndGet();</span><br><span class="line">        ok = <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        log.error(<span class="string">"create file channel "</span> + <span class="keyword">this</span>.fileName + <span class="string">" Failed. "</span>, e);</span><br><span class="line">        <span class="keyword">throw</span> e;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        log.error(<span class="string">"map file "</span> + <span class="keyword">this</span>.fileName + <span class="string">" Failed. "</span>, e);</span><br><span class="line">        <span class="keyword">throw</span> e;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!ok &amp;&amp; <span class="keyword">this</span>.fileChannel != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.fileChannel.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -310,6 +325,11 @@
 <p>创建完mappedFile对象后，有个预热操作，每个字节填充<strong>(byte) 0</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">warmMappedFile</span><span class="params">(FlushDiskType type, <span class="keyword">int</span> pages)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> beginTime = System.currentTimeMillis();</span><br><span class="line">    <span class="comment">//创建一个新的字节缓冲区，其内容是此缓冲区内容的共享子序列</span></span><br><span class="line">    ByteBuffer byteBuffer = <span class="keyword">this</span>.mappedByteBuffer.slice();</span><br><span class="line">    <span class="comment">//记录上一次刷盘的字节数</span></span><br><span class="line">    <span class="keyword">int</span> flush = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.fileSize; i += MappedFile.OS_PAGE_SIZE, j++) &#123;</span><br><span class="line">        byteBuffer.put(i, (<span class="keyword">byte</span>) <span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 刷盘方式是同步策略时，进行刷盘操作</span></span><br><span class="line">        <span class="comment">// 每修改pages个分页刷一次盘，相当于4096*4k = 16M  每16M刷一次盘，1G文件 1024M/16M = 64次</span></span><br><span class="line">        <span class="keyword">if</span> (type == FlushDiskType.SYNC_FLUSH) &#123;</span><br><span class="line">            <span class="keyword">if</span> ((i / OS_PAGE_SIZE) - (flush / OS_PAGE_SIZE) &gt;= pages) &#123;</span><br><span class="line">                flush = i;</span><br><span class="line">                mappedByteBuffer.force();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 防止垃圾回收GC</span></span><br><span class="line">        <span class="keyword">if</span> (j % <span class="number">1000</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            log.info(<span class="string">"j=&#123;&#125;, costTime=&#123;&#125;"</span>, j, System.currentTimeMillis() - time);</span><br><span class="line">            time = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">0</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                log.error(<span class="string">"Interrupted"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// force flush when prepare load finished</span></span><br><span class="line">    <span class="keyword">if</span> (type == FlushDiskType.SYNC_FLUSH) &#123;</span><br><span class="line">        log.info(<span class="string">"mapped file warm-up done, force to disk, mappedFile=&#123;&#125;, costTime=&#123;&#125;"</span>,</span><br><span class="line">            <span class="keyword">this</span>.getFileName(), System.currentTimeMillis() - beginTime);</span><br><span class="line">        <span class="comment">//刷盘，强制将此缓冲区内容的任何更改写入包含映射文件的存储设备</span></span><br><span class="line">        mappedByteBuffer.force();</span><br><span class="line">    &#125;</span><br><span class="line">    log.info(<span class="string">"mapped file warm-up done. mappedFile=&#123;&#125;, costTime=&#123;&#125;"</span>, <span class="keyword">this</span>.getFileName(),</span><br><span class="line">        System.currentTimeMillis() - beginTime);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">this</span>.mlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p><strong>预热的目的</strong>：第一点，由于仅分配内存并进行mlock系统调用后并不会为程序完全锁定这些内存，因为其中的分页可能是写时复制的。因此，就有必要对每个内存页面中写入一个假的值。其中，RocketMQ是在创建并分配MappedFile的过程中，预先写入一些随机值至Mmap映射出的内存空间里。第二，调用Mmap进行内存映射后，OS只是建立虚拟内存地址至物理地址的映射表，而实际并没有加载任何文件至内存中。程序要访问数据时OS会检查该部分的分页是否已经在内存中，如果不在，则发出一次缺页中断。这里，可以想象下1G的CommitLog需要发生多少次缺页中断，才能使得对应的数据才能完全加载至物理内存中（ps：X86的Linux中一个标准页面大小是4KB）？<strong>RocketMQ的做法是</strong>，在做Mmap内存映射的同时进行madvise系统调用，目的是使OS做一次内存映射后对应的文件数据尽可能多的预加载至内存中，从而达到内存预热的效果。</p>
+<p><strong>mlock</strong>()操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void mlock() &#123;</span><br><span class="line">    final long beginTime = System.currentTimeMillis();</span><br><span class="line">    final long address = ((DirectBuffer) (this.mappedByteBuffer)).address();</span><br><span class="line">    Pointer pointer = new Pointer(address);</span><br><span class="line">    &#123;</span><br><span class="line">        int ret = LibC.INSTANCE.mlock(pointer, new NativeLong(this.fileSize));</span><br><span class="line">        log.info(&quot;mlock &#123;&#125; &#123;&#125; &#123;&#125; ret = &#123;&#125; time consuming = &#123;&#125;&quot;, address, this.fileName, this.fileSize, ret, System.currentTimeMillis() - beginTime);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        int ret = LibC.INSTANCE.madvise(pointer, new NativeLong(this.fileSize), LibC.MADV_WILLNEED);</span><br><span class="line">        log.info(&quot;madvise &#123;&#125; &#123;&#125; &#123;&#125; ret = &#123;&#125; time consuming = &#123;&#125;&quot;, address, this.fileName, this.fileSize, ret, System.currentTimeMillis() - beginTime);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mlock系统调用</strong>：其可以将进程使用的部分或者全部的地址空间锁定在物理内存中，防止其被交换到swap空间。对于RocketMQ这种的高吞吐量的分布式消息队列来说，追求的是消息读写低延迟，那么肯定希望尽可能地多使用物理内存，提高数据读写访问的操作效率。</p>
 <h1 id="4、映射文件中写入消息"><a href="#4、映射文件中写入消息" class="headerlink" title="4、映射文件中写入消息"></a>4、映射文件中写入消息</h1><p>MappedFile.appendMessage()的核心方法MappedFile.appendMessagesInner()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AppendMessageResult <span class="title">appendMessagesInner</span><span class="params">(<span class="keyword">final</span> MessageExt messageExt, <span class="keyword">final</span> AppendMessageCallback cb)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">assert</span> messageExt != <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">assert</span> cb != <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//获取当前写的指针</span></span><br><span class="line">    <span class="keyword">int</span> currentPos = <span class="keyword">this</span>.wrotePosition.get();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (currentPos &lt; <span class="keyword">this</span>.fileSize) &#123;</span><br><span class="line">    	<span class="comment">//创建一个与MappedFile的共享内存区</span></span><br><span class="line">        ByteBuffer byteBuffer = writeBuffer != <span class="keyword">null</span> ? writeBuffer.slice() : <span class="keyword">this</span>.mappedByteBuffer.slice();</span><br><span class="line">        <span class="comment">//设置指针</span></span><br><span class="line">        byteBuffer.position(currentPos);</span><br><span class="line">        AppendMessageResult result = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (messageExt <span class="keyword">instanceof</span> MessageExtBrokerInner) &#123;</span><br><span class="line">            result = cb.doAppend(<span class="keyword">this</span>.getFileFromOffset(), byteBuffer, <span class="keyword">this</span>.fileSize - currentPos, (MessageExtBrokerInner) messageExt);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (messageExt <span class="keyword">instanceof</span> MessageExtBatch) &#123;</span><br><span class="line">            result = cb.doAppend(<span class="keyword">this</span>.getFileFromOffset(), byteBuffer, <span class="keyword">this</span>.fileSize - currentPos, (MessageExtBatch) messageExt);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AppendMessageResult(AppendMessageStatus.UNKNOWN_ERROR);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.wrotePosition.addAndGet(result.getWroteBytes());</span><br><span class="line">        <span class="keyword">this</span>.storeTimestamp = result.getStoreTimestamp();</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//当前写的指针大于文件的大小则抛出异常</span></span><br><span class="line">    log.error(<span class="string">"MappedFile.appendMessage return null, wrotePosition: &#123;&#125; fileSize: &#123;&#125;"</span>, currentPos, <span class="keyword">this</span>.fileSize);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> AppendMessageResult(AppendMessageStatus.UNKNOWN_ERROR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -572,11 +592,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -588,11 +616,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -601,14 +629,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,11 +644,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -652,10 +672,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">IOC和DI</a>
               </li>
              
@@ -669,6 +685,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
