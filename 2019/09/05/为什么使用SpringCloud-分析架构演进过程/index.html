@@ -17,8 +17,8 @@
 <meta property="og:description" content="1. 概述本文以淘宝作为例子，介绍从一百个并发到千万级并发情况下服务端的架构的演进过程，同时列举出每个演进阶段会遇到的相关技术，让大家对架构的演进有一个整体的认知，文章最后汇总了一些架构设计的原则。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://image-static.segmentfault.com/266/495/2664959638-5ca02e1d2e99b_articlex">
-<meta property="og:image" content="https://segmentfault.com/img/bVbqHnF?w=581&h=207">
 <meta property="og:image" content="https://image-static.segmentfault.com/257/135/2571350918-5ca02dfbdc242">
+<meta property="og:image" content="https://image-static.segmentfault.com/108/886/1088865837-5ca031313f044">
 <meta property="og:image" content="https://image-static.segmentfault.com/287/264/2872647211-5c95fef4928ad">
 <meta property="og:image" content="https://image-static.segmentfault.com/158/988/1589885053-5c96032e3c356">
 <meta property="og:image" content="https://image-static.segmentfault.com/250/737/250737400-5c9653d44e54e">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://image-static.segmentfault.com/116/244/1162448692-5ca052a998911">
 <meta property="og:image" content="https://image-static.segmentfault.com/276/074/2760745238-5ca055e4b20a9">
 <meta property="og:image" content="https://image-static.segmentfault.com/140/934/1409345676-5ca05cae06402">
-<meta property="og:updated_time" content="2019-10-31T05:35:36.848Z">
+<meta property="og:updated_time" content="2019-11-03T23:50:37.002Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="为什么使用SpringCloud - 分析架构演进过程">
 <meta name="twitter:description" content="1. 概述本文以淘宝作为例子，介绍从一百个并发到千万级并发情况下服务端的架构的演进过程，同时列举出每个演进阶段会遇到的相关技术，让大家对架构的演进有一个整体的认知，文章最后汇总了一些架构设计的原则。">
@@ -238,12 +238,12 @@
 <blockquote>
 <p><strong>随着用户数的增长，Tomcat和数据库之间竞争资源，单机性能不足以支撑业务</strong></p>
 </blockquote>
-<h2 id="3-2-第一次演进：Tomcat与数据库分开部署"><a href="#3-2-第一次演进：Tomcat与数据库分开部署" class="headerlink" title="3.2 第一次演进：Tomcat与数据库分开部署"></a>3.2 第一次演进：Tomcat与数据库分开部署</h2><p><img src="https://segmentfault.com/img/bVbqHnF?w=581&h=207" alt="clipboard.png"></p>
+<h2 id="3-2-第一次演进：Tomcat与数据库分开部署"><a href="#3-2-第一次演进：Tomcat与数据库分开部署" class="headerlink" title="3.2 第一次演进：Tomcat与数据库分开部署"></a>3.2 第一次演进：Tomcat与数据库分开部署</h2><p><img src="https://image-static.segmentfault.com/257/135/2571350918-5ca02dfbdc242" alt="clipboard.png"></p>
 <p>Tomcat和数据库分别独占服务器资源，显著提高两者各自性能。</p>
 <blockquote>
 <p><strong>随着用户数的增长，并发读写数据库成为瓶颈</strong></p>
 </blockquote>
-<h2 id="3-3-第二次演进：引入本地缓存和分布式缓存"><a href="#3-3-第二次演进：引入本地缓存和分布式缓存" class="headerlink" title="3.3 第二次演进：引入本地缓存和分布式缓存"></a>3.3 第二次演进：引入本地缓存和分布式缓存</h2><p><img src="https://image-static.segmentfault.com/257/135/2571350918-5ca02dfbdc242" alt="clipboard.png"></p>
+<h2 id="3-3-第二次演进：引入本地缓存和分布式缓存"><a href="#3-3-第二次演进：引入本地缓存和分布式缓存" class="headerlink" title="3.3 第二次演进：引入本地缓存和分布式缓存"></a>3.3 第二次演进：引入本地缓存和分布式缓存</h2><p><img src="https://image-static.segmentfault.com/108/886/1088865837-5ca031313f044" alt="clipboard.png"></p>
 <p>在Tomcat同服务器上或同JVM中增加本地缓存，并在外部增加分布式缓存，缓存热门商品信息或热门商品的html页面等。通过缓存能把绝大多数请求在读写数据库前拦截掉，大大降低数据库压力。其中涉及的技术包括：使用memcached作为本地缓存，使用Redis作为分布式缓存，还会涉及缓存一致性、缓存穿透/击穿、缓存雪崩、热点数据集中失效等问题。</p>
 <blockquote>
 <p><strong>缓存抗住了大部分的访问请求，随着用户数的增长，并发压力主要落在单机的Tomcat上，响应逐渐变慢</strong></p>
@@ -583,23 +583,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -611,6 +607,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
@@ -619,7 +623,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -631,18 +635,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
@@ -651,7 +643,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -667,11 +663,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -696,6 +692,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
               </li>
              
               <li class="article-tag-list-item">
