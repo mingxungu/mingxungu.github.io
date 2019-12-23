@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://image-static.segmentfault.com/116/244/1162448692-5ca052a998911">
 <meta property="og:image" content="https://image-static.segmentfault.com/276/074/2760745238-5ca055e4b20a9">
 <meta property="og:image" content="https://image-static.segmentfault.com/140/934/1409345676-5ca05cae06402">
-<meta property="og:updated_time" content="2019-11-03T23:50:37.002Z">
+<meta property="og:updated_time" content="2019-11-03T23:52:41.737Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="为什么使用SpringCloud - 分析架构演进过程">
 <meta name="twitter:description" content="1. 概述本文以淘宝作为例子，介绍从一百个并发到千万级并发情况下服务端的架构的演进过程，同时列举出每个演进阶段会遇到的相关技术，让大家对架构的演进有一个整体的认知，文章最后汇总了一些架构设计的原则。">
@@ -65,7 +65,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="https://avatars0.githubusercontent.com/u/30455375?s=400&amp;u=8e2e22aeec48ac4b5344190eebce8a3f7f09692b&amp;v=4" class="js-avatar">
+			<img src="https://oscimg.oschina.net/oscnet/up-714965de42b602da19bf42963ddebc90.jpg!/both/200x200?t=1513566929000" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">IT小栈</a></h1>
@@ -129,7 +129,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="https://avatars0.githubusercontent.com/u/30455375?s=400&amp;u=8e2e22aeec48ac4b5344190eebce8a3f7f09692b&amp;v=4" class="js-avatar">
+				<img src="https://oscimg.oschina.net/oscnet/up-714965de42b602da19bf42963ddebc90.jpg!/both/200x200?t=1513566929000" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">IT小栈</h1>
@@ -234,7 +234,7 @@
 <li><strong>正向代理和反向代理</strong><br>系统内部要访问外部网络时，统一通过一个代理服务器把请求转发出去，在外部网络看来就是代理服务器发起的访问，此时代理服务器实现的是正向代理；当外部请求进入系统时，代理服务器把该请求转发到系统中的某台服务器上，对外部请求来说，与之交互的只有代理服务器，此时代理服务器实现的是反向代理。简单来说，正向代理是代理服务器代替系统内部来访问外部网络的过程，反向代理是外部请求访问系统时通过代理服务器转发到内部服务器的过程。</li>
 </ul>
 <h1 id="3-架构演进"><a href="#3-架构演进" class="headerlink" title="3. 架构演进"></a>3. 架构演进</h1><h2 id="3-1-单机架构"><a href="#3-1-单机架构" class="headerlink" title="3.1 单机架构"></a>3.1 单机架构</h2><p><img src="https://image-static.segmentfault.com/266/495/2664959638-5ca02e1d2e99b_articlex" alt="clipboard.png"></p>
-<p>以淘宝作为例子。在网站最初时，应用数量与用户数都较少，可以把Tomcat和数据库部署在同一台服务器上。浏览器往<a href="http://www.taobao.com发起请求时，首先经过DNS服务器（域名系统）把域名转换为实际IP地址10.102.4.1，浏览器转而访问该IP对应的Tomcat。" target="_blank" rel="noopener">www.taobao.com发起请求时，首先经过DNS服务器（域名系统）把域名转换为实际IP地址10.102.4.1，浏览器转而访问该IP对应的Tomcat。</a></p>
+<p>以淘宝作为例子。在网站最初时，应用数量与用户数都较少，可以把Tomcat和数据库部署在同一台服务器上。浏览器往<a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a> 发起请求时，首先经过DNS服务器（域名系统）把域名转换为实际IP地址10.102.4.1，浏览器转而访问该IP对应的Tomcat。</p>
 <blockquote>
 <p><strong>随着用户数的增长，Tomcat和数据库之间竞争资源，单机性能不足以支撑业务</strong></p>
 </blockquote>
@@ -583,14 +583,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
@@ -607,11 +599,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -623,15 +631,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -639,15 +643,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -659,11 +659,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -671,7 +671,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -695,7 +695,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
              
               <li class="article-tag-list-item">
