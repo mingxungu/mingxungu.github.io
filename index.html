@@ -190,6 +190,109 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Kafka快速入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/03/Kafka快速入门/">Kafka快速入门</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/03/Kafka快速入门/" class="archive-article-date">
+  	<time datetime="2020-03-02T23:57:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本章简单讲讲Kafka的入门操作，消息发送和消息接收。</p>
+<h1 id="1、引入kafka-2-12"><a href="#1、引入kafka-2-12" class="headerlink" title="1、引入kafka_2.12"></a>1、引入kafka_2.12</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.kafka<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>kafka_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-nop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.24<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2、生产者Producer"><a href="#2、生产者Producer" class="headerlink" title="2、生产者Producer"></a>2、生产者Producer</h1><p>Kafka消息的生产有三种模式：<strong>发送即忘</strong>（不管是否发送成功，只管发送）、<strong>同步</strong>（等待发送成功才返回）、<strong>异步</strong>（发送失败会异步调用回调函数）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaProducerTest</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Producer&lt;String,String&gt; producer;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span>&#123;</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		<span class="comment">//kafka 地址</span></span><br><span class="line">		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		<span class="comment">//确认有几个副本接收到消息 </span></span><br><span class="line">		<span class="comment">//1：一个副本 （默认值）</span></span><br><span class="line">		<span class="comment">//0：直接返回  </span></span><br><span class="line">		<span class="comment">//-1或all：所有副本接收到</span></span><br><span class="line">		props.put(ProducerConfig.ACKS_CONFIG,<span class="string">"all"</span>);</span><br><span class="line">		<span class="comment">//客户端发送失败重试次数默认是0(可重试的异常才起效果，如网络问题等)</span></span><br><span class="line">		props.put(ProducerConfig.RETRIES_CONFIG,<span class="number">3</span>);</span><br><span class="line">		<span class="comment">//key序列化</span></span><br><span class="line">		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">		<span class="comment">//value序列化</span></span><br><span class="line">		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);	</span><br><span class="line">		producer = <span class="keyword">new</span> KafkaProducer&lt;String,String&gt;(props);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第一种：直接发送不管结果。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sendMessageForgetResult</span><span class="params">(String topic ,String key ,String message)</span></span>&#123;</span><br><span class="line">		producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message));</span><br><span class="line">		System.out.println(<span class="string">"直接发送不管结果==="</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第二种：同步发送</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RecordMetadata <span class="title">sendMessageSync</span><span class="params">(String topic ,String key ,String message)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>&#123;</span><br><span class="line">		Future&lt;RecordMetadata&gt; future = producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message));</span><br><span class="line">		RecordMetadata pecordMetadata = future.get();</span><br><span class="line">		System.out.println(<span class="string">"同步发送==="</span>+pecordMetadata.offset());</span><br><span class="line">		<span class="keyword">return</span> pecordMetadata;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第三种：异步发送，执行回调方法（异常时才会调用）</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sendMessageCallback</span><span class="params">(String topic ,String key ,String message)</span></span>&#123;</span><br><span class="line">		producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message),<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompletion</span><span class="params">(RecordMetadata record, Exception e)</span> </span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(<span class="keyword">null</span> != e)&#123;</span><br><span class="line">					<span class="comment">//发送异常处理</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">					<span class="keyword">return</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(<span class="string">"异步发送，发送失败，执行回调方法==="</span>+record.offset());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//直接发送</span></span><br><span class="line">		sendMessageForgetResult(<span class="string">"gumx"</span>,<span class="string">"0"</span>,<span class="string">"直接发送，不管是否成功!"</span>);</span><br><span class="line">        </span><br><span class="line">		<span class="comment">//同步发送</span></span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			sendMessageSync(<span class="string">"gumx"</span>,<span class="string">"1"</span>,<span class="string">"同步发送!"</span>);</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//异步处理</span></span><br><span class="line">		sendMessageCallback(<span class="string">"gumx"</span>,<span class="string">"2"</span>,<span class="string">"异步发送!"</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>消息发送的三种模式的应用场景分析</p>
+<blockquote>
+<p>对于消息可靠性要求不强，吞吐量要求高并且消息的发送允许丢失的场景可以使用第一种<strong>发送即忘</strong>，如日志收集功能</p>
+<p>对于消息的可靠性要求强，吞吐量要求不高，必须立刻返回结果的，要么成功要么失败，使用第二种<strong>同步</strong></p>
+<p>对于消息可靠性要求较强，吞吐量要求较高，使用第三种<strong>异步</strong></p>
+</blockquote>
+<p>使用Kafka Eagle可视化工具，查询kafka中主题是gumx的消息</p>
+<p><img src="//mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png" alt></p>
+<h1 id="3、消费者Consumer"><a href="#3、消费者Consumer" class="headerlink" title="3、消费者Consumer"></a>3、消费者Consumer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaConsumerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		props.put(<span class="string">"bootstrap.servers"</span>,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		props.put(<span class="string">"group.id"</span>,<span class="string">"gumx_record"</span>);</span><br><span class="line">		<span class="comment">//自动提交偏移量</span></span><br><span class="line">		props.put(<span class="string">"enable.auto.commit"</span>,<span class="string">"true"</span>);</span><br><span class="line">		<span class="comment">//偏移量提交的间隔时间</span></span><br><span class="line">		props.put(<span class="string">"auto.commit.interval.ms"</span>,<span class="string">"1000"</span>);</span><br><span class="line">		props.put(<span class="string">"key.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">		props.put(<span class="string">"value.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);	</span><br><span class="line"></span><br><span class="line">		KafkaConsumer&lt;String,String&gt; consumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">		consumer.subscribe(Arrays.asList(<span class="string">"gumx"</span>));</span><br><span class="line"></span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			ConsumerRecords&lt;String,String&gt; records = consumer.poll(Duration.ofMillis(<span class="number">2000</span>));</span><br><span class="line">			<span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">				System.out.println(<span class="string">""</span>);</span><br><span class="line">				System.out.printf(<span class="string">"消息消费，offset= %d,key= %s,value= %s%n"</span>,record.offset(),record.key(),record.value());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="//mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_consumer_msg.png" alt></p>
+<p>注意：生产者启动是不会获取消息，默认是从队列尾部消费，启动消费者后再次发送消息才能看到如图所示结果。</p>
+<p>里面的具体参数解析后续会详细说明</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">kafka</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/kafka//" class="article-tag-list-link color1">kafka</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/03/Kafka快速入门/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Kafka简单介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -546,93 +649,6 @@
 
 
   
-    <article id="post-Java代码编译过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/14/Java代码编译过程/">Java代码编译过程</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/14/Java代码编译过程/" class="archive-article-date">
-  	<time datetime="2019-08-13T23:48:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我们知道Java文件后缀是.java文件，JVM则识别的是.class字节码文件，那么我们就需要中间做些转换.java-&gt;.class,下面我们分析下这个编译过程。</p>
-        
-          <a class="article-more-a" href="/2019/08/14/Java代码编译过程/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Java基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/14/Java代码编译过程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -647,7 +663,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 IT小栈
+    		&copy; 2020 IT小栈
     	</div>
 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
         <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
@@ -729,11 +745,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">kafka</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -741,19 +757,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -761,11 +765,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -777,6 +777,30 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
               </li>
              
@@ -785,11 +809,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -797,7 +821,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -809,7 +833,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -817,19 +841,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -849,11 +869,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
