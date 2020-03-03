@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
   <title>Kafka快速入门 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.1212345678910&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.apache.kafka&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;kafka_2.12&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;2.2.1&amp;lt">
+  <meta name="description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。">
 <meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka快速入门">
 <meta property="og:url" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.1212345678910&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.apache.kafka&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;kafka_2.12&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;2.2.1&amp;lt">
+<meta property="og:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_consumer_msg.png">
-<meta property="og:updated_time" content="2020-03-03T03:05:29.339Z">
+<meta property="og:updated_time" content="2020-03-03T03:14:15.310Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka快速入门">
-<meta name="twitter:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.1212345678910&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.apache.kafka&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;kafka_2.12&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;2.2.1&amp;lt">
+<meta name="twitter:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。">
 <meta name="twitter:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -216,6 +216,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本章简单讲讲Kafka的入门操作，消息发送和消息接收。</p>
+<a id="more"></a>
+
 <h1 id="1、引入kafka-2-12"><a href="#1、引入kafka-2-12" class="headerlink" title="1、引入kafka_2.12"></a>1、引入kafka_2.12</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.kafka<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>kafka_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-nop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.24<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="2、生产者Producer"><a href="#2、生产者Producer" class="headerlink" title="2、生产者Producer"></a>2、生产者Producer</h1><p>Kafka消息的生产有三种模式：<strong>发送即忘</strong>（不管是否发送成功，只管发送）、<strong>同步</strong>（等待发送成功才返回）、<strong>异步</strong>（发送失败会异步调用回调函数）</p>
@@ -480,10 +482,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
@@ -492,43 +490,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -540,11 +502,51 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -572,6 +574,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">IOC和DI</a>
               </li>
              
@@ -585,14 +595,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
             
             <div class="clearfix"></div>
