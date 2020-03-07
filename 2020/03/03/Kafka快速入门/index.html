@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
   <title>Kafka快速入门 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。">
+  <meta name="description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
 <meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka快速入门">
 <meta property="og:url" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。">
+<meta property="og:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_consumer_msg.png">
-<meta property="og:updated_time" content="2020-03-03T03:14:15.310Z">
+<meta property="og:updated_time" content="2020-03-07T00:10:00.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka快速入门">
-<meta name="twitter:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。">
+<meta name="twitter:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
 <meta name="twitter:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -216,9 +216,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本章简单讲讲Kafka的入门操作，消息发送和消息接收。</p>
-<a id="more"></a>
+<h1 id="1、引入kafka-2-12"><a href="#1、引入kafka-2-12" class="headerlink" title="1、引入kafka_2.12"></a>1、引入kafka_2.12</h1><a id="more"></a>
 
-<h1 id="1、引入kafka-2-12"><a href="#1、引入kafka-2-12" class="headerlink" title="1、引入kafka_2.12"></a>1、引入kafka_2.12</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.kafka<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>kafka_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-nop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.24<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.kafka<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>kafka_2.12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-nop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.24<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="2、生产者Producer"><a href="#2、生产者Producer" class="headerlink" title="2、生产者Producer"></a>2、生产者Producer</h1><p>Kafka消息的生产有三种模式：<strong>发送即忘</strong>（不管是否发送成功，只管发送）、<strong>同步</strong>（等待发送成功才返回）、<strong>异步</strong>（发送失败会异步调用回调函数）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaProducerTest</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Producer&lt;String,String&gt; producer;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span>&#123;</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		<span class="comment">//kafka 地址</span></span><br><span class="line">		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		<span class="comment">//确认有几个副本接收到消息 </span></span><br><span class="line">		<span class="comment">//1：一个副本 （默认值）</span></span><br><span class="line">		<span class="comment">//0：直接返回  </span></span><br><span class="line">		<span class="comment">//-1或all：所有副本接收到</span></span><br><span class="line">		props.put(ProducerConfig.ACKS_CONFIG,<span class="string">"all"</span>);</span><br><span class="line">		<span class="comment">//客户端发送失败重试次数默认是0(可重试的异常才起效果，如网络问题等)</span></span><br><span class="line">		props.put(ProducerConfig.RETRIES_CONFIG,<span class="number">3</span>);</span><br><span class="line">		<span class="comment">//key序列化</span></span><br><span class="line">		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">		<span class="comment">//value序列化</span></span><br><span class="line">		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);	</span><br><span class="line">		producer = <span class="keyword">new</span> KafkaProducer&lt;String,String&gt;(props);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第一种：直接发送不管结果。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sendMessageForgetResult</span><span class="params">(String topic ,String key ,String message)</span></span>&#123;</span><br><span class="line">		producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message));</span><br><span class="line">		System.out.println(<span class="string">"直接发送不管结果==="</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第二种：同步发送</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RecordMetadata <span class="title">sendMessageSync</span><span class="params">(String topic ,String key ,String message)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>&#123;</span><br><span class="line">		Future&lt;RecordMetadata&gt; future = producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message));</span><br><span class="line">		RecordMetadata pecordMetadata = future.get();</span><br><span class="line">		System.out.println(<span class="string">"同步发送==="</span>+pecordMetadata.offset());</span><br><span class="line">		<span class="keyword">return</span> pecordMetadata;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第三种：异步发送，执行回调方法（异常时才会调用）</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sendMessageCallback</span><span class="params">(String topic ,String key ,String message)</span></span>&#123;</span><br><span class="line">		producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message),<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompletion</span><span class="params">(RecordMetadata record, Exception e)</span> </span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(<span class="keyword">null</span> != e)&#123;</span><br><span class="line">					<span class="comment">//发送异常处理</span></span><br><span class="line">					e.printStackTrace();</span><br><span class="line">					<span class="keyword">return</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(<span class="string">"异步发送，发送失败，执行回调方法==="</span>+record.offset());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//直接发送</span></span><br><span class="line">		sendMessageForgetResult(<span class="string">"gumx"</span>,<span class="string">"0"</span>,<span class="string">"直接发送，不管是否成功!"</span>);</span><br><span class="line">        </span><br><span class="line">		<span class="comment">//同步发送</span></span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			sendMessageSync(<span class="string">"gumx"</span>,<span class="string">"1"</span>,<span class="string">"同步发送!"</span>);</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//异步处理</span></span><br><span class="line">		sendMessageCallback(<span class="string">"gumx"</span>,<span class="string">"2"</span>,<span class="string">"异步发送!"</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -470,15 +470,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -510,7 +510,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,7 +518,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,15 +538,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -558,27 +558,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -595,6 +583,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
             
             <div class="clearfix"></div>
