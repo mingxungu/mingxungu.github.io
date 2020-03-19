@@ -9,7 +9,7 @@
   <title>Kafka副本机制 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="学习Kafka那必然绕不开的就是副本机制，实现系统的高可用，副本是不可缺少的一环。在 Kafka 中采用了多副本的机制。我们来试想一下 Kafka 中为什么要实现副本机制？上几节我们也都不同程度的提到副本，特别是在《Kafka主题管理》中创建主题时我们没有深入讲解。">
-<meta name="keywords" content="kafka副本机制">
+<meta name="keywords" content="kafka副本机制,kafka ISR">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka副本机制">
 <meta property="og:url" content="https://mingxungu.github.io/2020/03/20/Kafka副本机制/index.html">
@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/20/Kafka副本机制/kafka_replication_leader-based.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/20/Kafka副本机制/kafka_replication_ISR_1.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/20/Kafka副本机制/kafka_replication_ISR_2.png">
-<meta property="og:updated_time" content="2020-03-19T13:37:40.766Z">
+<meta property="og:updated_time" content="2020-03-19T22:52:13.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka副本机制">
 <meta name="twitter:description" content="学习Kafka那必然绕不开的就是副本机制，实现系统的高可用，副本是不可缺少的一环。在 Kafka 中采用了多副本的机制。我们来试想一下 Kafka 中为什么要实现副本机制？上几节我们也都不同程度的提到副本，特别是在《Kafka主题管理》中创建主题时我们没有深入讲解。">
@@ -282,6 +282,10 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">kafka副本机制</a>
         		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">kafka ISR</a>
+        		</li>
       		
 		</ul>
 	</div>
@@ -517,7 +521,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移主题</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -569,10 +585,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
@@ -602,6 +614,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -642,14 +658,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移主题</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
             
             <div class="clearfix"></div>
