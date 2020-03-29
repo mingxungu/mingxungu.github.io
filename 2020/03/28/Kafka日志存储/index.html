@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
   <title>Kafka日志存储 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。 1、目录结构每一个分区对应一个日志Log。为了防止Log过大Kafka又引入了日志分段LogSegment的概念，将Log进行切分为多个LogSegme">
+  <meta name="description" content="Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。">
 <meta name="keywords" content="kafka日志存储">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka日志存储">
 <meta property="og:url" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。 1、目录结构每一个分区对应一个日志Log。为了防止Log过大Kafka又引入了日志分段LogSegment的概念，将Log进行切分为多个LogSegme">
+<meta property="og:description" content="Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_log_detail.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_log_1.png">
@@ -26,10 +26,10 @@
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_log_segment.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_index_time_geshi.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_timeindex_neibu.png">
-<meta property="og:updated_time" content="2020-03-29T07:36:48.000Z">
+<meta property="og:updated_time" content="2020-03-29T10:35:43.786Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka日志存储">
-<meta name="twitter:description" content="Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。 1、目录结构每一个分区对应一个日志Log。为了防止Log过大Kafka又引入了日志分段LogSegment的概念，将Log进行切分为多个LogSegme">
+<meta name="twitter:description" content="Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。">
 <meta name="twitter:image" content="https://mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_log_detail.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -224,6 +224,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Kafka中的消息是以主题为基本单位进行归纳，各个主题逻辑上相互独立。每个主题又分为一个或多个分区，分区的数量在创建主题时指定后期也可以修改。每条消息会根据分区规则被追加到指定的分区中，分区中的每条消息都会分配一个唯一的序列号，就是所说的偏移量。</p>
+<a id="more"></a>
 <h1 id="1、目录结构"><a href="#1、目录结构" class="headerlink" title="1、目录结构"></a>1、目录结构</h1><p>每一个分区对应一个日志Log。为了防止Log过大Kafka又引入了日志分段LogSegment的概念，将Log进行切分为多个LogSegment，就是将一个大文件分割成多个小文件，这样便有消息的维护和清理。Log在物理上只以文件夹的形式存储，而每个LogSegment对应磁盘上的一个日志文件和两个索引文件，以及可能的其他文件（比如事务的索引文件.txnindex结尾的文件）。</p>
 <p><img src="//mingxungu.github.io/2020/03/28/Kafka日志存储/kafka_log_detail.png" alt></p>
 <p>向Log中追加消息时是顺序写入，只有最后一个LogSegment才能执行写入操作，在此之前的所有的LogSegment都不能写入数据。我们将最后一个LogSegment成为“活跃的日志片段”，当消息不断加入，满足<strong><u>一定条件</u></strong>时，就会创建新的LogSegment，也就是“活跃的日志片段”，之后的消息会写入这个新创建的“活跃的日志片段”中。</p>
@@ -539,6 +540,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -548,10 +553,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -579,19 +580,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka分区算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka生产者拦截器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka分区算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka生产者拦截器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -635,11 +636,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -699,15 +700,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
             
             <div class="clearfix"></div>
