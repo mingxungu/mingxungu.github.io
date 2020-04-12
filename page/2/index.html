@@ -69,8 +69,6 @@
 	        
 				<li><a href="/categories/spring">Spring</a></li>
 	        
-				<li><a href="/categories/springMVC">Spring MVC</a></li>
-	        
 				<li><a href="/categories/springBoot">Spring Boot</a></li>
 	        
 				<li><a href="/categories/springCloud">Spring Cloud</a></li>
@@ -143,8 +141,6 @@
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
@@ -157,29 +153,27 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 8.333333333333334%"><a href="/">主页</a></li>
+					<li style="width: 9.090909090909092%"><a href="/">主页</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/java">Java基础</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/java">Java基础</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/rocketMQ">RocketMQ</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/rocketMQ">RocketMQ</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/kafka">Kafka</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/kafka">Kafka</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/redis">Redis</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/redis">Redis</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/shiro">Shiro</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/shiro">Shiro</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/spring">Spring</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/spring">Spring</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/springMVC">Spring MVC</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/springBoot">Spring Boot</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/springBoot">Spring Boot</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/springCloud">Spring Cloud</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/springCloud">Spring Cloud</a></li>
+					<li style="width: 9.090909090909092%"><a href="/dataLinks">资料链接</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/dataLinks">资料链接</a></li>
-		        
-					<li style="width: 8.333333333333334%"><a href="/about">关于</a></li>
+					<li style="width: 9.090909090909092%"><a href="/about">关于</a></li>
 		        
 				</ul>
 			</nav>
@@ -195,6 +189,97 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-Kafka日志清理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/31/Kafka日志清理/">Kafka日志清理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/31/Kafka日志清理/" class="archive-article-date">
+  	<time datetime="2020-03-30T23:51:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>kafka的消息是持久化到磁盘中的，随着消息的不断写入磁盘空间也在不断增加，需要对消息做一定的清理操作。kafka提供了几种日志清理的操作主要分为两类日志删除和日志压缩。下面我们分别进行分析。</p>
+        
+          <a class="article-more-a" href="/2020/03/31/Kafka日志清理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">kafka Log Clean</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">kafka Log Compaction</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/kafka//" class="article-tag-list-link color1">kafka</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/31/Kafka日志清理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-Kafka日志存储" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -552,93 +637,6 @@
 
 
   
-    <article id="post-Kafka位移主题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/19/Kafka位移主题/">Kafka位移主题</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/19/Kafka位移主题/" class="archive-article-date">
-  	<time datetime="2020-03-19T03:05:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>上一节我们介绍了位移提交，消费的位移如何保存时其中提到了位移主题__consumer_offsets这个是Kafka的内部主题，还有一个内部主题 __transaction_state(事务有关)，后面我们再介绍，内部主题由Kafka自身进行维护，本节我们将揭开内部主题__consumer_offsets神秘的面纱。</p>
-        
-          <a class="article-more-a" href="/2020/03/19/Kafka位移主题/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">kafka位移主题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/kafka//" class="article-tag-list-link color1">kafka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/19/Kafka位移主题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -815,6 +813,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -824,10 +826,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -847,11 +845,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -863,14 +869,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
               </li>
              
@@ -879,11 +877,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -892,6 +890,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -908,6 +910,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">

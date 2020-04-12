@@ -69,8 +69,6 @@
 	        
 				<li><a href="/categories/spring">Spring</a></li>
 	        
-				<li><a href="/categories/springMVC">Spring MVC</a></li>
-	        
 				<li><a href="/categories/springBoot">Spring Boot</a></li>
 	        
 				<li><a href="/categories/springCloud">Spring Cloud</a></li>
@@ -143,8 +141,6 @@
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
@@ -157,29 +153,27 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 8.333333333333334%"><a href="/">主页</a></li>
+					<li style="width: 9.090909090909092%"><a href="/">主页</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/java">Java基础</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/java">Java基础</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/rocketMQ">RocketMQ</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/rocketMQ">RocketMQ</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/kafka">Kafka</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/kafka">Kafka</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/redis">Redis</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/redis">Redis</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/shiro">Shiro</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/shiro">Shiro</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/spring">Spring</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/spring">Spring</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/springMVC">Spring MVC</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/springBoot">Spring Boot</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/springBoot">Spring Boot</a></li>
+					<li style="width: 9.090909090909092%"><a href="/categories/springCloud">Spring Cloud</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/categories/springCloud">Spring Cloud</a></li>
+					<li style="width: 9.090909090909092%"><a href="/dataLinks">资料链接</a></li>
 		        
-					<li style="width: 8.333333333333334%"><a href="/dataLinks">资料链接</a></li>
-		        
-					<li style="width: 8.333333333333334%"><a href="/about">关于</a></li>
+					<li style="width: 9.090909090909092%"><a href="/about">关于</a></li>
 		        
 				</ul>
 			</nav>
@@ -195,6 +189,172 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-Redis集群模式安装部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/11/Redis集群模式安装部署/">Redis集群模式安装部署</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/11/Redis集群模式安装部署/" class="archive-article-date">
+  	<time datetime="2020-04-11T02:15:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Redis的sentinel哨兵模式虽然可以解决Redis单点故障的问题，但是一主多从的结构必然会导致客户端写入数据只能在Master节点上操作，当写入量特别大的时候主节点压力就会很大，sentinel无法分布式将数据存放到其他服务器上。Redis从3.0版本之后提供了cluster集群模式，解决了这个问题。</p>
+<h1 id="1、环境准备"><a href="#1、环境准备" class="headerlink" title="1、环境准备"></a>1、环境准备</h1><p>下载地址：<a href="http://download.redis.io/releases/" target="_blank" rel="noopener">http://download.redis.io/releases/</a></p>
+<p>版本：redis-5.0.5.tar.gz</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>端口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.115.241</td>
+<td>7001</td>
+</tr>
+<tr>
+<td>192.168.115.241</td>
+<td>7002</td>
+</tr>
+<tr>
+<td>192.168.115.241</td>
+<td>7003</td>
+</tr>
+<tr>
+<td>192.168.115.242</td>
+<td>7004</td>
+</tr>
+<tr>
+<td>192.168.115.242</td>
+<td>7005</td>
+</tr>
+<tr>
+<td>192.168.115.242</td>
+<td>7006</td>
+</tr>
+</tbody></table>
+<h1 id="2、安装"><a href="#2、安装" class="headerlink" title="2、安装"></a>2、安装</h1><p>redis 5.0版本 集群搭建不需要我们安装ruby就可以搭建成功我们先安装一台服务器，另外一台服务器的操作步骤一样。</p>
+<h2 id="2-1、编译"><a href="#2-1、编译" class="headerlink" title="2.1、编译"></a>2.1、编译</h2><p>创建安装目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/redis-cluster</span><br></pre></td></tr></table></figure>
+
+<p>上传redis-5.0.5.tar.gz安装包到新创建的目录下，解压安装包到当前目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf redis-5.0.5.tar.gz  -C /usr/local/redis-cluster</span><br></pre></td></tr></table></figure>
+
+<p>编译、安装到/usr/local/redis-cluster目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-cluster/redis-5.0.5</span><br><span class="line">make</span><br><span class="line">make PREFIX=/usr/local/redis-cluster install</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2、配置文件"><a href="#2-2、配置文件" class="headerlink" title="2.2、配置文件"></a>2.2、配置文件</h2><p>创建配置文件目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /usr/local/redis-cluster/conf</span><br><span class="line">mkdir -p /usr/local/redis-cluster/data</span><br><span class="line">mkdir -p /usr/local/redis-cluster/logs</span><br><span class="line">cp redis.conf /usr/local/redis-cluster/conf/redis-7001.conf</span><br></pre></td></tr></table></figure>
+
+<p>配置节点文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-cluster/conf</span><br><span class="line">vi redis-7001.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">bind 0.0.0.0</span><br><span class="line">port 7001</span><br><span class="line">daemonize yes</span><br><span class="line">pidfile /var/run/redis_7001.pid</span><br><span class="line">logfile "/usr/local/redis-cluster/logs/redis_7001.log"</span><br><span class="line">dbfilename "dump-7001.rdb"</span><br><span class="line">dir "/usr/local/redis-cluster/data"</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file "/usr/local/redis-cluster/conf/nodes-7001.conf"</span><br><span class="line">cluster-node-timeout 15000</span><br></pre></td></tr></table></figure>
+
+<p>其他两个节点7002、7003将上述配置文件中的7001改成对应的端口即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp redis-7001.conf redis-7002.conf </span><br><span class="line">cp redis-7001.conf redis-7003.conf</span><br></pre></td></tr></table></figure>
+
+<p><strong>另一台服务器按照上面步骤安装另外三个节点端口号是7004、7005、7006，配置文件中的端口号相应的修改</strong></p>
+<h2 id="2-3、创建集群"><a href="#2-3、创建集群" class="headerlink" title="2.3、创建集群"></a>2.3、创建集群</h2><p>启动6个单节点</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-cluster/bin/</span><br><span class="line">./redis-server ../conf/redis-7001.conf </span><br><span class="line">./redis-server ../conf/redis-7002.conf </span><br><span class="line">./redis-server ../conf/redis-7003.conf</span><br></pre></td></tr></table></figure>
+
+<p>另一台服务器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-cluster/bin/</span><br><span class="line">./redis-server ../conf/redis-7004.conf </span><br><span class="line">./redis-server ../conf/redis-7005.conf </span><br><span class="line">./redis-server ../conf/redis-7006.conf</span><br></pre></td></tr></table></figure>
+
+<p>查看进程</p>
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png" alt></p>
+<p>做集群的主从关联</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![redis-cluster-az-2](D:\Program Files\Hexo\source\_posts\Redis集群模式安装部署\redis-cluster-az-2.png)./redis-cli --cluster create --cluster-replicas 1  192.168.115.241:7001 192.168.115.241:7002 192.168.115.241:7003 192.168.115.242:7004 192.168.115.242:7005 192.168.115.242:7006</span><br></pre></td></tr></table></figure>
+
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png" alt></p>
+<p>结果</p>
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png" alt></p>
+<h2 id="2-4、查看节点信息"><a href="#2-4、查看节点信息" class="headerlink" title="2.4、查看节点信息"></a>2.4、查看节点信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 bin]# ./redis-cli -h 192.168.115.241 -p 7001 -c</span><br><span class="line">192.168.115.241:7001&gt; cluster info</span><br></pre></td></tr></table></figure>
+
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png" alt></p>
+<p>查看各个节点信息</p>
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png" alt></p>
+<h1 id="3、测试故障"><a href="#3、测试故障" class="headerlink" title="3、测试故障"></a>3、测试故障</h1><p>从上面的信息中我们看到主节点分别是7001、7002、7004、分别对应的从节点是7006、7005、7003。任伟杀掉7001主点，那么7006则会升级为主节点，我们测试下。</p>
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png" alt></p>
+<p>查看集群节点信息</p>
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png" alt></p>
+<p>7001节点状态是fail不可用状态，此时的7006节点由slave升级为master</p>
+<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Redis Cluster</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/redis//" class="article-tag-list-link color1">redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/11/Redis集群模式安装部署/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-Redis哨兵模式安装部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -548,97 +708,6 @@
 
 
   
-    <article id="post-Kafka日志清理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/31/Kafka日志清理/">Kafka日志清理</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/31/Kafka日志清理/" class="archive-article-date">
-  	<time datetime="2020-03-30T23:51:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>kafka的消息是持久化到磁盘中的，随着消息的不断写入磁盘空间也在不断增加，需要对消息做一定的清理操作。kafka提供了几种日志清理的操作主要分为两类日志删除和日志压缩。下面我们分别进行分析。</p>
-        
-          <a class="article-more-a" href="/2020/03/31/Kafka日志清理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">kafka Log Clean</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">kafka Log Compaction</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/kafka//" class="article-tag-list-link color1">kafka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/31/Kafka日志清理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -815,6 +884,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -824,10 +897,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">RocketMQ高可用HA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -847,11 +916,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -863,14 +940,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">延迟消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
               </li>
              
@@ -879,11 +948,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -892,6 +961,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -908,6 +981,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
