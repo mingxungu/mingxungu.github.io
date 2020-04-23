@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://mingxungu.github.io/2020/04/21/Redis基本数据类型之String/string_encoding.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/04/21/Redis基本数据类型之String/raw_embstr.jpg">
 <meta property="og:image" content="https://mingxungu.github.io/2020/04/21/Redis基本数据类型之String/embstr_redis3_redis4.jpg">
-<meta property="og:updated_time" content="2020-04-23T22:28:04.215Z">
+<meta property="og:updated_time" content="2020-04-23T22:31:26.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基本数据类型之String">
 <meta name="twitter:description" content="Redis的基本数据类型有五种，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)。字符串String又是最简单、最常用的数据类型，本节我们重点探讨其基本使用、底层存储原理、使用场景等。">
@@ -235,8 +235,7 @@
       
         <p>Redis的基本数据类型有五种，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)。字符串String又是最简单、最常用的数据类型，本节我们重点探讨其基本使用、底层存储原理、使用场景等。</p>
 <a id="more"></a>
-<h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis 是 Remote dictionary server 即远程字典服务的缩写，一个 Redis 实例可以有多个存储数据的字典，客户端可以通过 select 来选择字典即 DB 进行数据存储。</p>
-<p>Redis中所有的数据结构都是以唯一的key字符串作为名称，然后通过这个唯一的key值来获取相应的value数据。不同类型的数据结构的差异就在于value的结构不同。</p>
+<h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis中所有的数据结构都是以唯一的key字符串作为名称，然后通过这个唯一的key值来获取相应的value数据。不同类型的数据结构的差异就在于value的结构不同。</p>
 <p>Redis的字符串其底层实现是简单动态字符串<strong>SDS</strong>(simple dynamic string)，是可以修改的字符串。内部实现类似于Java的ArrayList,采用预分配冗余空间的方式来减少内存的频繁分配，<u><strong>在字符串长度小于 1MB 时，按所需长度的 2 倍来分配，超过 1MB，则按照每次额外增加 1MB 的容量来预分配</strong></u>。需要注意的是<strong>字符串最大长度为512MB</strong>。</p>
 <h1 id="2、常用命令"><a href="#2、常用命令" class="headerlink" title="2、常用命令"></a>2、常用命令</h1><h2 id="2-1、SET-设置值"><a href="#2-1、SET-设置值" class="headerlink" title="2.1、SET-设置值"></a>2.1、SET-设置值</h2><p><strong>SET key value [EX seconds] [PX milliseconds] [NX|XX]</strong></p>
 <p>我们发现前两个参数是比必填的后面的参数都是选填的；EX指的是该键值对的过期时间单位是秒；PX指的是该键值对的过期时间单位是毫秒；NX指代键值对不存在则设置成功，存在则设置失败；XX指代键值对存在则设置成功，不存在则设置失败。下面我们逐一验证。</p>
@@ -580,10 +579,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移主题</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
@@ -600,11 +595,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
+                <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,6 +635,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">redis String</a>
               </li>
              
@@ -648,15 +647,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -692,6 +687,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移主题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
@@ -716,11 +715,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -729,10 +732,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
