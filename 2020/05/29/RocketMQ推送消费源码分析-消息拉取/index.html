@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
-  <title>RocketMQ推送消费源码分析-消息拉取 | IT小栈</title>
+  <title>RocketMQ推送消费源码分析(一)-消息拉取 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="RocketMQ的消费提供推拉两种模式，push模式无疑是首选，我们项目使用的比较深入需要相应的设置一些Consuner端的参数来满足项目需要，对默认的设置进行修改，有些参数总是模棱两可，今天我们重点分析下，push的整个工作机制。">
 <meta name="keywords" content="PushConsumer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RocketMQ推送消费源码分析-消息拉取">
+<meta property="og:title" content="RocketMQ推送消费源码分析(一)-消息拉取">
 <meta property="og:url" content="https://mingxungu.github.io/2020/05/29/RocketMQ推送消费源码分析-消息拉取/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ的消费提供推拉两种模式，push模式无疑是首选，我们项目使用的比较深入需要相应的设置一些Consuner端的参数来满足项目需要，对默认的设置进行修改，有些参数总是模棱两可，今天我们重点分析下，push的整个工作机制。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png">
-<meta property="og:updated_time" content="2020-05-30T11:02:09.105Z">
+<meta property="og:updated_time" content="2020-05-31T08:52:03.177Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RocketMQ推送消费源码分析-消息拉取">
+<meta name="twitter:title" content="RocketMQ推送消费源码分析(一)-消息拉取">
 <meta name="twitter:description" content="RocketMQ的消费提供推拉两种模式，push模式无疑是首选，我们项目使用的比较深入需要相应的设置一些Consuner端的参数来满足项目需要，对默认的设置进行修改，有些参数总是模棱两可，今天我们重点分析下，push的整个工作机制。">
 <meta name="twitter:image" content="https://mingxungu.github.io/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png">
   
@@ -201,7 +201,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      RocketMQ推送消费源码分析-消息拉取
+      RocketMQ推送消费源码分析(一)-消息拉取
     </h1>
   
 
@@ -403,7 +403,7 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          RocketMQ推送消费源码分析-重平衡
+          RocketMQ推送消费源码分析(二)-重平衡
         
       </div>
     </a>
@@ -580,14 +580,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
               </li>
              
@@ -608,15 +600,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka分区算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">kafka生产者拦截器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -720,15 +712,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -773,6 +765,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
               </li>
             
             <div class="clearfix"></div>
