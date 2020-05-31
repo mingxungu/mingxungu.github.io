@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="https://mingxungu.github.io">
   <title>RocketMQ推送消费源码分析-重平衡 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。 1、背景 我们直接上图，图中的②就是我们本节要讲解的内容。 2、客户端发送心跳到每一个Broker上节我们分析了DefaultMQPushConsumer.start()的启动会发送心跳和开启重平衡 1234//客户端发">
+  <meta name="description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。">
 <meta name="keywords" content="rebalance">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ推送消费源码分析-重平衡">
 <meta property="og:url" content="https://mingxungu.github.io/2020/05/31/RocketMQ推送消费源码分析-重平衡/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。 1、背景 我们直接上图，图中的②就是我们本节要讲解的内容。 2、客户端发送心跳到每一个Broker上节我们分析了DefaultMQPushConsumer.start()的启动会发送心跳和开启重平衡 1234//客户端发">
+<meta property="og:description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mingxungu.github.io/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png">
 <meta property="og:image" content="https://mingxungu.github.io/2020/05/31/RocketMQ推送消费源码分析-重平衡/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png">
-<meta property="og:updated_time" content="2020-05-31T08:40:48.663Z">
+<meta property="og:updated_time" content="2020-05-31T08:44:25.041Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ推送消费源码分析-重平衡">
-<meta name="twitter:description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。 1、背景 我们直接上图，图中的②就是我们本节要讲解的内容。 2、客户端发送心跳到每一个Broker上节我们分析了DefaultMQPushConsumer.start()的启动会发送心跳和开启重平衡 1234//客户端发">
+<meta name="twitter:description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。">
 <meta name="twitter:image" content="https://mingxungu.github.io/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -216,6 +216,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。</p>
+<a id="more"></a>
+
 <h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p><img src="//mingxungu.github.io/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png" alt></p>
 <p>我们直接上图，图中的②就是我们本节要讲解的内容。</p>
 <h1 id="2、客户端发送心跳到每一个Broker"><a href="#2、客户端发送心跳到每一个Broker" class="headerlink" title="2、客户端发送心跳到每一个Broker"></a>2、客户端发送心跳到每一个Broker</h1><p>上节我们分析了DefaultMQPushConsumer.start()的启动会发送心跳和开启重平衡</p>
@@ -495,6 +497,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -515,11 +521,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,10 +542,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,7 +605,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -615,15 +617,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,10 +646,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">PushConsumer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
