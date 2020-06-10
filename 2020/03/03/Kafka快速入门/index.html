@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_consumer_msg.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_consumer_msg.png">
 <meta property="og:updated_time" content="2020-03-07T00:10:00.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka快速入门">
 <meta name="twitter:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -246,10 +246,10 @@
 <p>对于消息可靠性要求较强，吞吐量要求较高，使用第三种<strong>异步</strong></p>
 </blockquote>
 <p>使用Kafka Eagle可视化工具，查询kafka中主题是gumx的消息</p>
-<p><img src="//www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png" alt></p>
 <h1 id="3、消费者Consumer"><a href="#3、消费者Consumer" class="headerlink" title="3、消费者Consumer"></a>3、消费者Consumer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaConsumerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		props.put(<span class="string">"bootstrap.servers"</span>,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		props.put(<span class="string">"group.id"</span>,<span class="string">"gumx_record"</span>);</span><br><span class="line">		<span class="comment">//自动提交偏移量</span></span><br><span class="line">		props.put(<span class="string">"enable.auto.commit"</span>,<span class="string">"true"</span>);</span><br><span class="line">		<span class="comment">//偏移量提交的间隔时间</span></span><br><span class="line">		props.put(<span class="string">"auto.commit.interval.ms"</span>,<span class="string">"1000"</span>);</span><br><span class="line">		props.put(<span class="string">"key.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">		props.put(<span class="string">"value.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);	</span><br><span class="line"></span><br><span class="line">		KafkaConsumer&lt;String,String&gt; consumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">		consumer.subscribe(Arrays.asList(<span class="string">"gumx"</span>));</span><br><span class="line"></span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			ConsumerRecords&lt;String,String&gt; records = consumer.poll(Duration.ofMillis(<span class="number">2000</span>));</span><br><span class="line">			<span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">				System.out.println(<span class="string">""</span>);</span><br><span class="line">				System.out.printf(<span class="string">"消息消费，offset= %d,key= %s,value= %s%n"</span>,record.offset(),record.key(),record.value());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//www.itzones.cn/2020/03/03/Kafka快速入门/kafka_consumer_msg.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_consumer_msg.png" alt></p>
 <p>注意：生产者启动是不会获取消息，默认是从队列尾部消费，启动消费者后再次发送消息才能看到如图所示结果。</p>
 <p>里面的具体参数解析后续会详细说明</p>
 
@@ -536,10 +536,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -584,15 +580,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,6 +621,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -724,10 +724,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -765,6 +761,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

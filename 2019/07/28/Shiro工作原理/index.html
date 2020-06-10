@@ -17,35 +17,35 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="本节我们接着上一章节分析下Shiro的工作原理，初始化过程及如何与Spring进行整合使用的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/6.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/1.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/2.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/3.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/4.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/5.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/1.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/7.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/8.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/9.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/10.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/11.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/12.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/13.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/14.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/15.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/16.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/17.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/18.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/19.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/20.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/21.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/22.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/23.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/6.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/1.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/2.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/3.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/4.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/5.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/1.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/7.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/8.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/9.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/10.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/11.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/12.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/13.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/14.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/15.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/16.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/17.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/18.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/19.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/20.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/21.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/22.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/23.png">
 <meta property="og:updated_time" content="2019-07-29T07:04:43.323Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro工作原理">
 <meta name="twitter:description" content="本节我们接着上一章节分析下Shiro的工作原理，初始化过程及如何与Spring进行整合使用的。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/07/28/Shiro工作原理/6.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2019/07/28/Shiro工作原理/6.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -267,13 +267,13 @@
 <p>执行了DelegatingFilterProxy中的方法initFilterBean（）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initFilterBean</span><span class="params">()</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">	<span class="keyword">synchronized</span> (<span class="keyword">this</span>.delegateMonitor) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.delegate == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span> (<span class="keyword">this</span>.targetBeanName == <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">this</span>.targetBeanName = getFilterName();</span><br><span class="line">			&#125;</span><br><span class="line">			WebApplicationContext wac = findWebApplicationContext();</span><br><span class="line">			<span class="keyword">if</span> (wac != <span class="keyword">null</span>)</span><br><span class="line">				<span class="keyword">this</span>.delegate = initDelegate(wac);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/6.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/6.png" alt></p>
 <p>上一节中介绍了创建DelegatingFilterProxy时候注入了targetBeanName属性</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!—</span> <span class="attr">shiro</span>的过滤器，<span class="attr">DelegatingFilterProxy</span> 通过代理模式将<span class="attr">spring</span>容器中的<span class="attr">bean</span>和<span class="attr">filter</span>关联<span class="attr">--</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>shiroFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.springframework.web.filter.DelegatingFilterProxy<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">async-supported</span>&gt;</span>true<span class="tag">&lt;/<span class="name">async-supported</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">!—</span> 设置<span class="attr">true</span>由<span class="attr">servlet</span>容器控制<span class="attr">filter</span>的生命周期 <span class="attr">--</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>targetFilterLifecycle<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">!—</span> 设置<span class="attr">spring</span>容器<span class="attr">filter</span>的<span class="attr">bean</span> <span class="attr">id</span> 如果不设置则找与<span class="attr">filter-name</span>一致的<span class="attr">bean--</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">param-name</span>&gt;</span>targetBeanName<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">param-value</span>&gt;</span>shiroFilter<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="1-2、doFilter"><a href="#1-2、doFilter" class="headerlink" title="1.2、doFilter()"></a>1.2、doFilter()</h2><p>分析完init()方法我们分析下doFilter()</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/1.png" alt></p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/2.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/1.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/2.png" alt></p>
 <p>我们发现最终执行的确是org.apache.shiro.spring.web.ShiroFilterFactoryBean入口类,原来DelegatingFilterProxy代理的是ShiroFilterFactoryBean类，下面我们分析下</p>
 <h1 id="2、ShiroFilterFactoryBean"><a href="#2、ShiroFilterFactoryBean" class="headerlink" title="2、ShiroFilterFactoryBean"></a>2、ShiroFilterFactoryBean</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroFilterFactoryBean</span> <span class="keyword">implements</span> <span class="title">FactoryBean</span>, <span class="title">BeanPostProcessor</span></span></span><br></pre></td></tr></table></figure>
 
@@ -281,8 +281,8 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">        instance = createInstance();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>我们可以看出其核心方法是createInstance()，该方法实现了几个功能</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/3.png" alt></p>
-<h2 id="2-1、FilterChainManager过滤器管理类"><a href="#2-1、FilterChainManager过滤器管理类" class="headerlink" title="2.1、FilterChainManager过滤器管理类"></a>2.1、FilterChainManager过滤器管理类</h2><p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/4.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/3.png" alt></p>
+<h2 id="2-1、FilterChainManager过滤器管理类"><a href="#2-1、FilterChainManager过滤器管理类" class="headerlink" title="2.1、FilterChainManager过滤器管理类"></a>2.1、FilterChainManager过滤器管理类</h2><p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/4.png" alt></p>
 <h3 id="2-1-1、属性讲解"><a href="#2-1-1、属性讲解" class="headerlink" title="2.1.1、属性讲解"></a>2.1.1、属性讲解</h3><p>查看其源码，FilterChainManager是一个接口，实际的实现类DefaultFilterChainManager</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultFilterChainManager</span> <span class="keyword">implements</span> <span class="title">FilterChainManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">transient</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(DefaultFilterChainManager.class);</span><br><span class="line">    <span class="keyword">private</span> FilterConfig filterConfig;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Filter&gt; filters; <span class="comment">//pool of filters available for creating chains</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, NamedFilterList&gt; filterChains; <span class="comment">//key: chain name, value: chain</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DefaultFilterChainManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.filters = <span class="keyword">new</span> LinkedHashMap&lt;String, Filter&gt;();</span><br><span class="line">        <span class="keyword">this</span>.filterChains = <span class="keyword">new</span> LinkedHashMap&lt;String, NamedFilterList&gt;();</span><br><span class="line">        addDefaultFilters(<span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DefaultFilterChainManager</span><span class="params">(FilterConfig filterConfig)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.filters = <span class="keyword">new</span> LinkedHashMap&lt;String, Filter&gt;();</span><br><span class="line">        <span class="keyword">this</span>.filterChains = <span class="keyword">new</span> LinkedHashMap&lt;String, NamedFilterList&gt;();</span><br><span class="line">        setFilterConfig(filterConfig);</span><br><span class="line">        addDefaultFilters(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//省略代码....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -291,7 +291,7 @@
 <h3 id="2-1-2、创建过程"><a href="#2-1-2、创建过程" class="headerlink" title="2.1.2、创建过程"></a>2.1.2、创建过程</h3><p>1、读取filters配置的自定义过滤器，将它们纳入到过滤器管理器里。</p>
 <p>2、applyGlobalPropertiesIfNecessary(filter);方法是将配置的loginUrl,successUrl,unauthorizedUrl属性设置到不同过滤器里。其中loginUrl赋值到所有继承自AccessControlFilter的过滤器里，successUrl赋值到所有继承自AuthenticationFilter的过滤器里，unauthorizedUrl赋值到所有继承自AuthorizationFilter的过滤器里。 </p>
 <p>当然其实过滤器可以自己设置loginUrl,successUrl,unauthorizedUrl，自定义赋值的也覆盖全局指定的。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/5.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/5.png" alt></p>
 <p>3.最后读取filterChainDefinitions配置，根据配置设置每个url对应的过滤链,filterChains保存这些配置，它是一个Map集合，key就是url，value就是过滤器组成的NamedFilterList集合。其实当请求过来时，解析出请求路径，会从filterChains里找到url对应的过滤链，按过滤器的策略一个一个执行下去。 同时会调用PathMatchingFilter的processPathConfig()方法做些赋值操作。下面会专门讲从PathMatchingFilter开始工作的过程。</p>
 <p>4.一步一步分析下来过滤器管理器里的过滤链filterChains如下</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/login.jsp=org.apache.shiro.web.filter.mgt.SimpleNamedFilterList@6ed97422,</span><br><span class="line">/login=org.apache.shiro.web.filter.mgt.SimpleNamedFilterList@592dbd8,</span><br><span class="line">/logout=org.apache.shiro.web.filter.mgt.SimpleNamedFilterList@1141badb,</span><br><span class="line">/authenticated=org.apache.shiro.web.filter.mgt.SimpleNamedFilterList@2d1b876e,</span><br><span class="line">/views/**=org.apache.shiro.web.filter.mgt.SimpleNamedFilterList@31106774,</span><br><span class="line">/**=org.apache.shiro.web.filter.mgt.SimpleNamedFilterList@14cd7d10</span><br></pre></td></tr></table></figure>
@@ -324,47 +324,47 @@
 
 <p>继承关系比较复杂，最终实现的还是Filter接口，所以AbstractShiroFilter既然也是个Filter了。自然ShiroFilterFactoryBean就是一个filter。</p>
 <h1 id="3-、请求解析过程"><a href="#3-、请求解析过程" class="headerlink" title="3.、请求解析过程"></a>3.、请求解析过程</h1><p>我们前面分析的都是ShiroFilterFactoryBean其创建的过程，DelegatingFilterProxy.doFilter()中我们分析了delegate代理类就是ShiroFilterFactoryBean，我们分析下invokeDelegate()方法</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/1.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/1.png" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">invokeDelegate</span><span class="params">(Filter delegate, ServletRequest request, ServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">		FilterChain filterChain)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">	delegate.doFilter(request, response, filterChain);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>明显是调用ShiroFilterFactoryBean的doFilter()方法，上面我们也分析了实际返回的是SpringShiroFilter对象我们重点分析下其执行过程。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/7.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/7.png" alt></p>
 <p>SpringShiroFilter是ShiroFilterFactoryBean的内部类属于，继承AbstractShiroFilter,其doFilter方法在父类中，OncePerRequestFilter的子类不能重写doFilter(),这才是业务核心代码所在，分析首先分析下shiro提供的默认Filter</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/8.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/8.png" alt></p>
 <p>已经很清楚的说明了这一切，shiro提供的10个默认的过滤器都继承了AdviceFilter,当然我们自定义过滤器的时候也可以继承AbstractShiroFilter，一般自定义Filter继承AdviceFilter或其子类。</p>
 <p>我们发现AdviceFilter的父类OncePerRequestFilter是abstract class 继承了Filter,OncePerRequestFilter实现了doFilter()方法</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/9.png" alt></p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/10.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/9.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/10.png" alt></p>
 <p>先到达AbstractShiroFilter.executeChain()方法，去根据request解析出来的url找到对应的过滤链，然后执行过滤器链。 executeChain()方法如下</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/11.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/11.png" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> FilterChain <span class="title">getExecutionChain</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain origChain)</span> </span>&#123;</span><br><span class="line">    FilterChain chain = origChain;</span><br><span class="line">     <span class="comment">//resolver即是前面说的PathMatchingFilterChainResolver对象。里面保存有过滤器管理器实例</span></span><br><span class="line">    FilterChainResolver resolver = getFilterChainResolver();</span><br><span class="line">    <span class="keyword">if</span> (resolver == <span class="keyword">null</span>) &#123;</span><br><span class="line">        log.debug(<span class="string">"No FilterChainResolver configured.  Returning original FilterChain."</span>);</span><br><span class="line">        <span class="keyword">return</span> origChain;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//进入PathMatchingFilterChainResolver对象里，根据解析出来的requestURI找到对应的过滤器链并返回</span></span><br><span class="line">    FilterChain resolved = resolver.getChain(request, response, origChain);</span><br><span class="line">    <span class="keyword">if</span> (resolved != <span class="keyword">null</span>) &#123;</span><br><span class="line">        log.trace(<span class="string">"Resolved a configured FilterChain for the current request."</span>);</span><br><span class="line">        chain = resolved;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        log.trace(<span class="string">"No FilterChain configured for the current request.  Using the default."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> chain;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/12.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/12.png" alt></p>
 <p>其中chain是SimpleNamedFilterList对象，name即是匹配的URL</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/13.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/13.png" alt></p>
 <p>public class ProxiedFilterChain implements FilterChain 相应的实现doFilter()方法。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/14.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/14.png" alt></p>
 <p>上面我们讲到一般默认的过滤器和自定义的过滤器都是OncePerRequestFilter的子类执行其doFilter()，上面也分析了其业务逻辑，这个请求第一次执行该过滤器需要先执行doFilterInternal()</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/15.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/15.png" alt></p>
 <p>查看其子类有两个AbstractShiroFilter、AdviceFilter具体实现。具体调用那个需要根据具体当前的过滤器的父类是哪个决定，一般都是AdviceFilter(默认的filter都是其子类)，我们具体分析下这个。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/16.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/16.png" alt></p>
 <p>首先看下preHander()</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/17.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/17.png" alt></p>
 <p>上面分析过退出的过滤器LogoutFilter不继承PathMatchingFilter,都退出了肯定是终止过滤器链的执行。分析一下PathMatchingFilter，其方法的调用关系。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/18.png" alt></p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/19.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/18.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/19.png" alt></p>
 <p>其中重点看看AccessControlFilter和AnonymousFilter。一个是需要身份验证的，一个是匿名访问的。</p>
 <p>AnonymousFilter直接放行。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/20.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/20.png" alt></p>
 <p>直接看AccessControlFilter，一般访问控制的过滤器都会去继承AccessControlFilter或其子类。</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/21.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/21.png" alt></p>
 <p>如果isAccessAllowed()验证成功则返回true,否则交由onAccessDenied()方法处理，最后将onAccessDenied()方法处理的结果返回。<br> isAccessAllowed()方法是决定了当前请求的subject是否允许访问。如果以前做过验证则返回true，否则返回false。<br> onAccessDenied()方法是在被拒绝访问时处理。AccessControlFilter类有很多子类重载了该方法。  </p>
 <p>补充说明：</p>
 <p>过滤器执行原理: </p>
 <p>先从PathMatchingFilter类讲解开始，匹配路径的过滤器，因为大部分（除了LogoutFilter）的过滤器都会继承PathMatchingFilter类，它的作用是路径匹配。过滤器单独维护自己需要过滤的url。 </p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/22.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/22.png" alt></p>
 <p>pathMatcher：匹配器，就是当请求过来时，匹配哪个url对应哪个过滤器的。<br>processPathConfig：解析xml里配置的url对应的过滤器，分别加到appliedPaths要应用的map集合里，由于每个过滤器都继承PathMatchingFilter,故每个过滤器都会经过这步操作。<br>比如如下图，刚启动web服务时过滤器管理器会解析xml里filterChainDefinitions配置的过滤链，在根据配置给每个url创建过滤器链时，会调用不同过滤器的processPathConfig方法让过滤器自己把url添加到appliedPaths集合里，因为过滤器是单例的，过滤器管理器的filters里也只维护过滤器的单个实例</p>
-<p><img src="//www.itzones.cn/2019/07/28/Shiro工作原理/23.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/28/Shiro工作原理/23.png" alt></p>
 <p>preHandle方法：请求过来时该方法匹配url路径是否是该过滤器要处理的。遍历appliedPaths里所有的url直到完全匹配成功或遍历完为止。如果匹配成功则表明该url请求是需要该过滤器处理。然后就会进入onPreHandle方法。</p>
 <p>onPreHandle方法：该方法在路径匹配成功时决定对url是否需要身份验证。默认是返回true，意思是不需要验证的。但子类需要根据业务逻辑自己重写该方法。 </p>
 <h1 id="4、自定义过滤器"><a href="#4、自定义过滤器" class="headerlink" title="4、自定义过滤器"></a>4、自定义过滤器</h1><p>上面我们分析过Shiro提供了10种过滤器，我们先介绍下，再自定义过滤器</p>
@@ -732,10 +732,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -780,15 +776,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -821,6 +817,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -920,10 +920,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -961,6 +957,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

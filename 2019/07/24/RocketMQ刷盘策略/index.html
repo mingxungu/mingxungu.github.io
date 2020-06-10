@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="我们都知道RocketMQ的消息是持久化到文件的，具体的消息的刷盘策略是什么，是发送一条消息就直接持久化到文件中吗？作为一款高性能的消息中间件这样做肯定不行，至少性能上不允许这样操作，那么具体策略是啥我们具体分析下。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/flushDisk.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/%E5%9B%BE%E7%89%872.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/flushDisk.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/%E5%9B%BE%E7%89%872.png">
 <meta property="og:updated_time" content="2019-07-24T09:16:41.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ刷盘策略">
 <meta name="twitter:description" content="我们都知道RocketMQ的消息是持久化到文件的，具体的消息的刷盘策略是什么，是发送一条消息就直接持久化到文件中吗？作为一款高性能的消息中间件这样做肯定不行，至少性能上不允许这样操作，那么具体策略是啥我们具体分析下。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/flushDisk.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/flushDisk.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -260,7 +260,7 @@
 </tr>
 </tbody></table>
 <p>下面我们从源码的角度分析其实现的逻辑</p>
-<p><img src="//www.itzones.cn/2019/07/24/RocketMQ刷盘策略/flushDisk.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/flushDisk.png" alt></p>
 <h1 id="2、同步刷盘"><a href="#2、同步刷盘" class="headerlink" title="2、同步刷盘"></a>2、同步刷盘</h1><p>CommitLog.putMessage()方法中的刷盘的核心方法handleDiskFlush()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDiskFlush</span><span class="params">(AppendMessageResult result, PutMessageResult putMessageResult, MessageExt messageExt)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Synchronization flush  同步刷盘</span></span><br><span class="line">    <span class="keyword">if</span> (FlushDiskType.SYNC_FLUSH == <span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getFlushDiskType()) &#123;</span><br><span class="line">        <span class="keyword">final</span> GroupCommitService service = (GroupCommitService) <span class="keyword">this</span>.flushCommitLogService;</span><br><span class="line">        <span class="comment">//客户端确认要等待刷盘成功</span></span><br><span class="line">        <span class="keyword">if</span> (messageExt.isWaitStoreMsgOK()) &#123;</span><br><span class="line">        	<span class="comment">//封装刷盘请求对象 nextoffset : 当前内存写的位置 + 本次要写入的字节数</span></span><br><span class="line">            GroupCommitRequest request = <span class="keyword">new</span> GroupCommitRequest(result.getWroteOffset() + result.getWroteBytes());</span><br><span class="line">            <span class="comment">//添加刷盘请求（后台定时任务进行刷盘，每隔10毫秒批量刷盘。10毫秒中如果有多个请求，则多个请求一块刷盘）</span></span><br><span class="line">            service.putRequest(request);</span><br><span class="line">            <span class="comment">//等待刷盘请求结果（最长等待5秒钟，刷盘成功后马上可以获取结果。）</span></span><br><span class="line">            <span class="keyword">boolean</span> flushOK = request.waitForFlush(<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getSyncFlushTimeout());</span><br><span class="line">            <span class="keyword">if</span> (!flushOK) &#123;</span><br><span class="line">                log.error(<span class="string">"do groupcommit, wait for flush failed, topic: "</span> + messageExt.getTopic() + <span class="string">" tags: "</span> + messageExt.getTags()</span><br><span class="line">                    + <span class="string">" client address: "</span> + messageExt.getBornHostString());</span><br><span class="line">                putMessageResult.setPutMessageStatus(PutMessageStatus.FLUSH_DISK_TIMEOUT);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            service.wakeup();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;<span class="comment">// Asynchronous flush 异步刷盘</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().isTransientStorePoolEnable()) &#123;</span><br><span class="line">        	<span class="comment">//唤醒FlushRealTimeService服务线程</span></span><br><span class="line">            flushCommitLogService.wakeup();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        	<span class="comment">//唤醒CommitRealTimeService服务线程</span></span><br><span class="line">            commitLogService.wakeup();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -282,7 +282,7 @@
 <h1 id="3、异步刷盘"><a href="#3、异步刷盘" class="headerlink" title="3、异步刷盘"></a>3、异步刷盘</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().isTransientStorePoolEnable()) &#123;</span><br><span class="line">	<span class="comment">//唤醒FlushRealTimeService服务线程</span></span><br><span class="line">    flushCommitLogService.wakeup();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">//唤醒CommitRealTimeService服务线程</span></span><br><span class="line">    commitLogService.wakeup();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>我们发现异步刷盘的时候有两种方式，一种是堆外内存池开启时启动CommitRealTimeService服务线程，另一个是默认执行的FlushRealTimeService服务线程进行刷盘操作，关于TransientStorePoolEnable在<a href="https://itzones.cn/2019/07/19/RocketMQ内存映射/" target="_blank" rel="noopener">《RocketMQ内存映射》</a>章节中的<strong>“创建映射文件MappedFile”</strong>中有介绍</p>
-<p><img src="//www.itzones.cn/2019/07/24/RocketMQ刷盘策略/%E5%9B%BE%E7%89%872.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/24/RocketMQ刷盘策略/%E5%9B%BE%E7%89%872.png" alt></p>
 <p>​                                                                                                              图3-1</p>
 <h2 id="1、FlushRealTimeService"><a href="#1、FlushRealTimeService" class="headerlink" title="1、FlushRealTimeService"></a>1、FlushRealTimeService</h2><p>查看其run()方法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    CommitLog.log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service started"</span>);</span><br><span class="line">    <span class="keyword">while</span> (!<span class="keyword">this</span>.isStopped()) &#123;</span><br><span class="line">    	<span class="comment">// 每次刷盘的间隔时间，默认 200ms</span></span><br><span class="line">        <span class="keyword">int</span> interval = CommitLog.<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getCommitIntervalCommitLog();</span><br><span class="line">        <span class="comment">// 每次commit最少的页数 默认4页</span></span><br><span class="line">        <span class="keyword">int</span> commitDataLeastPages = CommitLog.<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getCommitCommitLogLeastPages();</span><br><span class="line">        <span class="comment">// 如果上次刷新的时间+该值 小于当前时间，则改变flushPhysicQueueLeastPages =0 默认为200</span></span><br><span class="line">        <span class="keyword">int</span> commitDataThoroughInterval =</span><br><span class="line">            CommitLog.<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getCommitCommitLogThoroughInterval();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> begin = System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//距离上一次刷盘时间超过200ms则立刻刷盘，commit最少的页数置为0</span></span><br><span class="line">        <span class="keyword">if</span> (begin &gt;= (<span class="keyword">this</span>.lastCommitTimestamp + commitDataThoroughInterval)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.lastCommitTimestamp = begin;</span><br><span class="line">            commitDataLeastPages = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	<span class="comment">//刷盘</span></span><br><span class="line">            <span class="keyword">boolean</span> result = CommitLog.<span class="keyword">this</span>.mappedFileQueue.commit(commitDataLeastPages);</span><br><span class="line">            <span class="keyword">long</span> end = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">                <span class="keyword">this</span>.lastCommitTimestamp = end; <span class="comment">// result = false means some data committed.</span></span><br><span class="line">                <span class="comment">//now wake up flush thread.</span></span><br><span class="line">                flushCommitLogService.wakeup();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (end - begin &gt; <span class="number">500</span>) &#123;</span><br><span class="line">                log.info(<span class="string">"Commit data to file costs &#123;&#125; ms"</span>, end - begin);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>.waitForRunning(interval);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            CommitLog.log.error(<span class="keyword">this</span>.getServiceName() + <span class="string">" service has exception. "</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">boolean</span> result = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; RETRY_TIMES_OVER &amp;&amp; !result; i++) &#123;</span><br><span class="line">        result = CommitLog.<span class="keyword">this</span>.mappedFileQueue.commit(<span class="number">0</span>);</span><br><span class="line">        CommitLog.log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service shutdown, retry "</span> + (i + <span class="number">1</span>) + <span class="string">" times "</span> + (result ? <span class="string">"OK"</span> : <span class="string">"Not OK"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    CommitLog.log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -598,10 +598,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -646,15 +642,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -687,6 +683,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -786,10 +786,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -827,6 +823,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

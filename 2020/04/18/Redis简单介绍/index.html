@@ -17,15 +17,15 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="提到缓存我们第一时间可能想到的就是Redis，其实缓存框架有很多如Memcache、阿里的Tair、Ehcache等。Ehcache对分布式方面支持的不好，多个节点不能同步；Tair的应用没有这么广泛；Memcache是一个典型的内存型缓存，当然也可借助第三方组件MemcacheDB实现持久化，只支持简单的key-value存储，不支持枚举，不支持持久化和复制等功能。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/18/Redis简单介绍/redis_tx.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/18/Redis简单介绍/redis_master-slave.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/18/Redis简单介绍/redis-codis.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/18/Redis简单介绍/redis-cluster.jpg">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis_tx.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis_master-slave.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis-codis.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis-cluster.jpg">
 <meta property="og:updated_time" content="2020-04-23T22:31:08.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis简单介绍">
 <meta name="twitter:description" content="提到缓存我们第一时间可能想到的就是Redis，其实缓存框架有很多如Memcache、阿里的Tair、Ehcache等。Ehcache对分布式方面支持的不好，多个节点不能同步；Tair的应用没有这么广泛；Memcache是一个典型的内存型缓存，当然也可借助第三方组件MemcacheDB实现持久化，只支持简单的key-value存储，不支持枚举，不支持持久化和复制等功能。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/04/18/Redis简单介绍/redis_tx.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis_tx.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -239,7 +239,7 @@
 <h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis是一款免费开源基于ANSIC语言编写的，BSD（BSD协议是五大开源协议的一种，它允许使用者在使用产品的基础上，可以对源代码进行修改和重新发布，并且可以发布为商业软件）许可的，日志型key-value存储组件，它的所有数据结构都存在内存中，可以用作缓存、数据库和消息中间件。</p>
 <p>Redis 是 Remote dictionary server 即远程字典服务的缩写，一个 Redis 实例可以有多个存储数据的字典，客户端可以通过 select 来选择字典即 DB 进行数据存储。</p>
 <h1 id="2、版本说明"><a href="#2、版本说明" class="headerlink" title="2、版本说明"></a>2、版本说明</h1><p>Redis借鉴了Linux操作系统对于版本号的命名规则：版本号第二位如果是奇数，则为非稳定版本（例如2.7、2.9、3.1），如果是偶数，则为稳定版本（例如2.6、2.8、3.0、3.2）。当前奇数版本就是下一个稳定版本的开发版本，例如2.9版本是3.0版本的开发版本。所以我们在生产环境通常选取偶数版本的Redis，如果对于某些新的特性想提前了解和使用，可以选择最新的奇数版本</p>
-<h1 id="3、Redis特性"><a href="#3、Redis特性" class="headerlink" title="3、Redis特性"></a>3、Redis特性</h1><p><img src="//www.itzones.cn/2020/04/18/Redis简单介绍/redis_tx.png" alt></p>
+<h1 id="3、Redis特性"><a href="#3、Redis特性" class="headerlink" title="3、Redis特性"></a>3、Redis特性</h1><p><img src="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis_tx.png" alt></p>
 <h2 id="3-1、高性能"><a href="#3-1、高性能" class="headerlink" title="3.1、高性能"></a>3.1、高性能</h2><p>同为key-value存储组件，Memcached只能支持二进制字节块这一种数据类型。而Redis的数据类型却丰富的多，它具有8种核心数据类型，每种数据类型都有一系列操作指令对应。Redis 性能很高，单线程压测可以达到 10~11w 的 QPS。</p>
 <p>Redis 一般被看作单进程/单线程组件，因为 Redis 的网络 IO 和命令处理，都在核心进程中由单线程处理。Redis 基于 Epoll 事件模型开发，可以进行非阻塞网络 IO，同时由于<strong>单线程</strong>命令处理，整个处理过程不存在竞争，不需要加锁，没有上下文切换开销，所有数据操作都是在内存中操作，所以 Redis 的性能很高，单个实例即可以达到 10w 级的 QPS。核心线程除了负责网络 IO 及命令处理外，还负责写数据到缓冲，以方便将最新写操作同步到 AOF、slave。</p>
 <h2 id="3-2、持久化"><a href="#3-2、持久化" class="headerlink" title="3.2、持久化"></a>3.2、持久化</h2><p>虽然 Redis 所有数据的读写操作，都在内存中进行，但也可以将所有数据进行落盘做持久化。Redis 提供了 2 种持久化方式。</p>
@@ -255,7 +255,7 @@
 <h2 id="3-5、集群"><a href="#3-5、集群" class="headerlink" title="3.5、集群"></a>3.5、集群</h2><p>Redis 还支持 Cluster 特性，可以通过自动或手动方式，将所有 key 按哈希分散到不同节点，在容量不足时，还可以通过 Redis 的迁移指令，把其中一部分 key 迁移到其他节点。</p>
 <h2 id="3-6、丰富的数据类型"><a href="#3-6、丰富的数据类型" class="headerlink" title="3.6、丰富的数据类型"></a>3.6、丰富的数据类型</h2><p>作为缓存组件，Redis的最大优势是支持丰富的数据类型。目前，Redis支持8种核心数据类型，包括string、list、set、sortedset、hash、bitmap、geo、hyperloglog。</p>
 <h2 id="3-7、热备"><a href="#3-7、热备" class="headerlink" title="3.7、热备"></a>3.7、热备</h2><p>Redis支持master-slave的复制功能。当Redis的slave部署并设置完毕后，slave会和master建立连接，进行全量同步。第一次建立连接，或者长时间断开连接后，缺失的指令超过master复制缓冲区的大小，都需要先进行一次全量同步。全量同步时，master会启动一个子进程，将数据库快照保存到文件中，然后将这个快照文件发给 slave，同时将快照之后的写指令也同步给 slave。全量同步完成后，如果 slave 短时间中断，然后重连复制，缺少的写指令长度小于 master 的复制缓冲大小，master 就会把 slave 缺失的内容全部发送给 slave，进行增量复制。</p>
-<p><img src="//www.itzones.cn/2020/04/18/Redis简单介绍/redis_master-slave.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis_master-slave.png" alt></p>
 <p>Redis的master可以挂载多个slave，同时slave还可以继续挂载slave(一般不这样使用，一般是一主多从)，通过这种方式，可以有效减轻master的压力，同时在master挂掉后，可以在 slave 通过 slaveof no one 指令，使当前 slave 停止与 master 的同步，转而成为新的 master。</p>
 <h1 id="4、使用场景"><a href="#4、使用场景" class="headerlink" title="4、使用场景"></a>4、使用场景</h1><h2 id="4-1、缓存数据"><a href="#4-1、缓存数据" class="headerlink" title="4.1、缓存数据"></a>4.1、缓存数据</h2><p>数据缓存是最容易想到的，最常用，对经常需要查询且变动不是很频繁的数据，常称作热点数据。</p>
 <h2 id="4-2、分布式锁"><a href="#4-2、分布式锁" class="headerlink" title="4.2、分布式锁"></a>4.2、分布式锁</h2><p>分布式锁是控制分布式系统或不同系统之间<strong>共同访问共享资源的一种锁实现</strong>，如果不同的系统或同一个系统的不同主机之间共享了某个资源时，往往需要互斥来防止彼此干扰来保证一致性。</p>
@@ -265,8 +265,8 @@
 <h1 id="5、Redis-部署方式"><a href="#5、Redis-部署方式" class="headerlink" title="5、Redis 部署方式"></a>5、Redis 部署方式</h1><h2 id="5-1、主从模式"><a href="#5-1、主从模式" class="headerlink" title="5.1、主从模式"></a>5.1、主从模式</h2><p>​        <strong>在需要扩展读请求的时候，或者在需要写入临时数据的时候</strong>，用户可以通过设置额外的Redis从服务器来保存数据集的副本。在接收到主服务器发送的数据初始副本之后，客户端每次向主服务器进行写入时，从服务器都会<strong>实时地得到更新</strong>。在部署好主从服务器之后，客户端就可以向任意一个从服务器发送读请求了，而不必再像之前一样，总是把每个读请求都发送给主服务器。</p>
 <h2 id="5-2、哨兵模式"><a href="#5-2、哨兵模式" class="headerlink" title="5.2、哨兵模式"></a>5.2、哨兵模式</h2><p>​        在主从模式下如果Master宕机，需要手动重启Master节点或者手动切换主节点来完成系统恢复，这在生产环境中是有问题的。Redis在2.6版本开始提供的了<strong>哨兵模式</strong>，到Redis的2.8版本以后该模式正式稳定。<strong>Sentinel（哨兵）进程监控Redis集群中Master主服务器工作的状态，在Master主服务器发生故障的时候，可以实现Master和Slave服务器的切换</strong>，保证系统的高可用。</p>
 <h2 id="5-3、集群模式"><a href="#5-3、集群模式" class="headerlink" title="5.3、集群模式"></a>5.3、集群模式</h2><h3 id="5-3-1、国产集群方案-Codis"><a href="#5-3-1、国产集群方案-Codis" class="headerlink" title="5.3.1、国产集群方案-Codis"></a>5.3.1、国产集群方案-Codis</h3><p>Codis 是 Redis 集群方案之一，令我们感到骄傲的是，它是中国人开发并开源的，来自前豌豆荚中间件团队。Codis是一个代理中间件，当客户端向Codis发送指令时，Codis负责将指令转发到后面的redis来执行，并将结果返回给客户端。一个Codis实例可以连接多个redis实例，也可以启动多个codis实例来支撑，每个codis节点都是对等的，这样可以增加整体的QPS需求，还能起到容灾功能。</p>
-<p><img src="//www.itzones.cn/2020/04/18/Redis简单介绍/redis-codis.png" alt></p>
-<h3 id="5-3-2、官方集群方案-Cluster"><a href="#5-3-2、官方集群方案-Cluster" class="headerlink" title="5.3.2、官方集群方案-Cluster"></a>5.3.2、官方集群方案-Cluster</h3><p>Redis Cluster是Redis的分布式解决方案，在Redis 3.0版本正式推出的，有效解决了Redis分布式方面的需求。当遇到单机内存、并发、流量等瓶颈时，可以采用Cluster架构达到负载均衡的目的。Redis-Cluster采用无中心结构，每个节点保存数据和整个集群状态，每个节点都和其他所有节点连接。<br><img src="//www.itzones.cn/2020/04/18/Redis简单介绍/redis-cluster.jpg" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis-codis.png" alt></p>
+<h3 id="5-3-2、官方集群方案-Cluster"><a href="#5-3-2、官方集群方案-Cluster" class="headerlink" title="5.3.2、官方集群方案-Cluster"></a>5.3.2、官方集群方案-Cluster</h3><p>Redis Cluster是Redis的分布式解决方案，在Redis 3.0版本正式推出的，有效解决了Redis分布式方面的需求。当遇到单机内存、并发、流量等瓶颈时，可以采用Cluster架构达到负载均衡的目的。Redis-Cluster采用无中心结构，每个节点保存数据和整个集群状态，每个节点都和其他所有节点连接。<br><img src="http://www.itzones.cn/2020/04/18/Redis简单介绍/redis-cluster.jpg" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -551,10 +551,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -599,15 +595,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,6 +636,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -739,10 +739,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -780,6 +776,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

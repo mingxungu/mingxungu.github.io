@@ -17,22 +17,22 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="上一节中我们分析了Shiro过滤器的原理，Shiro是通过访问资源的URL进行权限管控，分析了其不同的URL对应的过滤器链不同，可自己配置实现过滤器，也可以使用系统默认的过滤器。本节我们分析其认证的过程，FormAuthenticationFilter默认的认证过滤器。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/8.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/1.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/2.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/3.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/4.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/5.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/6.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/7.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/9.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/10.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/11.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/8.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/1.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/2.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/3.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/4.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/5.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/6.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/7.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/9.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/10.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/11.png">
 <meta property="og:updated_time" content="2019-07-29T09:05:36.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro认证流程">
 <meta name="twitter:description" content="上一节中我们分析了Shiro过滤器的原理，Shiro是通过访问资源的URL进行权限管控，分析了其不同的URL对应的过滤器链不同，可自己配置实现过滤器，也可以使用系统默认的过滤器。本节我们分析其认证的过程，FormAuthenticationFilter默认的认证过滤器。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/07/29/Shiro认证流程/8.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2019/07/29/Shiro认证流程/8.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -244,7 +244,7 @@
 <a id="more"></a>
 
 <p>我们上节分析其过滤器的继承关系图，我们再回顾一下。</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/8.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/8.png" alt></p>
 <p>每一类过滤器都继承自OncePerRequestFilter，我们直接看doFilter()源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain filterChain)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    String alreadyFilteredAttributeName = getAlreadyFilteredAttributeName();</span><br><span class="line">    <span class="keyword">if</span> ( request.getAttribute(alreadyFilteredAttributeName) != <span class="keyword">null</span> ) &#123;</span><br><span class="line">        log.trace(<span class="string">"Filter '&#123;&#125;' already executed.  Proceeding without invoking this filter."</span>, getName());</span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="comment">//noinspection deprecation</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="comment">/* added in 1.2: */</span> !isEnabled(request, response) ||</span><br><span class="line">            <span class="comment">/* retain backwards compatibility: */</span> shouldNotFilter(request) ) &#123;</span><br><span class="line">        log.debug(<span class="string">"Filter '&#123;&#125;' is not enabled for the current request.  Proceeding without invoking this filter."</span>,</span><br><span class="line">                getName());</span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Do invoke this filter...</span></span><br><span class="line">        log.trace(<span class="string">"Filter '&#123;&#125;' not yet executed.  Executing now."</span>, getName());</span><br><span class="line">        request.setAttribute(alreadyFilteredAttributeName, Boolean.TRUE);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            doFilterInternal(request, response, filterChain);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// Once the request has finished, we're done and we don't</span></span><br><span class="line">            <span class="comment">// need to mark as 'already filtered' any more.</span></span><br><span class="line">            request.removeAttribute(alreadyFilteredAttributeName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -258,18 +258,18 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private boolean isFilterChainContinued(ServletRequest request, ServletResponse response,</span><br><span class="line">                                       String path, Object pathConfig) throws Exception &#123;</span><br><span class="line">    if (isEnabled(request, response, path, pathConfig)) &#123; //isEnabled check added in 1.2</span><br><span class="line">        if (log.isTraceEnabled()) &#123;</span><br><span class="line">            log.trace(&quot;Filter &apos;&#123;&#125;&apos; is enabled for the current request under path &apos;&#123;&#125;&apos; with config [&#123;&#125;].  &quot; +</span><br><span class="line">                    &quot;Delegating to subclass implementation for &apos;onPreHandle&apos; check.&quot;,</span><br><span class="line">                    new Object[]&#123;getName(), path, pathConfig&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        return onPreHandle(request, response, pathConfig);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (log.isTraceEnabled()) &#123;</span><br><span class="line">        log.trace(&quot;Filter &apos;&#123;&#125;&apos; is disabled for the current request under path &apos;&#123;&#125;&apos; with config [&#123;&#125;].  &quot; +</span><br><span class="line">                &quot;The next element in the FilterChain will be called immediately.&quot;,</span><br><span class="line">                new Object[]&#123;getName(), path, pathConfig&#125;);</span><br><span class="line">    &#125; </span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>核心方法是onPreHandle(),其子类的实现是AccessControlFilter.onPreHandle()</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/1.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/1.png" alt></p>
 <p>查看源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onPreHandle</span><span class="params">(ServletRequest request, ServletResponse response, Object mappedValue)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> isAccessAllowed(request, response, mappedValue) || onAccessDenied(request, response, mappedValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>AccessControlFilter. onPreHandle()方法中的isAccessAllowed一定是false,因为没有做登陆认证所以就会执行FormAuthenticationFilter的实现onAccessDenied()的实现。做登陆操作。</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/2.png" alt></p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/3.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/2.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/3.png" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">onLoginSuccess</span><span class="params">(AuthenticationToken token, Subject subject,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 ServletRequest request, ServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//登录成功跳转到登录成功页面，我们配置的successUrl的路径</span></span><br><span class="line">	issueSuccessRedirect(request, response);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>登录成功直接重定向到成功页面返回false不再执行过滤器链后面的操作</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/4.png" alt></p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/5.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/4.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/5.png" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AuthenticationInfo <span class="title">authenticate</span><span class="params">(AuthenticationToken token)</span> <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.authenticator.authenticate(token);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>调用父类AbstractAuthenticator.authenticate()方法</p>
@@ -282,14 +282,14 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> AuthenticationInfo <span class="title">doSingleRealmAuthentication</span><span class="params">(Realm realm, AuthenticationToken token)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!realm.supports(token)) &#123;</span><br><span class="line">        String msg = <span class="string">"Realm ["</span> + realm + <span class="string">"] does not support authentication token ["</span> +</span><br><span class="line">                token + <span class="string">"].  Please ensure that the appropriate Realm implementation is "</span> +</span><br><span class="line">                <span class="string">"configured correctly or that the realm accepts AuthenticationTokens of this type."</span>;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedTokenException(msg);</span><br><span class="line">    &#125;</span><br><span class="line">    AuthenticationInfo info = realm.getAuthenticationInfo(token);</span><br><span class="line">    <span class="keyword">if</span> (info == <span class="keyword">null</span>) &#123;</span><br><span class="line">        String msg = <span class="string">"Realm ["</span> + realm + <span class="string">"] was unable to find account data for the "</span> +</span><br><span class="line">                <span class="string">"submitted AuthenticationToken ["</span> + token + <span class="string">"]."</span>;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnknownAccountException(msg);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> info;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>调用AuthenticatingRealm.getAuthenticationInfo()方法</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/6.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/6.png" alt></p>
 <p>核心的方法AuthenticatingRealm. getAuthenticationInfo其中doGetAuthenticationInfo获取认证信息就是需要我们去实现的</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/7.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/7.png" alt></p>
 <p>其中assertCredentialsMatch</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/9.png" alt></p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/10.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/9.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/10.png" alt></p>
 <p>FormAuthenticationFilter执行的流程。</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro认证流程/11.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro认证流程/11.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -574,10 +574,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -622,15 +618,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -663,6 +659,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -762,10 +762,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -803,6 +799,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

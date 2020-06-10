@@ -17,31 +17,31 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Redis的基本数据类型有五种，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)。字符串String又是最简单、最常用的数据类型，本节我们重点探讨其基本使用、底层存储原理、使用场景等。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_set_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setnx_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setex_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_psetex_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_get_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getset_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_strlen_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_append_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getrange_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incr_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incrby_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decr_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decrby_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mset_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mget_option.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/redis_object.jpg">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/redisObject.jpg">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_encoding.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/raw_embstr.jpg">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/embstr_redis3_redis4.jpg">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_set_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setnx_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setex_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_psetex_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_get_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getset_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_strlen_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_append_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getrange_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incr_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incrby_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decr_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decrby_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mset_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mget_option.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/redis_object.jpg">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/redisObject.jpg">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_encoding.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/raw_embstr.jpg">
+<meta property="og:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/embstr_redis3_redis4.jpg">
 <meta property="og:updated_time" content="2020-04-23T22:31:26.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基本数据类型之String">
 <meta name="twitter:description" content="Redis的基本数据类型有五种，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)。字符串String又是最简单、最常用的数据类型，本节我们重点探讨其基本使用、底层存储原理、使用场景等。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_set_option.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_set_option.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -255,66 +255,66 @@
 <p>Redis的字符串其底层实现是简单动态字符串<strong>SDS</strong>(simple dynamic string)，是可以修改的字符串。内部实现类似于Java的ArrayList,采用预分配冗余空间的方式来减少内存的频繁分配，<u><strong>在字符串长度小于 1MB 时，按所需长度的 2 倍来分配，超过 1MB，则按照每次额外增加 1MB 的容量来预分配</strong></u>。需要注意的是<strong>字符串最大长度为512MB</strong>。</p>
 <h1 id="2、常用命令"><a href="#2、常用命令" class="headerlink" title="2、常用命令"></a>2、常用命令</h1><h2 id="2-1、SET-设置值"><a href="#2-1、SET-设置值" class="headerlink" title="2.1、SET-设置值"></a>2.1、SET-设置值</h2><p><strong>SET key value [EX seconds] [PX milliseconds] [NX|XX]</strong></p>
 <p>我们发现前两个参数是比必填的后面的参数都是选填的；EX指的是该键值对的过期时间单位是秒；PX指的是该键值对的过期时间单位是毫秒；NX指代键值对不存在则设置成功，存在则设置失败；XX指代键值对存在则设置成功，不存在则设置失败。下面我们逐一验证。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_set_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_set_option.png" alt></p>
 <h2 id="2-2、SETNX-KEY不存在设置，存在不设置"><a href="#2-2、SETNX-KEY不存在设置，存在不设置" class="headerlink" title="2.2、SETNX-KEY不存在设置，存在不设置"></a>2.2、SETNX-KEY不存在设置，存在不设置</h2><p><strong>SETNX key value</strong></p>
 <p>我们发现这个命令和我们上面的说的SET key value NX是一个意思</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setnx_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setnx_option.png" alt></p>
 <h2 id="2-3、SETEX-设置键值对并设置过期时间（秒）"><a href="#2-3、SETEX-设置键值对并设置过期时间（秒）" class="headerlink" title="2.3、SETEX-设置键值对并设置过期时间（秒）"></a>2.3、SETEX-设置键值对并设置过期时间（秒）</h2><p><strong>SETEX key seconds value</strong></p>
 <p>将键 <code>key</code> 的值设置为 <code>value</code> ， 并将键 <code>key</code> 的生存时间设置为 <code>seconds</code> 秒钟。如果键 <code>key</code> 已经存在， 那么 <code>SETEX</code> 命令将覆盖已有的值。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setex_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_setex_option.png" alt></p>
 <h2 id="2-4、PSETEX-设置键值对并设置过期时间（毫秒）"><a href="#2-4、PSETEX-设置键值对并设置过期时间（毫秒）" class="headerlink" title="2.4、PSETEX-设置键值对并设置过期时间（毫秒）"></a>2.4、PSETEX-设置键值对并设置过期时间（毫秒）</h2><p><strong>PSETEX key milliseconds value</strong></p>
 <p>这个命令和 <code>SETEX</code> 命令相似， 但它以毫秒为单位设置 <code>key</code> 的生存时间， 而不是像 <code>SETEX</code> 命令那样以秒为单位进行设置。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_psetex_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_psetex_option.png" alt></p>
 <h2 id="2-5、GET-获取某个键的值"><a href="#2-5、GET-获取某个键的值" class="headerlink" title="2.5、GET-获取某个键的值"></a>2.5、GET-获取某个键的值</h2><p><strong>GET key</strong></p>
 <p>如果键 <code>key</code> 不存在， 那么返回特殊值 <code>nil</code> ； 否则， 返回键 <code>key</code> 的值。如果键 <code>key</code> 的值并非字符串类型， 那么返回一个错误， 因为 <code>GET</code> 命令只能用于字符串值</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_get_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_get_option.png" alt></p>
 <h2 id="2-6、GETSET-设置键值对并返回被设置之前的旧值"><a href="#2-6、GETSET-设置键值对并返回被设置之前的旧值" class="headerlink" title="2.6、GETSET-设置键值对并返回被设置之前的旧值"></a>2.6、GETSET-设置键值对并返回被设置之前的旧值</h2><p><strong>GETSET key value</strong></p>
 <p>返回给定键 <code>key</code> 的旧值。如果键 <code>key</code> 没有旧值， 也即是说， 键 <code>key</code> 在被设置之前并不存在， 那么命令返回 <code>nil</code> 。当键 <code>key</code> 存在但不是字符串类型时， 命令返回一个错误。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getset_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getset_option.png" alt></p>
 <h2 id="2-7、STRLEN-返回字符串的长度"><a href="#2-7、STRLEN-返回字符串的长度" class="headerlink" title="2.7、STRLEN-返回字符串的长度"></a>2.7、STRLEN-返回字符串的长度</h2><p><strong>STRLEN key</strong></p>
 <p>返回键 <code>key</code> 储存的对应的value字符串值的长度。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_strlen_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_strlen_option.png" alt></p>
 <h2 id="2-8、APPEND-末尾追加字符串"><a href="#2-8、APPEND-末尾追加字符串" class="headerlink" title="2.8、APPEND-末尾追加字符串"></a>2.8、APPEND-末尾追加字符串</h2><p><strong>APPEND key value</strong></p>
 <p>如果键 <code>key</code> 已经存在并且它的值是一个字符串， <code>APPEND</code> 命令将把 <code>value</code> 追加到键 <code>key</code> 现有值的末尾。如果 <code>key</code> 不存在， <code>APPEND</code> 就简单地将键 <code>key</code> 的值设为 <code>value</code> ， 就像执行 <code>SET key value</code> 一样。追加 <code>value</code> 之后， 返回键 <code>key</code> 的对应的value字符串的值的长度。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_append_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_append_option.png" alt></p>
 <h2 id="2-9、GETRANGE-获取偏移量范围内的值"><a href="#2-9、GETRANGE-获取偏移量范围内的值" class="headerlink" title="2.9、GETRANGE-获取偏移量范围内的值"></a>2.9、GETRANGE-获取偏移量范围内的值</h2><p><strong>GETRANGE key start end</strong></p>
 <p>返回键 <code>key</code> 储存的字符串值的指定部分， 字符串的截取范围由 <code>start</code> 和 <code>end</code> 两个偏移量决定 (包括 <code>start</code> 和 <code>end</code> 在内)。负数偏移量表示从字符串的末尾开始计数， <code>-1</code> 表示最后一个字符， <code>-2</code> 表示倒数第二个字符， 以此类推。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getrange_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_getrange_option.png" alt></p>
 <h2 id="2-10、INCR-自增"><a href="#2-10、INCR-自增" class="headerlink" title="2.10、INCR-自增"></a>2.10、INCR-自增</h2><p><strong>INCR key</strong></p>
 <p>为键 <code>key</code> 储存的数字值加上一。如果键 <code>key</code> 不存在， 那么它的值会先被初始化为 <code>0</code> ， 然后再执行 <code>INCR</code> 命令。如果键 <code>key</code> 储存的值不能被解释为数字， 那么 <code>INCR</code> 命令将返回一个错误。本操作的值限制在 64 位(bit)有符号数字表示之内。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incr_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incr_option.png" alt></p>
 <h2 id="2-11、INCRBY-设置自增的数字"><a href="#2-11、INCRBY-设置自增的数字" class="headerlink" title="2.11、INCRBY-设置自增的数字"></a>2.11、INCRBY-设置自增的数字</h2><p><strong>INCRBY key increment</strong></p>
 <p>为键 <code>key</code> 储存的数字值加上增量 <code>increment</code> 。如果键 <code>key</code> 不存在， 那么键 <code>key</code> 的值会先被初始化为 <code>0</code> ， 然后再执行 <code>INCRBY</code> 命令。如果键 <code>key</code> 储存的值不能被解释为数字， 那么 <code>INCRBY</code> 命令将返回一个错误。本操作的值限制在 64 位(bit)有符号数字表示之内。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incrby_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_incrby_option.png" alt></p>
 <h2 id="2-12、DECR-递减"><a href="#2-12、DECR-递减" class="headerlink" title="2.12、DECR-递减"></a>2.12、DECR-递减</h2><p><strong>DECR key</strong></p>
 <p>为键 <code>key</code> 储存的数字值减去一。如果键 <code>key</code> 不存在， 那么键 <code>key</code> 的值会先被初始化为 <code>0</code> ， 然后再执行 <code>DECR</code> 操作。如果键 <code>key</code> 储存的值不能被解释为数字， 那么 <code>DECR</code> 命令将返回一个错误。本操作的值限制在 64 位(bit)有符号数字表示之内。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decr_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decr_option.png" alt></p>
 <h2 id="2-13、DECRBY-设置递减的数字"><a href="#2-13、DECRBY-设置递减的数字" class="headerlink" title="2.13、DECRBY-设置递减的数字"></a>2.13、DECRBY-设置递减的数字</h2><p><strong>DECRBY key decrement</strong></p>
 <p>将键 <code>key</code> 储存的整数值减去减量 <code>decrement</code> 。如果键 <code>key</code> 不存在， 那么键 <code>key</code> 的值会先被初始化为 <code>0</code> ， 然后再执行 <code>DECRBY</code> 命令。如果键 <code>key</code> 储存的值不能被解释为数字， 那么 <code>DECRBY</code> 命令将返回一个错误。本操作的值限制在 64 位(bit)有符号数字表示之内</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decrby_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_decrby_option.png" alt></p>
 <h2 id="2-14、MSET-批量设值"><a href="#2-14、MSET-批量设值" class="headerlink" title="2.14、MSET-批量设值"></a>2.14、MSET-批量设值</h2><p><strong>MSET key value [key value …]</strong></p>
 <p>如果某个给定键已经存在， 那么 <code>MSET</code> 将使用新值去覆盖旧值， 如果这不是你所希望的效果， 请考虑使用 <code>MSETNX</code> 命令， 这个命令只会在所有给定键都不存在的情况下进行设置。<code>MSET</code> 是一个<strong><u>原子性(atomic)操作</u></strong>， 所有给定键都会在同一时间内被设置， 不会出现某些键被设置了但是另一些键没有被设置的情况。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mset_option.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mset_option.png" alt></p>
 <p><strong>注意：<u>mset,mget 具有原子性不可切割，当时操作的键值 可能不在一个槽里面，所以失败；可以通过{}来定义组的概念，从而使key中{}内相同内容的键值对放到一个slot中去。</u></strong></p>
 <h2 id="2-15、MGET-批量获取值"><a href="#2-15、MGET-批量获取值" class="headerlink" title="2.15、MGET-批量获取值"></a>2.15、MGET-批量获取值</h2><p><strong>MGET key [key …]</strong></p>
-<p>返回给定的一个或多个字符串键的值。如果给定的字符串键里面， 有某个键不存在， 那么这个键的值将以特殊值 <code>nil</code> 表示<br><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mget_option.png" alt></p>
+<p>返回给定的一个或多个字符串键的值。如果给定的字符串键里面， 有某个键不存在， 那么这个键的值将以特殊值 <code>nil</code> 表示<br><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_mget_option.png" alt></p>
 <h1 id="3、内部实现"><a href="#3、内部实现" class="headerlink" title="3、内部实现"></a>3、内部实现</h1><h2 id="3-1、Redis内部存储结构"><a href="#3-1、Redis内部存储结构" class="headerlink" title="3.1、Redis内部存储结构"></a>3.1、Redis内部存储结构</h2><p><strong>dictEntry</strong></p>
 <p>因为 Redis 是 KV 的数据库，它是通过 hashtable 实现的（我们把这个叫做外层的哈希）。所以每个键值对都会有一个 dictEntry，里面指向了 key 和 value 的指针。next 指向下一个 dictEntry。源码如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> *key;              <span class="comment">//关键字</span></span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">        <span class="keyword">double</span> d;</span><br><span class="line">    &#125; v;                    <span class="comment">//val</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">//next</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
 
 <p>key 是字符串，但是 Redis 没有直接使用 C 的字符数组，而是存储在自定义的 SDS中。</p>
 <p>value 既不是直接作为字符串存储，也不是直接存储在 SDS 中，而是存储在redisObject 中。实际上五种常用的数据类型的任何一种，都是通过 redisObject 来存储的。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/redis_object.jpg" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/redis_object.jpg" alt></p>
 <p><strong>redisObject</strong> </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>; <span class="comment">/* 对象的类型， 包括： OBJ_STRING、 OBJ_LIST、 OBJ_HASH、 OBJ_SET、 OBJ_ZSET */</span></span><br><span class="line">    <span class="keyword">unsigned</span> encoding:<span class="number">4</span>; <span class="comment">/* 具体的数据结构 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> lru:LRU_BITS; <span class="comment">/* 24 位， 对象最后一次被命令程序访问的时间， 与内存回收有关 */</span></span><br><span class="line">    <span class="keyword">int</span> refcount; <span class="comment">/* 引用计数。 当 refcount 为 0 的时候， 表示该对象已经不被任何对象引用， 则可以进行垃圾回收了*/</span></span><br><span class="line">    <span class="keyword">void</span> *ptr; <span class="comment">/* 指向对象实际的数据结构 */</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/redisObject.jpg" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/redisObject.jpg" alt></p>
 <h2 id="3-2、String类型内部编码"><a href="#3-2、String类型内部编码" class="headerlink" title="3.2、String类型内部编码"></a>3.2、String类型内部编码</h2><p>Redis中的字符串类型，有三种内部编码：raw、embstr、int。当值小于44字节（Redis 3.2+，之前版本小于39字节），使用embstr，否则使用raw</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_encoding.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/string_encoding.png" alt></p>
 <p>int类型就是指的是数字，没有什么说的，那么raw、embstr都代表的是字符串有什么异同吗，下面我们分析下。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/raw_embstr.jpg" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/raw_embstr.jpg" alt></p>
 <p>图中展示了两者的区别，可以看到<strong>embstr将redisObject和SDS保存在连续的64字节空间内</strong>，这样可以只需要一次内存分配，而对于raw来说，SDS和redisObject分离，需要两次内存分配，而且占用更多的内存空间。</p>
-<p><img src="//www.itzones.cn/2020/04/21/Redis基本数据类型之String/embstr_redis3_redis4.jpg" alt></p>
+<p><img src="http://www.itzones.cn/2020/04/21/Redis基本数据类型之String/embstr_redis3_redis4.jpg" alt></p>
 <p>可以看到embstr在3.2+中使用了叫sdshdr8的结构，在该结构下，元数据只需要3个字节，而Redis需要8个字节，所以总共64个字节，减去redisObject(16字节)，再减去SDS的原信息，最后的实际内容就变成了44字节和39字节。</p>
 <p><strong><u>embstr 和raw 比较</u></strong></p>
 <blockquote>
@@ -625,10 +625,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -673,15 +669,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -714,6 +710,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -813,10 +813,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -854,6 +850,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

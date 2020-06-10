@@ -17,12 +17,12 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ的消费提供推拉两种模式，push模式无疑是首选，我们项目使用的比较深入需要相应的设置一些Consuner端的参数来满足项目需要，对默认的设置进行修改，有些参数总是模棱两可，今天我们重点分析下，push的整个工作机制。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png">
 <meta property="og:updated_time" content="2020-05-31T08:52:03.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ推送消费源码分析(一)-消息拉取">
 <meta name="twitter:description" content="RocketMQ的消费提供推拉两种模式，push模式无疑是首选，我们项目使用的比较深入需要相应的设置一些Consuner端的参数来满足项目需要，对默认的设置进行修改，有些参数总是模棱两可，今天我们重点分析下，push的整个工作机制。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -234,7 +234,7 @@
 <a id="more"></a>
 
 <h1 id="1、整体流程"><a href="#1、整体流程" class="headerlink" title="1、整体流程"></a>1、整体流程</h1><p>话不多说，直接上图，图不是很专业重在说明重要节点流程</p>
-<p><img src="//www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/push%E6%B6%88%E8%B4%B9.png" alt></p>
 <p>Push模式的消费我们分为三个章节来介绍</p>
 <blockquote>
 <p>1、第一节，我们重点介绍PushConsuemr的启动过程，消息拉取的过程，及消息分发消费</p>
@@ -605,10 +605,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -653,15 +649,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -694,6 +690,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -793,10 +793,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -834,6 +830,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

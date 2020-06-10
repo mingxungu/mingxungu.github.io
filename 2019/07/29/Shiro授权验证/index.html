@@ -17,20 +17,20 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="上节我们对认证过滤器的整个处理流程通过源码梳理了一下，本节我们将了解另一个重量级的过滤器授权过滤器PermissionsAuthorizationFilter，下面我们具体分析下。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/1.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/2.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/3.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/4.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/5.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/6.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/7.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/8.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/9.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/1.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/2.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/3.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/4.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/5.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/6.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/7.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/8.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/9.png">
 <meta property="og:updated_time" content="2019-07-29T10:52:59.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro授权验证">
 <meta name="twitter:description" content="上节我们对认证过滤器的整个处理流程通过源码梳理了一下，本节我们将了解另一个重量级的过滤器授权过滤器PermissionsAuthorizationFilter，下面我们具体分析下。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/07/29/Shiro授权验证/1.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2019/07/29/Shiro授权验证/1.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -242,37 +242,37 @@
 <a id="more"></a>
 
 <p>PermissionsAuthorizationFilter也是AccessControlFilter的子类实现</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/1.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/1.png" alt></p>
 <p>AccessControlFilter也会执行onPreHandle()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onPreHandle</span><span class="params">(ServletRequest request, ServletResponse response, Object mappedValue)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> isAccessAllowed(request, response, mappedValue) || onAccessDenied(request, response, mappedValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>查看具体实现在PermissionsAuthorizationFilter.isAccessAllowed()</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/2.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/2.png" alt></p>
 <p>从该方法中我们可以知道默认是允许访问的boolean isPermitted =true当我们对某个资源的权限标识为null则意味着它可以被所有人访问。</p>
 <p>调用DelegatingSubject.isPermitted()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPermitted</span><span class="params">(String permission)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//判断是否有账号，根据账号获取其拥有的所有权限和当前资源的权限进行比较</span></span><br><span class="line">    <span class="keyword">return</span> hasPrincipals() &amp;&amp; securityManager.isPermitted(getPrincipals(), permission);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>关于Subject的hasPrincipals()方法我们下一节会分析Subject创建过程，有账号才能来验证有没有权限，调用AuthorizingRealm类中的isPermitted()</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/3.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/3.png" alt></p>
 <p>获取认证信息</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/4.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/4.png" alt></p>
 <p>我们需要自己去继承Realm接口实现，获取权限信息</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/5.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/5.png" alt></p>
 <p>获取的该用户所拥有的权限标识信息与该资源的需要的权限信息比较是否存在，存在则有访问权限，不存在则没有访问权限</p>
 <p>我们看一下onAccessDenied方法的具体实现，也就是不具备访问权限时如何处理</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/6.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/6.png" alt></p>
 <p>具体看看如何判断是否有权限</p>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/7.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/7.png" alt></p>
 <p>下面我们重点介绍：</p>
 <p>如何根据权限名获取权限信息 、如何根据用户角色获取权限信息</p>
 <ul>
 <li>根据权限名获取权限信息</li>
 </ul>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/8.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/8.png" alt></p>
 <ul>
 <li>根据用户角色获取权限信息</li>
 </ul>
-<p><img src="//www.itzones.cn/2019/07/29/Shiro授权验证/9.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/07/29/Shiro授权验证/9.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -557,10 +557,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -605,15 +601,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -646,6 +642,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -745,10 +745,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -786,6 +782,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png">
 <meta property="og:updated_time" content="2020-05-31T09:00:14.424Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ推送消费源码分析(二)-重平衡">
 <meta name="twitter:description" content="上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -234,7 +234,7 @@
         <p>上一节我们讲到了push模式的消费下的消息拉取过程中对于如何获取拉取资源没有想到，本节我们重点讲解下，集群模式下消费者的增加会触发消费的重平衡来保证每个消费者“分担”消息的消费。</p>
 <a id="more"></a>
 
-<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p><img src="//www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png" alt></p>
+<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p><img src="http://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/push%E6%B6%88%E8%B4%B9.png" alt></p>
 <p>我们直接上图，图中的②就是我们本节要讲解的内容。</p>
 <h1 id="2、客户端发送心跳到每一个Broker"><a href="#2、客户端发送心跳到每一个Broker" class="headerlink" title="2、客户端发送心跳到每一个Broker"></a>2、客户端发送心跳到每一个Broker</h1><p>上节我们分析了DefaultMQPushConsumer.start()的启动会发送心跳和开启重平衡</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//客户端发送心跳包给broker</span></span><br><span class="line"><span class="keyword">this</span>.mQClientFactory.sendHeartbeatToAllBrokerWithLock();</span><br><span class="line"><span class="comment">//消息消费重新负载</span></span><br><span class="line"><span class="keyword">this</span>.mQClientFactory.rebalanceImmediately();</span><br></pre></td></tr></table></figure>
@@ -269,7 +269,7 @@
 <p>广播模式下的重平衡只能是订阅者信息变了，我们不做讨论，广播模式下每个消费者都会独享消费订阅的全部消息</p>
 <p>集群模式比较复杂我们分析下，我们需要获取订阅者的主题的消息队列MessageQueue集合，需要获取该订阅组的消费者客户端的集合，对其进行排序供下面算法使用。</p>
 <p>提供了很多种算法我们本节不做讨论需要了解的请查看 <a href="[https://itzones.cn/2019/07/03/RocketMQ%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%BC%8F/](https://itzones.cn/2019/07/03/RocketMQ消费模式/)">《RocketMQ消费模式》</a>1.2章节中重点介绍了其分配策略</p>
-<p><img src="//www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/%E9%9B%86%E7%BE%A4%E9%98%9F%E5%88%97%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95.png" alt></p>
 <p>至此每个客户端都会执行同一个分配策略，这个就能保证每个消费者只消费自己管理的MessageQueue的消息</p>
 <h2 id="3-2、客户端获取的消费队列集合放入拉取资源中"><a href="#3-2、客户端获取的消费队列集合放入拉取资源中" class="headerlink" title="3.2、客户端获取的消费队列集合放入拉取资源中"></a>3.2、客户端获取的消费队列集合放入拉取资源中</h2><p>获取到了消费队列的集合，下面我们分析如何放入拉取资源中，就是我们在上一节 <a href="https://itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/" target="_blank" rel="noopener">RocketMQ推送消费源码分析-消息拉取</a>提到的，消息的拉取任务是从从LinkedBlockingQueue对列中获取的PullRequest对象。</p>
 <p>我们接着分析updateProcessQueueTableInRebalance()</p>
@@ -563,10 +563,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -611,15 +607,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -652,6 +648,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -751,10 +751,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -792,6 +788,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

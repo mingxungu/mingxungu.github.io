@@ -17,17 +17,17 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="上一节我们在副本机制中讲解了关于副本的基本概念及多副本存在的意义，引出了ISR出现的原因，本节我们继续围绕副本深入探讨。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_replication_HW.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_1.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_leo_1.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_lost_msg.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_diff_msg.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_epoch_solve_lost_msg.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_replication_HW.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_1.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_leo_1.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_lost_msg.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_diff_msg.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_epoch_solve_lost_msg.png">
 <meta property="og:updated_time" content="2020-03-23T12:07:22.608Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka HW与Leader Epoch">
 <meta name="twitter:description" content="上一节我们在副本机制中讲解了关于副本的基本概念及多副本存在的意义，引出了ISR出现的原因，本节我们继续围绕副本深入探讨。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_replication_HW.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_replication_HW.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -242,7 +242,7 @@
 <p>ISR: 与Leader副本保持一定同步状态的副本集合，当然Leader也是ISR中的成员</p>
 <p>LEO: 标识每个分区中最后一条消息的下一个位置，分区的每一个副本都有自己的LEO</p>
 <p>HW: ISR中最小的LEO即为HW，俗称高水位，消费者只能拉取HW之前的消息</p>
-<p><img src="//www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_replication_HW.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_replication_HW.png" alt></p>
 <p>通过图中我们直观的分析HW和LEO的概念。图中展示的是一个分区下的三个副本，我们认为三个副本都在ISR中，1个Leader副本和2个Follower副本，Leader副本的LEO是8，Follower1副本的LEO是7，Follower2副本的LEO是6，那么这个分区的HW是6；如果Follower2副本被判定为失效副本从ISR集合中移除，那么此时分区的HW为Leader和Follower1副本的LEO最小值，即为7。</p>
 <h2 id="1-2、高水位的作用"><a href="#1-2、高水位的作用" class="headerlink" title="1.2、高水位的作用"></a>1.2、高水位的作用</h2><p>1、定义消息可见性，即用来标识分区下的哪些消息是可以被消费者消费的。</p>
 <p>2、帮助 Kafka 完成副本同步。</p>
@@ -252,7 +252,7 @@
 </blockquote>
 <p>高水位和 LEO 是副本对象的两个重要属性。Kafka 所有副本都有对应的高水位和 LEO 值，而不仅仅是 Leader 副本。只不过 Leader 副本比较特殊，<strong>Kafka 使用 Leader 副本的高水位来定义所在分区的高水位</strong>。换句话说，分区的高水位就是其 Leader 副本的高水位。</p>
 <h2 id="1-3、高水位更新机制"><a href="#1-3、高水位更新机制" class="headerlink" title="1.3、高水位更新机制"></a>1.3、高水位更新机制</h2><p>我们先梳理一下消息的追加到副本的过程。我们已某个主题的分区数是3，副本因子是3的进行分析</p>
-<p><img src="//www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_1.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_1.png" alt></p>
 <p>1、生产者客户端发送消息至Leader副本（Broker0上的副本1、Broker1上的副本2、Broker2上的副本3）</p>
 <p>2、消息被追加到Leader副本的本地日志，并更新日志的偏移量LEO</p>
 <p>3、Follower副本向Leader副本请求同步数据，会携带当前副本的LEO（如Broker1上的副本1和Broker2上的副本1向Broker0上的副本1请求数据）</p>
@@ -260,7 +260,7 @@
 <p>5、Leader副本将拉取的结果返回给follower副本</p>
 <p>6、Follower副本获取从Leader副本获取的消息，将消息追加到本地日志中并更新日志的偏移量信息LEO</p>
 <p><strong>了解了以上过程我们来动态的说明LEO和HW更新的过程</strong></p>
-<p><img src="//www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_leo_1.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_leo_1.png" alt></p>
 <p>图中展示了副本Follower拉取Leader消息时这个LEO和HW动态更新的过程</p>
 <blockquote>
 <p>Follower每次请求时会携带自身的LEO，Leader会记录每个Follower的LEO；计算HW=min(Leader的LEO，Follower1的LEO，Follower2的LEO)。</p>
@@ -271,13 +271,13 @@
 <p>各个副本所在的节点都会记录自己的HW</p>
 </blockquote>
 <h1 id="2、Leader-Epoch引入"><a href="#2、Leader-Epoch引入" class="headerlink" title="2、Leader Epoch引入"></a>2、Leader Epoch引入</h1><p>以上我们的分析都是说明正常情况下的Leader副本与Follower副本之间的同步过程，如果Leader副本发生切换，那么同步又该如何处理0.11 版本之前都是依据HW的同步机制，但是这样很容易造成数据丢失，或者因为Leader副本和Follower副本不一致的问题。社区在 0.11 版本正式引入了 Leader Epoch 概念，来规避因高水位更新错配导致的各种不一致问题。</p>
-<h2 id="2-1、分析数据丢失场景"><a href="#2-1、分析数据丢失场景" class="headerlink" title="2.1、分析数据丢失场景"></a>2.1、分析数据丢失场景</h2><p><img src="//www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_lost_msg.png" alt></p>
+<h2 id="2-1、分析数据丢失场景"><a href="#2-1、分析数据丢失场景" class="headerlink" title="2.1、分析数据丢失场景"></a>2.1、分析数据丢失场景</h2><p><img src="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_lost_msg.png" alt></p>
 <p>分为四个阶端，灰色背景的为Leader</p>
 <p>第一阶段：A是Leader,此时A的HW是2，B的HW是1，此时B携带自身的额LEO拉取A中的消息，此时B重启，B还没有从A中拉取消息更新自身的HW时发生了重启。</p>
 <p>第二阶端：B重启后发现LEO和本身的HW不一致，则根据HW（这个值会存入本地的replication-offset-checkpoint）进行日志截断，这时会将M2的消息进行删除。此时的B中只有M1这条消息。从A中拉取消息</p>
 <p>第三阶端：B从A中拉取消息时，此时A宕机，说明Leader挂了，选举出B为新的Leader,HW就是1。</p>
 <p>第四阶端：A主机恢复，此时的A则是一个Follower副本，此时的HW是2，由于副本的HW不能比Leader的高，还会做一次日志截断，此时的HW调整为1。那么M2的消息就会丢失，即使A没有恢复正常同样M2消息还是丢失了。</p>
-<h2 id="2-2、分析数据不一致场景"><a href="#2-2、分析数据不一致场景" class="headerlink" title="2.2、分析数据不一致场景"></a>2.2、分析数据不一致场景</h2><p><img src="//www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_diff_msg.png" alt></p>
+<h2 id="2-2、分析数据不一致场景"><a href="#2-2、分析数据不一致场景" class="headerlink" title="2.2、分析数据不一致场景"></a>2.2、分析数据不一致场景</h2><p><img src="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_hw_diff_msg.png" alt></p>
 <p>分为四个阶端，灰色背景的为Leader</p>
 <p>第一阶段：A节点的HW和LEO都是2，B的HW是1，LEO是2此时正要去Leader拉取数据，A/B两个节点都都宕机</p>
 <p>第二阶端：B恢复后发现LEO和本身的HW不一致，则根据HW（这个值会存入本地的replication-offset-checkpoint）进行日志截断，这时会将M2的消息进行删除。此时的B中只有M1这条消息</p>
@@ -285,7 +285,7 @@
 <p>第四阶端：此时A恢复后自动成为Follower,此时的HW是2,从B（Leader）拉取消息时返回给A的HW同样是2，这样A不用做任何操作，此时我们发现A中有M1、M2然而B中却是M1和M3。</p>
 <h2 id="2-3、Leader-Epoch"><a href="#2-3、Leader-Epoch" class="headerlink" title="2.3、Leader Epoch"></a>2.3、Leader Epoch</h2><p>为了解决以上问题kafka从0.11.0.0开始引入Leader Epoch的概念，在需要截断数据的时候使用Leader Epoch作为参照而不是原来的HW。Leader Epoch代表Leader的纪元信息初始值为0。每当Leader变更一次Leader Epoch就会增加1，相当于为Leader增加一个版本号。于此同时每个副本中还是增设一个矢量&lt;LeaderEpoch =&gt; StartOffset&gt;,其中StartOffset表示当前的LeaderEpoch下写入第一条消息的偏移量。每个副本的Log下都有一个leader-epoch-checkpoint文件，在发生Leader Epoch 变更时，会将相应的矢量值追加到这个文件中。</p>
 <p>下面通过动态过程分析引入Leader Epoch如何保证消息不丢失。</p>
-<p><img src="//www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_epoch_solve_lost_msg.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/21/Kafka-HW与Leader-Epoch/kafka_epoch_solve_lost_msg.png" alt></p>
 <p>分为四个阶端</p>
 <p>第一阶段：A是Leader,此时A的HW是2，B的HW是1，此时B携带自身的额LEO拉取A中的消息，此时B重启，B还没有从A中拉取消息更新自身的HW时发生了重启。</p>
 <p>第二阶段：Follower 副本 B 重启回来后，需要向 A 发送一个特殊的请求去获取 Leader 的 LEO 值。在这个例子中，该值为 2。当获知到 Leader LEO=2 后，B 发现该 LEO 值不比它自己的 LEO 值小，而且缓存中也没有保存任何起始位移值 &gt; 2 的 Epoch 条目，因此 B 无需执行任何日志截断操作。这是对高水位机制的一个明显改进，即副本是否执行日志截断不再依赖于高水位进行判断。</p>
@@ -579,10 +579,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -627,15 +623,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -668,6 +664,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -767,10 +767,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -808,6 +804,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

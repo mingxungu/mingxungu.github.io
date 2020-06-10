@@ -17,17 +17,17 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Eureka是Netflix开发的服务发现框架，本身是一个基于REST的服务，主要用于定位运行在AWS域中的中间层服务，以达到负载均衡和中间层服务故障转移的目的。SpringCloud将它集成在其子项目spring-cloud-netflix中，以实现SpringCloud的服务发现功能。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E8%B0%83%E7%94%A8%E5%9B%BE%E8%A7%A3.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E7%95%8C%E9%9D%A2.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-producer.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result1.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result2.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E8%B0%83%E7%94%A8%E5%9B%BE%E8%A7%A3.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E7%95%8C%E9%9D%A2.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-producer.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result1.png">
+<meta property="og:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result2.png">
 <meta property="og:updated_time" content="2019-10-29T06:16:13.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="springcloud:注册中心Eureka">
 <meta name="twitter:description" content="Eureka是Netflix开发的服务发现框架，本身是一个基于REST的服务，主要用于定位运行在AWS域中的中间层服务，以达到负载均衡和中间层服务故障转移的目的。SpringCloud将它集成在其子项目spring-cloud-netflix中，以实现SpringCloud的服务发现功能。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E8%B0%83%E7%94%A8%E5%9B%BE%E8%A7%A3.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E8%B0%83%E7%94%A8%E5%9B%BE%E8%A7%A3.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -239,7 +239,7 @@
 <a id="more"></a>
 
 <h1 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h1><p>Eureka包含两个组件：Eureka Server和Eureka Client。</p>
-<p><img src="//www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E8%B0%83%E7%94%A8%E5%9B%BE%E8%A7%A3.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E8%B0%83%E7%94%A8%E5%9B%BE%E8%A7%A3.png" alt></p>
 <p>调用关系说明：</p>
 <p>1.服务提供者在启动时，向注册中心注册自己提供的服务。<br> 2.服务消费者在启动时，向注册中心订阅自己所需的服务。<br> 3.注册中心返回服务提供者地址给消费者。<br> 4.服务消费者从提供者地址中调用消费者。<br> 注意！ 下面的服务端指：注册中心，客户端指：服务提供者和消费者</p>
 <p><strong>Eureka Server</strong>：提供服务注册服务，各个节点启动后，会在Eureka Server中进行注册，包括主机与端口号、服务版本号、通讯协议等。这样EurekaServer中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观的看到。<br> Eureka服务端支持集群模式部署，首尾相连形成一个闭环即可，集群中的的不同服务注册中心通过异步模式互相复制各自的状态，这也意味着在给定的时间点每个实例关于所有服务的状态可能存在不一致的现象。</p>
@@ -259,7 +259,7 @@
 <h2 id="2-3、编写配置文件"><a href="#2-3、编写配置文件" class="headerlink" title="2.3、编写配置文件"></a>2.3、编写配置文件</h2><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.application.name</span>=<span class="string">eureka</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># server (eureka 默认端口为：8761)</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">8761</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否注册到eureka（eureka本身是不需要再注册到自己的）</span></span><br><span class="line"><span class="meta">eureka.client.register-with-eureka</span>=<span class="string">false</span></span><br><span class="line"><span class="comment"># 是否从eureka获取注册信息</span></span><br><span class="line"><span class="meta">eureka.client.fetch-registry</span>=<span class="string">false</span></span><br><span class="line"><span class="comment"># eureka服务器的地址（注意：地址最后面的 /eureka/ 这个是固定值）</span></span><br><span class="line"><span class="meta">eureka.client.service-url.defaultZone</span>=<span class="string">http://127.0.0.1:$&#123;server.port&#125;/eureka/</span></span><br><span class="line"><span class="comment">#关闭自我保护模式(默认打开true)</span></span><br><span class="line"><span class="comment">#15分钟内心跳失败比例低于85%，注册中心的服务实例会被保护起来，不会过期，可能导致客户端调用失败</span></span><br><span class="line"><span class="meta">eureka.server.enable-self-preservation</span>=<span class="string">false</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="2-4、启动服务"><a href="#2-4、启动服务" class="headerlink" title="2.4、启动服务"></a>2.4、启动服务</h2><p>访问：<a href="http://127.0.0.1:8761/" target="_blank" rel="noopener">http://127.0.0.1:8761/</a></p>
-<p><img src="//www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E7%95%8C%E9%9D%A2.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka%E7%95%8C%E9%9D%A2.png" alt></p>
 <h1 id="3、搭建服务提供者"><a href="#3、搭建服务提供者" class="headerlink" title="3、搭建服务提供者"></a>3、搭建服务提供者</h1><p>项目地址：</p>
 <p><a href="https://github.com/mingxungu/zxgk-microservices/tree/master/zxgk-examples/zxgk-eureka-producer-simple" target="_blank" rel="noopener">https://github.com/mingxungu/zxgk-microservices/tree/master/zxgk-examples/zxgk-eureka-producer-simple</a></p>
 <p><a href="https://github.com/mingxungu/zxgk-microservices/tree/master/zxgk-examples/zxgk-eureka-producer-simple1" target="_blank" rel="noopener">https://github.com/mingxungu/zxgk-microservices/tree/master/zxgk-examples/zxgk-eureka-producer-simple1</a></p>
@@ -272,7 +272,7 @@
 <h2 id="3-4、编写配置文件"><a href="#3-4、编写配置文件" class="headerlink" title="3.4、编写配置文件"></a>3.4、编写配置文件</h2><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.application.name</span>=<span class="string">zxgk-producer</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">9010</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户端在注册时就会使用自己的ip地址而不是主机名(客户端自身加)</span></span><br><span class="line"><span class="meta">eureka.instance.prefer-ip-address</span>=<span class="string">true</span></span><br><span class="line"><span class="meta">eureka.instance.instance-id</span>=<span class="string">$&#123;spring.cloud.client.ip-address&#125;:$&#123;server.port&#125;</span></span><br><span class="line"><span class="comment">#当前服务实例注册到服务中心,默认是true</span></span><br><span class="line"><span class="meta">eureka.client.register-with-eureka</span>=<span class="string">true</span></span><br><span class="line"><span class="comment">#是否需要去检索寻找服务，默认是true</span></span><br><span class="line"><span class="meta">eureka.client.fetch-registry</span>=<span class="string">true</span></span><br><span class="line"><span class="comment">#renew频率，向Eureka服务发送renew信息，默认30秒</span></span><br><span class="line"><span class="meta">eureka.instance.lease-renewal-interval-in-seconds</span>=<span class="string">30</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># eureka</span></span><br><span class="line"><span class="meta">eureka.client.serviceUrl.defaultZone</span>=<span class="string">http://localhost:8761/eureka/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">management.endpoints.web.exposure.include</span>=<span class="string">*</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="3-5、启动服务"><a href="#3-5、启动服务" class="headerlink" title="3.5、启动服务"></a>3.5、启动服务</h2><p>启动了两个实例，只是端口不同其他配置都一样，访问：<a href="http://127.0.0.1:8761/" target="_blank" rel="noopener">http://127.0.0.1:8761/</a></p>
-<p><img src="//www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-producer.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-producer.png" alt></p>
 <h1 id="4、编写服务消费者"><a href="#4、编写服务消费者" class="headerlink" title="4、编写服务消费者"></a>4、编写服务消费者</h1><p>项目地址：<a href="https://github.com/mingxungu/zxgk-microservices/tree/master/zxgk-examples/zxgk-eureka-consumer-ribbon-simple" target="_blank" rel="noopener">https://github.com/mingxungu/zxgk-microservices/tree/master/zxgk-examples/zxgk-eureka-consumer-ribbon-simple</a></p>
 <h2 id="4-1、pom文件"><a href="#4-1、pom文件" class="headerlink" title="4.1、pom文件"></a>4.1、pom文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>zxgk-examples<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>cn.com.pingtech<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>zxgk-eureka-producer-simple1<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>de.codecentric<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-admin-starter-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -282,10 +282,10 @@
 
 <h2 id="4-4、编写配置文件"><a href="#4-4、编写配置文件" class="headerlink" title="4.4、编写配置文件"></a>4.4、编写配置文件</h2><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">server.port</span>=<span class="string">9020</span></span><br><span class="line"></span><br><span class="line"><span class="meta">spring.application.name</span>=<span class="string">zxgk-consumer-ribbon</span></span><br><span class="line"><span class="comment">#eureka.client.service-url.defaultZone=http://127.0.0.1:8000/eureka/</span></span><br><span class="line"><span class="comment"># 启用ip配置 这样在注册中心列表中看见的是以ip+端口呈现的</span></span><br><span class="line"><span class="meta">eureka.instance.prefer-ip-address</span>=<span class="string">true</span></span><br><span class="line"><span class="comment"># 实例名称  最后呈现地址：ip:2000</span></span><br><span class="line"><span class="meta">eureka.instance.instance-id</span>=<span class="string">$&#123;spring.cloud.client.ip-address&#125;:$&#123;server.port&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#监控-》eureka</span></span><br><span class="line"><span class="meta">eureka.instance.leaseRenewalIntervalInSeconds</span>=<span class="string">10</span></span><br><span class="line"><span class="meta">eureka.instance.health-check-url-path</span>=<span class="string">/actuator/health</span></span><br><span class="line"><span class="meta">eureka.client.registryFetchIntervalSeconds</span>=<span class="string">5</span></span><br><span class="line"><span class="meta">eureka.client.service-url.defaultZone</span>=<span class="string">$&#123;EUREKA_SERVICE_URL:http://127.0.0.1:8000&#125;/eureka/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">management.endpoints.web.exposure.include</span>=<span class="string">*</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="4-5、启动消费者"><a href="#4-5、启动消费者" class="headerlink" title="4.5、启动消费者"></a>4.5、启动消费者</h2><p><img src="//www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer.png" alt></p>
+<h2 id="4-5、启动消费者"><a href="#4-5、启动消费者" class="headerlink" title="4.5、启动消费者"></a>4.5、启动消费者</h2><p><img src="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer.png" alt></p>
 <p>浏览器访问测试：</p>
-<p><img src="//www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result1.png" alt></p>
-<p><img src="//www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result2.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result1.png" alt></p>
+<p><img src="http://www.itzones.cn/2019/10/28/springcloud-注册中心Eureka/Eureka-consumer-result2.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -574,10 +574,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -622,15 +618,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -663,6 +659,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -762,10 +762,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -803,6 +799,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>

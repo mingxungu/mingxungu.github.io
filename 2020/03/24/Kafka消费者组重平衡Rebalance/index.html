@@ -17,18 +17,18 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="1、概念Rebalance 就是让一个 Consumer Group 下所有的 Consumer 实例就如何消费订阅主题的所有分区达成共识的过程。在 Rebalance 过程中，所有 Consumer 实例共同参与，在协调者组件的帮助下，完成订阅主题分区的分配。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_consumer_group_status.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_joingroup.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_syncGroup.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_joingroup.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_leavegroup.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_downgroup.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_submitpostion.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_consumer_group_status.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_joingroup.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_syncGroup.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_joingroup.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_leavegroup.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_downgroup.png">
+<meta property="og:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_submitpostion.png">
 <meta property="og:updated_time" content="2020-03-29T10:32:16.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka消费者组重平衡">
 <meta name="twitter:description" content="1、概念Rebalance 就是让一个 Consumer Group 下所有的 Consumer 实例就如何消费订阅主题的所有分区达成共识的过程。在 Rebalance 过程中，所有 Consumer 实例共同参与，在协调者组件的帮助下，完成订阅主题分区的分配。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_consumer_group_status.png">
+<meta name="twitter:image" content="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_consumer_group_status.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -283,7 +283,7 @@
 </tr>
 </tbody></table>
 <p>了解了这些状态的含义之后，我们来看一张图片，它展示了状态机的各个状态流转</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_consumer_group_status.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_consumer_group_status.png" alt></p>
 <p>我来解释一下消费者组启动时的状态流转过程。一个消费者组最开始是 Empty 状态，当重平衡过程开启后，它会被置于 PreparingRebalance 状态等待成员加入，之后变更到 CompletingRebalance 状态等待分配方案，最后流转到 Stable 状态完成重平衡。</p>
 <p>当有新成员加入或已有成员退出时，消费者组的状态从 Stable 直接跳到 PreparingRebalance 状态，此时，所有现存成员就必须重新申请加入组。当所有成员都退出组后，消费者组状态变更为 Empty。Kafka 定期自动删除过期位移的条件就是，组要处于 Empty 状态。因此，如果你的消费者组停掉了很长时间（超过 7 天），那么 Kafka 很可能就把该组的位移数据删除了。我相信，你在 Kafka 的日志中一定经常看到下面这个输出：Removed ✘✘✘ expired offsets in ✘✘✘ milliseconds.</p>
 <blockquote>
@@ -292,23 +292,23 @@
 <h1 id="2、重平衡Rebalance流程"><a href="#2、重平衡Rebalance流程" class="headerlink" title="2、重平衡Rebalance流程"></a>2、重平衡Rebalance流程</h1><h2 id="2-1、消费者端重平衡"><a href="#2-1、消费者端重平衡" class="headerlink" title="2.1、消费者端重平衡"></a>2.1、消费者端重平衡</h2><p>在消费者端，重平衡分为两个步骤：分别是加入组和等待领导者消费者（Leader Consumer）分配方案。这两个步骤分别对应两类特定的请求：JoinGroup 请求和 SyncGroup 请求。</p>
 <h3 id="2-1-1、JoinGroup"><a href="#2-1-1、JoinGroup" class="headerlink" title="2.1.1、JoinGroup"></a>2.1.1、JoinGroup</h3><p>当组内成员加入组时，它会向协调者发送 JoinGroup 请求。在该请求中，每个成员都要将自己订阅的主题上报，这样协调者就能收集到所有成员的订阅信息。一旦收集了全部成员的 JoinGroup 请求后，协调者会从这些成员中选择一个担任这个消费者组的领导者。</p>
 <p>通常情况下，第一个发送 JoinGroup 请求的成员自动成为领导者。你一定要注意区分这里的领导者和之前我们介绍的领导者副本，它们不是一个概念。这里的领导者是具体的消费者实例，它既不是副本，也不是协调者。领导者消费者的任务是收集所有成员的订阅信息，然后根据这些信息，制定具体的分区消费分配方案。</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_joingroup.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_joingroup.png" alt></p>
 <p>JoinGroup 请求的主要作用是将组成员订阅信息发送给领导者消费者，待领导者制定好分配方案后，重平衡流程进入到 SyncGroup 请求阶段</p>
 <h3 id="2-1-2、SyncGroup"><a href="#2-1-2、SyncGroup" class="headerlink" title="2.1.2、SyncGroup"></a>2.1.2、SyncGroup</h3><p>选出领导者之后，协调者会把消费者组订阅信息封装进 JoinGroup 请求的响应体中，然后发给领导者，由领导者统一做出分配方案后，进入到下一步：发送 SyncGroup 请求。</p>
 <p>在这一步中，领导者向协调者发送 SyncGroup 请求，将刚刚做出的分配方案发给协调者。值得注意的是，其他成员也会向协调者发送 SyncGroup 请求，只不过请求体中并没有实际的内容。这一步的主要目的是让协调者接收分配方案，然后统一以 SyncGroup 响应的方式分发给所有成员，这样组内所有成员就都知道自己该消费哪些分区了。</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_syncGroup.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_rebalance_syncGroup.png" alt></p>
 <p>SyncGroup 请求的主要目的，就是让协调者把领导者制定的分配方案下发给各个组内成员。当所有成员都成功接收到分配方案后，消费者组进入到 Stable 状态，即开始正常的消费工作。</p>
 <h2 id="2-2、Broker-端重平衡"><a href="#2-2、Broker-端重平衡" class="headerlink" title="2.2、Broker 端重平衡"></a>2.2、Broker 端重平衡</h2><p>要剖析协调者端处理重平衡的全流程，我们必须要分几个场景来讨论。这几个场景分别是新成员加入组、组成员主动离组、组成员崩溃离组、组成员提交位移。接下来，我们一个一个来讨论。</p>
 <h3 id="2-2-1、新成员入组"><a href="#2-2-1、新成员入组" class="headerlink" title="2.2.1、新成员入组"></a>2.2.1、新成员入组</h3><p>新成员入组是指组处于 Stable 状态后，有新成员加入。如果是全新启动一个消费者组，Kafka 是有一些自己的小优化的，流程上会有些许的不同。我们这里讨论的是，组稳定了之后有新成员加入的情形。</p>
 <p>当协调者收到新的 JoinGroup 请求后，它会通过心跳请求响应的方式通知组内现有的所有成员，强制它们开启新一轮的重平衡。具体的过程和之前的客户端重平衡流程是一样的。现在，我用一张时序图来说明协调者一端是如何处理新成员入组的。</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_joingroup.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_joingroup.png" alt></p>
 <p>如果消费端开启了位移自动提交enable.auto.commit=true，那么在请求加入消费组之前需要向GroupCoordinator提交消费位移，这个过程是阻塞执行的。</p>
 <h3 id="2-2-2、组成员主动离组"><a href="#2-2-2、组成员主动离组" class="headerlink" title="2.2.2、组成员主动离组"></a>2.2.2、组成员主动离组</h3><p>何谓主动离组？就是指消费者实例所在线程或进程调用 close() 方法主动通知协调者它要退出。这个场景就涉及到了第三类请求：LeaveGroup 请求。协调者收到 LeaveGroup 请求后，依然会以心跳响应的方式通知其他成员，因此我就不再赘述了，还是直接用一张图来说明。</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_leavegroup.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_leavegroup.png" alt></p>
 <h3 id="2-2-3、组成员崩溃离组"><a href="#2-2-3、组成员崩溃离组" class="headerlink" title="2.2.3、组成员崩溃离组"></a>2.2.3、组成员崩溃离组</h3><p>崩溃离组是指消费者实例出现严重故障，突然宕机导致的离组。它和主动离组是有区别的，因为后者是主动发起的离组，协调者能马上感知并处理。但崩溃离组是被动的，协调者通常需要等待一段时间才能感知到，这段时间一般是由消费者端参数 session.timeout.ms 控制的。也就是说，Kafka 一般不会超过 session.timeout.ms 就能感知到这个崩溃。当然，后面处理崩溃离组的流程与之前是一样的。</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_downgroup.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_downgroup.png" alt></p>
 <h3 id="2-2-4、重平衡时协调者对组内成员提交位移的处理"><a href="#2-2-4、重平衡时协调者对组内成员提交位移的处理" class="headerlink" title="2.2.4、重平衡时协调者对组内成员提交位移的处理"></a>2.2.4、重平衡时协调者对组内成员提交位移的处理</h3><p>正常情况下，每个组内成员都会定期汇报位移给协调者。当重平衡开启时，协调者会给予成员一段缓冲时间，要求每个成员必须在这段时间内快速地上报自己的位移信息，然后再开启正常的 JoinGroup/SyncGroup 请求发送。</p>
-<p><img src="//www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_submitpostion.png" alt></p>
+<p><img src="http://www.itzones.cn/2020/03/24/Kafka消费者组重平衡Rebalance/kafka_broker_rebalance_submitpostion.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -593,10 +593,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
@@ -641,15 +637,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -682,6 +678,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -781,10 +781,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
@@ -822,6 +818,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
             
             <div class="clearfix"></div>
