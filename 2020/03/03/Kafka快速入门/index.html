@@ -6,24 +6,24 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Kafka快速入门 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
 <meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka快速入门">
-<meta property="og:url" content="https://itzones.cn/2020/03/03/Kafka快速入门/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_consumer_msg.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_consumer_msg.png">
 <meta property="og:updated_time" content="2020-03-07T00:10:00.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka快速入门">
 <meta name="twitter:description" content="本章简单讲讲Kafka的入门操作，消息发送和消息接收。 1、引入kafka_2.12">
-<meta name="twitter:image" content="https://mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -42,6 +42,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -231,10 +246,10 @@
 <p>对于消息可靠性要求较强，吞吐量要求较高，使用第三种<strong>异步</strong></p>
 </blockquote>
 <p>使用Kafka Eagle可视化工具，查询kafka中主题是gumx的消息</p>
-<p><img src="//mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_producer_msg.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/03/Kafka快速入门/kafka_producer_msg.png" alt></p>
 <h1 id="3、消费者Consumer"><a href="#3、消费者Consumer" class="headerlink" title="3、消费者Consumer"></a>3、消费者Consumer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaConsumerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		props.put(<span class="string">"bootstrap.servers"</span>,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		props.put(<span class="string">"group.id"</span>,<span class="string">"gumx_record"</span>);</span><br><span class="line">		<span class="comment">//自动提交偏移量</span></span><br><span class="line">		props.put(<span class="string">"enable.auto.commit"</span>,<span class="string">"true"</span>);</span><br><span class="line">		<span class="comment">//偏移量提交的间隔时间</span></span><br><span class="line">		props.put(<span class="string">"auto.commit.interval.ms"</span>,<span class="string">"1000"</span>);</span><br><span class="line">		props.put(<span class="string">"key.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">		props.put(<span class="string">"value.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);	</span><br><span class="line"></span><br><span class="line">		KafkaConsumer&lt;String,String&gt; consumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">		consumer.subscribe(Arrays.asList(<span class="string">"gumx"</span>));</span><br><span class="line"></span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			ConsumerRecords&lt;String,String&gt; records = consumer.poll(Duration.ofMillis(<span class="number">2000</span>));</span><br><span class="line">			<span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">				System.out.println(<span class="string">""</span>);</span><br><span class="line">				System.out.printf(<span class="string">"消息消费，offset= %d,key= %s,value= %s%n"</span>,record.offset(),record.key(),record.value());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/03/Kafka快速入门/kafka_consumer_msg.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/03/Kafka快速入门/kafka_consumer_msg.png" alt></p>
 <p>注意：生产者启动是不会获取消息，默认是从队列尾部消费，启动消费者后再次发送消息才能看到如图所示结果。</p>
 <p>里面的具体参数解析后续会详细说明</p>
 
@@ -249,7 +264,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2020/03/03/Kafka快速入门/" title="Kafka快速入门" target="_blank">https://itzones.cn/2020/03/03/Kafka快速入门/</a>
+			<a href="https://www.itzones.cn/2020/03/03/Kafka快速入门/" title="Kafka快速入门" target="_blank">https://www.itzones.cn/2020/03/03/Kafka快速入门/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -341,7 +356,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2020/03/03/Kafka快速入门/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/03/03/Kafka快速入门/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -529,14 +544,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -549,7 +556,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -561,7 +572,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -570,10 +589,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -593,14 +608,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -613,11 +620,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -629,7 +648,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -641,19 +664,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -673,11 +688,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,7 +696,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -701,6 +716,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -709,15 +728,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -734,22 +765,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

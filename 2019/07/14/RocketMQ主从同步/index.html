@@ -6,27 +6,27 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>RocketMQ主从同步 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="RocketMQ作为一款优秀的分布式消息中间件，分布式系统的一个很重要的特点就是要保证系统的高可用(HA)，RocketMQ则是通过主从同步机制保证系统的高可用。">
 <meta name="keywords" content="主从同步,RocketMQ高可用HA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ主从同步">
-<meta property="og:url" content="https://itzones.cn/2019/07/14/RocketMQ主从同步/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ作为一款优秀的分布式消息中间件，分布式系统的一个很重要的特点就是要保证系统的高可用(HA)，RocketMQ则是通过主从同步机制保证系统的高可用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/rocketmq_m_s_%E5%8E%9F%E7%90%86%E5%9B%BE.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/%E4%B8%BB%E4%BB%8E%E5%85%83%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/commitlog%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/salveReadProcess.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/rocketmq_m_s_%E5%8E%9F%E7%90%86%E5%9B%BE.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/%E4%B8%BB%E4%BB%8E%E5%85%83%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/commitlog%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/salveReadProcess.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93.png">
 <meta property="og:updated_time" content="2019-07-17T09:43:05.857Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ主从同步">
 <meta name="twitter:description" content="RocketMQ作为一款优秀的分布式消息中间件，分布式系统的一个很重要的特点就是要保证系统的高可用(HA)，RocketMQ则是通过主从同步机制保证系统的高可用。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/14/RocketMQ主从同步/rocketmq_m_s_%E5%8E%9F%E7%90%86%E5%9B%BE.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/rocketmq_m_s_%E5%8E%9F%E7%90%86%E5%9B%BE.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -45,6 +45,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -223,7 +238,7 @@
 <a id="more"></a>
 
 <h1 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h1><p>主从同步同步的是啥作为消息中间件，无疑是消息相当于给数据做<strong>”备份“</strong>，主节点服务器Broker宕机后，消费者可以从从节点的服务消费消息，可以保证业务的正常运行。<br><strong>主从同步的原理图</strong></p>
-<p><img src="//mingxungu.github.io/2019/07/14/RocketMQ主从同步/rocketmq_m_s_%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/14/RocketMQ主从同步/rocketmq_m_s_%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt></p>
 <p>增加slave从节点的优点：</p>
 <blockquote>
 <p><strong>数据备份</strong>：保证了两/多台机器上的数据冗余，特别是在主从同步复制的情况下，一定程度上保证了Master出现不可恢复的故障以后，数据不丢失。<br><strong>高可用性</strong>：即使Master掉线， Consumer会自动重连到对应的Slave机器，不会出现消费停滞的情况。<br><strong>提高性能</strong>：主要表现为可分担Master读的压力，当从Master拉取消息，拉取消息的最大物理偏移与本地存储的最大物理偏移的差值超过一定值，会转向Slave(默认brokerId=1)进行读取，减轻了Master压力。<br><strong>消费实时</strong>：master宕机后消费者可以从slave上消费保证消息的实时性，但是slave不能接收producer发送的消息，slave只能同步master数据（RocketMQ4.5版本之前），4.5版本开始增加多副本机制，根据RAFT算法，master宕机会自动选择其中一个副本节点作为master保证消息可以正常的生产消费。</p>
@@ -259,7 +274,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syncAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//同步主题配置信息</span></span><br><span class="line">    <span class="keyword">this</span>.syncTopicConfig();</span><br><span class="line">    <span class="comment">//同步消费者偏移量信息</span></span><br><span class="line">    <span class="keyword">this</span>.syncConsumerOffset();</span><br><span class="line">    <span class="comment">//同步延迟消费的偏移量信息</span></span><br><span class="line">    <span class="keyword">this</span>.syncDelayOffset();</span><br><span class="line">    <span class="comment">//同步订阅的消息组信息</span></span><br><span class="line">    <span class="keyword">this</span>.syncSubscriptionGroupConfig();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>我们通过图分析其执行原理，四种文件的同步方式是相同的，我们分析一个主题信息同步</p>
-<p><img src="//mingxungu.github.io/2019/07/14/RocketMQ主从同步/%E4%B8%BB%E4%BB%8E%E5%85%83%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/14/RocketMQ主从同步/%E4%B8%BB%E4%BB%8E%E5%85%83%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6.png" alt></p>
 <h2 id="2-2、syncTopicConfig主题信息同步原理"><a href="#2-2、syncTopicConfig主题信息同步原理" class="headerlink" title="2.2、syncTopicConfig主题信息同步原理"></a>2.2、syncTopicConfig主题信息同步原理</h2><p>slave端启动时初始化</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">syncTopicConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String masterAddrBak = <span class="keyword">this</span>.masterAddr;</span><br><span class="line">    <span class="keyword">if</span> (masterAddrBak != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	<span class="comment">//调用getAllTopicConfig从master中拉取TopicConfig配置信息</span></span><br><span class="line">            TopicConfigSerializeWrapper topicWrapper =</span><br><span class="line">                <span class="keyword">this</span>.brokerController.getBrokerOuterAPI().getAllTopicConfig(masterAddrBak);</span><br><span class="line">            <span class="comment">//比较版本号是否一致，不一致则更新</span></span><br><span class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.brokerController.getTopicConfigManager().getDataVersion()</span><br><span class="line">                .equals(topicWrapper.getDataVersion())) &#123;</span><br><span class="line">            	<span class="comment">//更新TopicConfigManager中的版本号</span></span><br><span class="line">                <span class="keyword">this</span>.brokerController.getTopicConfigManager().getDataVersion()</span><br><span class="line">                    .assignNewOne(topicWrapper.getDataVersion());</span><br><span class="line">                <span class="comment">//清空TopicConfigManager中TopicConfig信息</span></span><br><span class="line">                <span class="keyword">this</span>.brokerController.getTopicConfigManager().getTopicConfigTable().clear();</span><br><span class="line">                <span class="comment">//赋值新的信息</span></span><br><span class="line">                <span class="keyword">this</span>.brokerController.getTopicConfigManager().getTopicConfigTable()</span><br><span class="line">                    .putAll(topicWrapper.getTopicConfigTable());</span><br><span class="line">                <span class="comment">//进行持久化</span></span><br><span class="line">                <span class="keyword">this</span>.brokerController.getTopicConfigManager().persist();</span><br><span class="line"></span><br><span class="line">                log.info(<span class="string">"Update slave topic config from master, &#123;&#125;"</span>, masterAddrBak);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">"SyncTopicConfig Exception, &#123;&#125;"</span>, masterAddrBak, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -273,7 +288,7 @@
 <p>我们发现只同步了基础的配置信息，没有同步consumequeue信息，我们slave在同步commitlog时会根据其文件内的信息构建consumequeue队列信息。</p>
 </blockquote>
 <h1 id="3、CommitLog复制"><a href="#3、CommitLog复制" class="headerlink" title="3、CommitLog复制"></a>3、CommitLog复制</h1><p>commitlog文件复制流程图</p>
-<p><img src="//mingxungu.github.io/2019/07/14/RocketMQ主从同步/commitlog%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/14/RocketMQ主从同步/commitlog%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6.png" alt></p>
 <p>从图中我们发现包含两部分1、slave的broker向master连接心跳包，报告master当前slave的数据偏移量，等待master发送最新的消息。2、master启动时开启一个监听等待slave发送心跳包，接收到slave发送的请求封装成HAConnection对象中两个属性，WriteSocketService处理slave发送的心跳包，ReadSocketService发送slave的数据请求。</p>
 <h2 id="3-1、SLAVE发送心跳包"><a href="#3-1、SLAVE发送心跳包" class="headerlink" title="3.1、SLAVE发送心跳包"></a>3.1、SLAVE发送心跳包</h2><p>slave发送心跳包主要是HAClient发送相关信息到master上我们首先分析下</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service started"</span>);</span><br><span class="line">    <span class="keyword">while</span> (!<span class="keyword">this</span>.isStopped()) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	<span class="comment">//和Master建立连接</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.connectMaster()) &#123;</span><br><span class="line">            	<span class="comment">//判断是否向Master反馈当前的消息拉取的偏移量,默认5秒发送一次</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.isTimeToReportOffset()) &#123;</span><br><span class="line">                	<span class="comment">//重新发送slaveoffset</span></span><br><span class="line">                    <span class="keyword">boolean</span> result = <span class="keyword">this</span>.reportSlaveMaxOffset(<span class="keyword">this</span>.currentReportedOffset);</span><br><span class="line">                    <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">                        <span class="keyword">this</span>.closeMaster();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//I/O复用，检查是否有读事件</span></span><br><span class="line">                <span class="keyword">this</span>.selector.select(<span class="number">1000</span>);</span><br><span class="line">                <span class="comment">//核心方法，处理Master返回的待处理的消息</span></span><br><span class="line">                <span class="keyword">boolean</span> ok = <span class="keyword">this</span>.processReadEvent();</span><br><span class="line">                <span class="keyword">if</span> (!ok) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.closeMaster();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//处理完读事件后，若slaveoffset更新，需要再次发送新的slaveoffset</span></span><br><span class="line">                <span class="keyword">if</span> (!reportSlaveMaxOffsetPlus()) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">long</span> interval =</span><br><span class="line">                    HAService.<span class="keyword">this</span>.getDefaultMessageStore().getSystemClock().now()</span><br><span class="line">                        - <span class="keyword">this</span>.lastWriteTimestamp;</span><br><span class="line">                <span class="keyword">if</span> (interval &gt; HAService.<span class="keyword">this</span>.getDefaultMessageStore().getMessageStoreConfig()</span><br><span class="line">                    .getHaHousekeepingInterval()) &#123;</span><br><span class="line">                    log.warn(<span class="string">"HAClient, housekeeping, found this connection["</span> + <span class="keyword">this</span>.masterAddress</span><br><span class="line">                        + <span class="string">"] expired, "</span> + interval);</span><br><span class="line">                    <span class="keyword">this</span>.closeMaster();</span><br><span class="line">                    log.warn(<span class="string">"HAClient, master not response some time, so close connection"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            	<span class="comment">//等待5秒，再次连接Master</span></span><br><span class="line">                <span class="keyword">this</span>.waitForRunning(<span class="number">1000</span> * <span class="number">5</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.warn(<span class="keyword">this</span>.getServiceName() + <span class="string">" service has exception. "</span>, e);</span><br><span class="line">            <span class="keyword">this</span>.waitForRunning(<span class="number">1000</span> * <span class="number">5</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service end"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -284,7 +299,7 @@
 <p>调用dispatchReadRequest分发读请求</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">dispatchReadRequest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> msgHeaderSize = <span class="number">8</span> + <span class="number">4</span>; <span class="comment">// phyoffset + size</span></span><br><span class="line">    <span class="keyword">int</span> readSocketPos = <span class="keyword">this</span>.byteBufferRead.position();</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> diff = <span class="keyword">this</span>.byteBufferRead.position() - <span class="keyword">this</span>.dispatchPostion;</span><br><span class="line">        <span class="keyword">if</span> (diff &gt;= msgHeaderSize) &#123;</span><br><span class="line">            <span class="keyword">long</span> masterPhyOffset = <span class="keyword">this</span>.byteBufferRead.getLong(<span class="keyword">this</span>.dispatchPostion);</span><br><span class="line">            <span class="keyword">int</span> bodySize = <span class="keyword">this</span>.byteBufferRead.getInt(<span class="keyword">this</span>.dispatchPostion + <span class="number">8</span>);</span><br><span class="line">            <span class="comment">//获取当前本地的commitlog偏移量</span></span><br><span class="line">            <span class="keyword">long</span> slavePhyOffset = HAService.<span class="keyword">this</span>.defaultMessageStore.getMaxPhyOffset();</span><br><span class="line">            <span class="keyword">if</span> (slavePhyOffset != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (slavePhyOffset != masterPhyOffset) &#123;</span><br><span class="line">                    log.error(<span class="string">"master pushed offset not equal the max phy offset in slave, SLAVE: "</span></span><br><span class="line">                        + slavePhyOffset + <span class="string">" MASTER: "</span> + masterPhyOffset);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (diff &gt;= (msgHeaderSize + bodySize)) &#123;</span><br><span class="line">                <span class="keyword">byte</span>[] bodyData = <span class="keyword">new</span> <span class="keyword">byte</span>[bodySize];</span><br><span class="line">                <span class="keyword">this</span>.byteBufferRead.position(<span class="keyword">this</span>.dispatchPostion + msgHeaderSize);</span><br><span class="line">                <span class="keyword">this</span>.byteBufferRead.get(bodyData);</span><br><span class="line"></span><br><span class="line">                HAService.<span class="keyword">this</span>.defaultMessageStore.appendToCommitLog(masterPhyOffset, bodyData);</span><br><span class="line">                <span class="comment">//回到读的位置</span></span><br><span class="line">                <span class="keyword">this</span>.byteBufferRead.position(readSocketPos);</span><br><span class="line">                <span class="keyword">this</span>.dispatchPostion += msgHeaderSize + bodySize;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (!reportSlaveMaxOffsetPlus()) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果bytebufferread没有剩余空间,调用reallocateByteBuffer</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.byteBufferRead.hasRemaining()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.reallocateByteBuffer();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2019/07/14/RocketMQ主从同步/salveReadProcess.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/14/RocketMQ主从同步/salveReadProcess.png" alt></p>
 <p>消息头是8+4字节，是请求头信息，需要保证读取的消息是完整的，需要判断读取的buffer的长度满足是才能进行commitlog文件的数据追加。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">appendToCommitLog</span><span class="params">(<span class="keyword">long</span> startOffset, <span class="keyword">byte</span>[] data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.shutdown) &#123;</span><br><span class="line">        log.warn(<span class="string">"message store has shutdown, so appendToPhyQueue is forbidden"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">boolean</span> result = <span class="keyword">this</span>.commitLog.appendData(startOffset, data);</span><br><span class="line">    <span class="keyword">if</span> (result) &#123;</span><br><span class="line">    	<span class="comment">//唤醒线程根据CommitLog文件构建ConsumeQueue、IndexFile文件</span></span><br><span class="line">        <span class="keyword">this</span>.reputMessageService.wakeup();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        log.error(<span class="string">"appendToPhyQueue failed "</span> + startOffset + <span class="string">" "</span> + data.length);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -319,7 +334,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleHA</span><span class="params">(AppendMessageResult result, PutMessageResult putMessageResult, MessageExt messageExt)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//同步复制</span></span><br><span class="line">	<span class="keyword">if</span> (BrokerRole.SYNC_MASTER == <span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getBrokerRole()) &#123;</span><br><span class="line">        HAService service = <span class="keyword">this</span>.defaultMessageStore.getHaService();</span><br><span class="line">        <span class="keyword">if</span> (messageExt.isWaitStoreMsgOK()) &#123;</span><br><span class="line">            <span class="comment">// Determine whether to wait</span></span><br><span class="line">        	<span class="comment">//觉得是否等待，如果slave和master之间的offset的差值超过一定值，则不再同步，返回SLAVE_NOT_AVAILABLE</span></span><br><span class="line">            <span class="keyword">if</span> (service.isSlaveOK(result.getWroteOffset() + result.getWroteBytes())) &#123;</span><br><span class="line">                <span class="comment">//组装request</span></span><br><span class="line">            	GroupCommitRequest request = <span class="keyword">new</span> GroupCommitRequest(result.getWroteOffset() + result.getWroteBytes());</span><br><span class="line">                service.putRequest(request);</span><br><span class="line">                <span class="comment">//唤醒WriteSocketService，等待commitlog追加</span></span><br><span class="line">                service.getWaitNotifyObject().wakeupAll();</span><br><span class="line">                <span class="comment">//线程在request上wait</span></span><br><span class="line">                <span class="keyword">boolean</span> flushOK =</span><br><span class="line">                    request.waitForFlush(<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getSyncFlushTimeout());</span><br><span class="line">                <span class="comment">//若flushOK是false则同步失败</span></span><br><span class="line">                <span class="keyword">if</span> (!flushOK) &#123;</span><br><span class="line">                    log.error(<span class="string">"do sync transfer other node, wait return, but failed, topic: "</span> + messageExt.getTopic() + <span class="string">" tags: "</span></span><br><span class="line">                        + messageExt.getTags() + <span class="string">" client address: "</span> + messageExt.getBornHostNameString());</span><br><span class="line">                    putMessageResult.setPutMessageStatus(PutMessageStatus.FLUSH_SLAVE_TIMEOUT);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Slave problem</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// Tell the producer, slave not available</span></span><br><span class="line">                putMessageResult.setPutMessageStatus(PutMessageStatus.SLAVE_NOT_AVAILABLE);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>GroupTransferService查看其业务处理</p>
-<p><img src="//mingxungu.github.io/2019/07/14/RocketMQ主从同步/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/14/RocketMQ主从同步/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93.png" alt></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service started"</span>);</span><br><span class="line">    <span class="keyword">while</span> (!<span class="keyword">this</span>.isStopped()) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.waitForRunning(<span class="number">10</span>);</span><br><span class="line">            <span class="keyword">this</span>.doWaitTransfer();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.warn(<span class="keyword">this</span>.getServiceName() + <span class="string">" service has exception. "</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">" service end"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doWaitTransfer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.requestsRead) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.requestsRead.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">for</span> (CommitLog.GroupCommitRequest req : <span class="keyword">this</span>.requestsRead) &#123;</span><br><span class="line">                <span class="comment">//比较两个offset如果push2SlaveMaxOffset&gt;=req.getNextOffset()则transferOK为true</span></span><br><span class="line">            	<span class="keyword">boolean</span> transferOK = HAService.<span class="keyword">this</span>.push2SlaveMaxOffset.get() &gt;= req.getNextOffset();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; !transferOK &amp;&amp; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.notifyTransferObject.waitForRunning(<span class="number">1000</span>);</span><br><span class="line">                    transferOK = HAService.<span class="keyword">this</span>.push2SlaveMaxOffset.get() &gt;= req.getNextOffset();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (!transferOK) &#123;</span><br><span class="line">                    log.warn(<span class="string">"transfer messsage to slave timeout, "</span> + req.getNextOffset());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//唤醒写线程</span></span><br><span class="line">                req.wakeupCustomer(transferOK);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">this</span>.requestsRead.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>GroupTransferService负责主从同步复制结束后通知由于等待HA同步结果的而阻塞的消息发送者线程。判断主从同步是否完成的依据是Slave中已成功复制的最大消息偏移量是否大于等于消息生产者发送消息后消息服务端返回的下一条消息的起始偏移量。如果大于等于说明主从同步完成，否则等待1秒后继续检查，每一批任务中循环5次加上初始的一次一共6次。</p>
@@ -358,7 +373,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2019/07/14/RocketMQ主从同步/" title="RocketMQ主从同步" target="_blank">https://itzones.cn/2019/07/14/RocketMQ主从同步/</a>
+			<a href="https://www.itzones.cn/2019/07/14/RocketMQ主从同步/" title="RocketMQ主从同步" target="_blank">https://www.itzones.cn/2019/07/14/RocketMQ主从同步/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -454,7 +469,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2019/07/14/RocketMQ主从同步/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2019/07/14/RocketMQ主从同步/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -642,14 +657,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -662,7 +669,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -674,7 +685,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -683,10 +702,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -706,14 +721,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -726,11 +733,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -742,7 +761,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -754,19 +777,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -786,11 +801,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -798,7 +809,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -814,6 +829,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -822,15 +841,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -847,22 +878,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

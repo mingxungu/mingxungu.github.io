@@ -6,35 +6,35 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Kafka主题管理 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本章节我们重点分析Kafka主题的创建、修改、删除、查看等相关的操作，了解主题所对应的分区和副本的机制。">
 <meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka主题管理">
-<meta property="og:url" content="https://itzones.cn/2020/03/07/Kafka主题管理/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="本章节我们重点分析Kafka主题的创建、修改、删除、查看等相关的操作，了解主题所对应的分区和副本的机制。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_config.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_store.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_store1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_partion_replica.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_view_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_list_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_view_list_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_del_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd1.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_config.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_store.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_store1.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_partion_replica.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_view_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_list_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_view_list_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd1.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_del_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd1.png">
 <meta property="og:updated_time" content="2020-03-07T04:46:17.805Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka主题管理">
 <meta name="twitter:description" content="本章节我们重点分析Kafka主题的创建、修改、删除、查看等相关的操作，了解主题所对应的分区和副本的机制。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_config.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_config.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -53,6 +53,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -232,23 +247,23 @@
 
 <h1 id="1、主题创建"><a href="#1、主题创建" class="headerlink" title="1、主题创建"></a>1、主题创建</h1><p>​        在使用kafka发送消息和消费消息之前，必须先要创建topic，在创建其主题时需要特别注意broker的参数。</p>
 <p>​        如果kafka broker中的$KAFKA_HOME/config/server.properties配置文件中配置了auto.create.topics.enable参数为true（默认值就是true），那么当生产者向一个尚未创建的topic发送消息时，会自动创建一个num.partitions（默认值为1）个分区和default.replication.factor（默认值为1）个副本的对应topic。不过我们一般不建议将auto.create.topics.enable参数设置为true，因为这个参数会影响topic的管理与维护。这就是我们在查看<a href="https://itzones.cn/2020/03/03/Kafka%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" target="_blank" rel="noopener">《Kafka快速入门》</a>一文中没有创建topic为<strong>“gumx”</strong>为什么还能做消息的创建和消费的原因。</p>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_config.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_config.png" alt></p>
 <p>​        通过kafka提供的kafka-topics.sh脚本来创建，并且我们也建议通过这种方式（或者相关的变种方式）来创建topic。</p>
 <p>创建一个分区数是3的，副本因子是2的“test”主题。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --create --zookeeper 192.168.115.241:2181 --replication-factor 2 --partitions 3 --topic test</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_cmd.png" alt></p>
 <p>我们知道Kafka是持久化到文件系统中的，我们查看其test主题的存储格式</p>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_store.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_store.png" alt></p>
 <p>我们看到在node1节点中创建了两个文件夹，test-0和test-1，对应的分别是test主题对应的分区编号0，1。从中我们可以发现规律主题的分区文价夹的命名规则&lt;主题&gt;-&lt;分区编号&gt;。我们发现我们创建的是3个分区，副本是2的主题那其他的分区的分布，查看另外两个节点。</p>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_create_store1.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_create_store1.png" alt></p>
 <p>至此我们发现三个broker创建了6个文件夹，这6正是，分区数3和副本因子2的乘积。<strong>注意分区的编号是从0开始的。</strong></p>
 <p>主题、分区、副本、日志的关系如图所示，我们发送的某个主题的消息就是存在对应的分区下的日志中的。具体的消息该分发到哪一个分区，根据分区的分配规则可进行配置，后续会介绍。</p>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_partion_replica.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_partion_replica.png" alt></p>
 <p>查看test主题的分配的详细信息</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --describe --zookeeper 192.168.115.241:2181 --topic test</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_view_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_view_cmd.png" alt></p>
 <p>我们分析下图片中的信息，PartitionCount 分区数，ReplicationFactor副本因子，这个没有什么疑问。重点是configs的内容信息。分析第一行中的Partition: 0表示分区编号是0。Leader：1，表示分区编号是0的Leader的副本所对应的brokerId是1。Replicas: 1,3    表示分区编号是0的副本所在的brokerId分别1和3。Isr: 1,3 表示分区编号是0的副本中所有与leader副本保持一定程度同步的副本的集合（后面会重点介绍ISR）。</p>
 <blockquote>
 <p>注意：现在要明确的一点就是，3个broker中的所有的test-0文件夹都表示分区编号是0的副本。副本的集合中需要选举一个作为leader其他作为follower。</p>
@@ -256,15 +271,15 @@
 <h1 id="2、查看主题"><a href="#2、查看主题" class="headerlink" title="2、查看主题"></a>2、查看主题</h1><p>查询当前所有可用的主题</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --zookeeper 192.168.115.241:2181 -list</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_list_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_list_cmd.png" alt></p>
 <p>我们上面使用了describe展示了单个topic的信息，如果不指定主题会展示所有的主题的详细信息，也可以执行多个主题。</p>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_view_list_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_view_list_cmd.png" alt></p>
 <p>从图中我们可用看到gumx是我们最开始发送消息时自动创建的，也可以反映出一些问题，<strong>默认的主题的分区数和副本因子都是1。</strong></p>
 <h1 id="3、修改主题"><a href="#3、修改主题" class="headerlink" title="3、修改主题"></a>3、修改主题</h1><p>当一个主题被创建后，依然允许我们对其做一定的修改，如修改分区数、修改配置信息。</p>
 <p>（1）增加分区数，我们对之前创建的gumx主题进行修改为3。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --zookeeper 192.168.115.241:2181 --alter --topic gumx topic-config --partitions 3</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd.png" alt></p>
 <blockquote>
 <p>增加分区后会对基于key计算的主题有影响，当消息有key时会根据变化后的分区总数进行消息的分配</p>
 <p>目前Kafka只支持增加分区数，不支持减少分区数</p>
@@ -272,17 +287,17 @@
 <p>（2）修改主题的参数</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --zookeeper 192.168.115.241:2181 --alter --topic gumx --config max.message.bytes=2000</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd1.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_alter_cmd1.png" alt></p>
 <h1 id="4、删除主题"><a href="#4、删除主题" class="headerlink" title="4、删除主题"></a>4、删除主题</h1><p>对应确定不使用的主题，最好将其删除，这样可以释放一部分资源如磁盘、文件句柄等</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --zookeeper 192.168.115.241:2181 --delete --topic gumx</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_del_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_del_cmd.png" alt></p>
 <blockquote>
 <p>我们看到删除命令执行完之后又一个提示信息。这个提示和broker端的参数配置delete.topic.enable有关。必须将delete.topic.enable参数配置成true才能删除，这个参数默认就是true,如果配置成false,那么删除操作就会被忽略。在生产环境中建议这个参数值设置成true</p>
 </blockquote>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd.png" alt></p>
 <p>确认已经被删除了。</p>
-<p><img src="//mingxungu.github.io/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd1.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/07/Kafka主题管理/kafka_topic_del_view_cmd1.png" alt></p>
 <p>gumx主题对应的分区已经被删除。</p>
 
       
@@ -296,7 +311,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2020/03/07/Kafka主题管理/" title="Kafka主题管理" target="_blank">https://itzones.cn/2020/03/07/Kafka主题管理/</a>
+			<a href="https://www.itzones.cn/2020/03/07/Kafka主题管理/" title="Kafka主题管理" target="_blank">https://www.itzones.cn/2020/03/07/Kafka主题管理/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -388,7 +403,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2020/03/07/Kafka主题管理/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/03/07/Kafka主题管理/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -576,14 +591,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -596,7 +603,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -608,7 +619,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -617,10 +636,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,14 +655,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -660,11 +667,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -676,7 +695,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -688,19 +711,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -720,11 +735,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -732,7 +743,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -748,6 +763,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -756,15 +775,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -781,22 +812,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

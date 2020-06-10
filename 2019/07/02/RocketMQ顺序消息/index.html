@@ -6,26 +6,26 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>RocketMQ顺序消息 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="我们知道消息队列的特性导致其消息不是顺序进行消费的，RocketMQ没有提供所谓的顺序消息来供我们使用，但是有时候一些场景需要需要顺序的去接收消息。今天我们重点讨论一下如何实现这种功能。虽然RocketMQ没有提供顺序消费但是我们可以变相的来实现它。我们知道消息需要放入队列中才能被消费，而队列本身的特性就是FIFO先进先出，我们可以将需要顺序的消息放入一个队列中，则就可以实现这个功能。">
 <meta name="keywords" content="RocketMQ入门">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ顺序消息">
-<meta property="og:url" content="https://itzones.cn/2019/07/02/RocketMQ顺序消息/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="我们知道消息队列的特性导致其消息不是顺序进行消费的，RocketMQ没有提供所谓的顺序消息来供我们使用，但是有时候一些场景需要需要顺序的去接收消息。今天我们重点讨论一下如何实现这种功能。虽然RocketMQ没有提供顺序消费但是我们可以变相的来实现它。我们知道消息需要放入队列中才能被消费，而队列本身的特性就是FIFO先进先出，我们可以将需要顺序的消息放入一个队列中，则就可以实现这个功能。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/RocketMQ%E9%98%9F%E5%88%97%E9%80%89%E6%8B%A9%E5%99%A8.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%BB%93%E6%9E%9C.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/RocketMQ%E9%98%9F%E5%88%97%E9%80%89%E6%8B%A9%E5%99%A8.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%BB%93%E6%9E%9C.png">
 <meta property="og:updated_time" content="2019-07-02T08:41:21.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ顺序消息">
 <meta name="twitter:description" content="我们知道消息队列的特性导致其消息不是顺序进行消费的，RocketMQ没有提供所谓的顺序消息来供我们使用，但是有时候一些场景需要需要顺序的去接收消息。今天我们重点讨论一下如何实现这种功能。虽然RocketMQ没有提供顺序消费但是我们可以变相的来实现它。我们知道消息需要放入队列中才能被消费，而队列本身的特性就是FIFO先进先出，我们可以将需要顺序的消息放入一个队列中，则就可以实现这个功能。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -44,6 +44,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -222,13 +237,13 @@
 <a id="more"></a>
 
 <h1 id="1、场景分析"><a href="#1、场景分析" class="headerlink" title="1、场景分析"></a>1、场景分析</h1><p>场景：两个业务系统之间消息通过MQ传输，业务系统A数据传输至业务系统B，要求消息准确、实时。但是业务系统A的原始的数据可能会存在修改的情况，要求业务系统B需要实时的更改。保证消息的实时性、一致性、可靠性。</p>
-<h2 id="1-1、默认消息生产过程分析"><a href="#1-1、默认消息生产过程分析" class="headerlink" title="1.1、默认消息生产过程分析"></a>1.1、默认消息生产过程分析</h2><p><img src="//mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png" alt="普通消息生产图解"></p>
+<h2 id="1-1、默认消息生产过程分析"><a href="#1-1、默认消息生产过程分析" class="headerlink" title="1.1、默认消息生产过程分析"></a>1.1、默认消息生产过程分析</h2><p><img src="//www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png" alt="普通消息生产图解"></p>
 <p>主题test_1发送消息到RocketMQ的双主Broker1、Broker2上，每个broker上test_1主题对应4个队列，消息id为001001的消息存在创建(create)、更新(update）,MQ集群是双主的，使用默认的消息发送算法，消息将轮询的丢弃到各个队列中。</p>
 <blockquote>
 <p>默认按照轮询算法将消息分发到各个broker的不同的队列中，保证每个队列的消息都是均匀分配，集群消费且消费者多个时，多个消费者会分散到不同的队列中消费消息，保证消息能够实时消费。</p>
 </blockquote>
 <p>因为消息本身是放入到不同的队列中消费的就不能保证其顺序性，更新的消息可能是最先被消费掉，创建的消息消费时业务需要判断消息是否是最新的，需要进行查库验证，是则更新，不是则丢弃保存最新的消息，保证业务系统A与业务系统B，数据的一致性，增加了业务处理的难度。</p>
-<h2 id="1-2、顺序消息生产过程分析"><a href="#1-2、顺序消息生产过程分析" class="headerlink" title="1.2、顺序消息生产过程分析"></a>1.2、顺序消息生产过程分析</h2><p><img src="//mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png" alt="顺序消息生产图解"></p>
+<h2 id="1-2、顺序消息生产过程分析"><a href="#1-2、顺序消息生产过程分析" class="headerlink" title="1.2、顺序消息生产过程分析"></a>1.2、顺序消息生产过程分析</h2><p><img src="//www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E5%9B%BE%E8%A7%A3.png" alt="顺序消息生产图解"></p>
 <p>我们在生产消息的时候可以将同一个消息ID的消息放入到相同的队列中，保证同一类需要顺序消费的消息放入到同一个队列中，这样队列中的消息就是有序的。但是同时也需要保证消息的消费也是有序的才可以保证消息的顺序消费。</p>
 <p><strong>集群模式下同一个消费组内的消费者共同承担其订阅主题下的消息队列的消费，同一个消息消息队列在同一时刻只会被消费组内的一个消费者消费，一个消费者同一时刻可以分配多个消费队列。</strong></p>
 <blockquote>
@@ -240,7 +255,7 @@
 
 <p>我们根据100个消息的序号来放入到不同的队列中，根据序号%10取模，相同的放入到一个队列中。</p>
 <h2 id="2-2、提供的队列选择器"><a href="#2-2、提供的队列选择器" class="headerlink" title="2.2、提供的队列选择器"></a>2.2、提供的队列选择器</h2><p>上面是我们实现自定义队列选择器的算法，RocketMQ也提供了三种队列选择算法</p>
-<p><img src="//mingxungu.github.io/2019/07/02/RocketMQ顺序消息/RocketMQ%E9%98%9F%E5%88%97%E9%80%89%E6%8B%A9%E5%99%A8.png" alt="RocketMQ队列选择器"></p>
+<p><img src="//www.itzones.cn/2019/07/02/RocketMQ顺序消息/RocketMQ%E9%98%9F%E5%88%97%E9%80%89%E6%8B%A9%E5%99%A8.png" alt="RocketMQ队列选择器"></p>
 <p>从图中我们可以看到一共三种</p>
 <ul>
 <li>SelectMessageQueueByHash：通过 hash 进行选择 queue。</li>
@@ -263,7 +278,7 @@
 <h1 id="3、编写Consumer"><a href="#3、编写Consumer" class="headerlink" title="3、编写Consumer"></a>3、编写Consumer</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">		consumer.setConsumerGroup(<span class="string">"order_consumer_test_push"</span>);</span><br><span class="line">		consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">		consumer.subscribe(<span class="string">"order_test_1"</span>, <span class="string">"*"</span>);</span><br><span class="line">		consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerOrderly()&#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> ConsumeOrderlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">					ConsumeOrderlyContext paramConsumeOrderlyContext)</span> </span>&#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					<span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">						String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">						System.out.println(<span class="string">"  MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					&#125;</span><br><span class="line">				&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">					<span class="keyword">return</span> ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span> ConsumeOrderlyStatus.SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">		consumer.start();</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>查看结果</p>
-<p><img src="//mingxungu.github.io/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%BB%93%E6%9E%9C.png" alt="顺序消费结果"></p>
+<p><img src="//www.itzones.cn/2019/07/02/RocketMQ顺序消息/%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E7%BB%93%E6%9E%9C.png" alt="顺序消费结果"></p>
 <p>我们找到两个典型的一组数字，尾号是6和9的，尾号是6的计较集中，尾号是9的比较分散，但是结果都是一样的，按照顺序消费的。</p>
 
       
@@ -277,7 +292,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2019/07/02/RocketMQ顺序消息/" title="RocketMQ顺序消息" target="_blank">https://itzones.cn/2019/07/02/RocketMQ顺序消息/</a>
+			<a href="https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/" title="RocketMQ顺序消息" target="_blank">https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -369,7 +384,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2019/07/02/RocketMQ顺序消息/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2019/07/02/RocketMQ顺序消息/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -557,14 +572,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -577,7 +584,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -589,7 +600,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -598,10 +617,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -621,14 +636,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -641,11 +648,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -657,7 +676,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -669,19 +692,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -701,11 +716,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -713,7 +724,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -729,6 +744,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -737,15 +756,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -762,22 +793,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

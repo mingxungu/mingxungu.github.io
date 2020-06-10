@@ -6,24 +6,24 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>RocketMQ简单介绍 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
 <meta name="keywords" content="RocketMQ入门">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ简单介绍">
-<meta property="og:url" content="https://itzones.cn/2019/06/24/RocketMQ简单介绍/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090838349.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090838349.png">
 <meta property="og:updated_time" content="2019-07-18T01:13:33.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ简单介绍">
 <meta name="twitter:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -42,6 +42,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -283,7 +298,7 @@
 <td>支持</td>
 </tr>
 </tbody></table>
-<h1 id="二、概况"><a href="#二、概况" class="headerlink" title="二、概况"></a>二、概况</h1><h2 id="1、RocketMQ集群部署结构"><a href="#1、RocketMQ集群部署结构" class="headerlink" title="1、RocketMQ集群部署结构"></a>1、RocketMQ集群部署结构</h2><p><img src="//mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090638699.png" alt="RocketMQ网络部署图"></p>
+<h1 id="二、概况"><a href="#二、概况" class="headerlink" title="二、概况"></a>二、概况</h1><h2 id="1、RocketMQ集群部署结构"><a href="#1、RocketMQ集群部署结构" class="headerlink" title="1、RocketMQ集群部署结构"></a>1、RocketMQ集群部署结构</h2><p><img src="//www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png" alt="RocketMQ网络部署图"></p>
 <p><strong>Name Server</strong></p>
 <p>Name Server是一个几乎无状态节点，可集群部署，节点之间无任何信息同步。</p>
 <p><strong>Broker</strong></p>
@@ -305,7 +320,7 @@
 <h3 id="3）单向消息（不可靠）"><a href="#3）单向消息（不可靠）" class="headerlink" title="3）单向消息（不可靠）"></a>3）单向消息（不可靠）</h3><p>​    消息不可靠，性能高，只负责往服务器发送一条消息，不会重试也不关心是否发送成功</p>
 <p>​    此方式发送消息的过程耗时非常短，一般在微秒级别</p>
 <h2 id="3、消费模式（集群-广播）"><a href="#3、消费模式（集群-广播）" class="headerlink" title="3、消费模式（集群/广播）"></a>3、消费模式（集群/广播）</h2><p>RocketMQ物理部署图：</p>
-<p><img src="//mingxungu.github.io/2019/06/24/RocketMQ简单介绍/20190829090838349.png" alt="RocketMQ物理部署图"></p>
+<p><img src="//www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090838349.png" alt="RocketMQ物理部署图"></p>
 <p><strong>术语解释</strong></p>
 <p><strong>消息主题（Topic）</strong></p>
 <p>Topic是生产者在发送消息和消费者在拉取消息的类别。Topic与生产者和消费者之间的关系非常松散。具体来说，一个Topic可能有0个，一个或多个生产者向它发送消息；相反，一个生产者可以发送不同类型Topic的消息。类似的，消费者组可以订阅一个或多个主题，只要该组的实例保持其订阅一致即可。</p>
@@ -336,7 +351,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2019/06/24/RocketMQ简单介绍/" title="RocketMQ简单介绍" target="_blank">https://itzones.cn/2019/06/24/RocketMQ简单介绍/</a>
+			<a href="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/" title="RocketMQ简单介绍" target="_blank">https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -428,7 +443,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2019/06/24/RocketMQ简单介绍/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -616,14 +631,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -636,7 +643,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -648,7 +659,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -657,10 +676,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -680,14 +695,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -700,11 +707,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -716,7 +735,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -728,19 +751,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -760,11 +775,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -772,7 +783,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -788,6 +803,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -796,15 +815,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -821,22 +852,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

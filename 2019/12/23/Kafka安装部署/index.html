@@ -6,35 +6,35 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Kafka安装部署 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Kafka的安装依赖ZK，我们一起讲解安装的过程。本文档包含Zookeeper集群和Kafka集群的安装以及对应的监控软件的安装ZK UI 和 Kafka Eagle">
 <meta name="keywords" content="kafka,zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka安装部署">
-<meta property="og:url" content="https://itzones.cn/2019/12/23/Kafka安装部署/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Kafka的安装依赖ZK，我们一起讲解安装的过程。本文档包含Zookeeper集群和Kafka集群的安装以及对应的监控软件的安装ZK UI 和 Kafka Eagle">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_zoo.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_zoo_edit.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_start.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/zk_ui_edit.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/zk_ui_ui.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_edit_1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_edit_2.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_edit_3.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_edit_1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_edit_2.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_ev_edit.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_start.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_ui.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_zoo.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_zoo_edit.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_start.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/zk_ui_edit.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/zk_ui_ui.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_edit_1.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_edit_2.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_edit_3.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_edit_1.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_edit_2.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_ev_edit.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_start.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_ui.png">
 <meta property="og:updated_time" content="2020-03-07T02:05:18.750Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka安装部署">
 <meta name="twitter:description" content="Kafka的安装依赖ZK，我们一起讲解安装的过程。本文档包含Zookeeper集群和Kafka集群的安装以及对应的监控软件的安装ZK UI 和 Kafka Eagle">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_zoo.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_zoo.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -53,6 +53,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -263,7 +278,7 @@
 <p> 在Zookeeper的安装目录下的conf文件夹下有个示例配置文件zoo_sample.cfg,拷贝一份命名为zoo.cfg</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/zookeeper/conf/</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_zoo.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_zoo.png" alt></p>
 <p>配置zoo.cfg</p>
 <p>修改配置</p>
 <p>dataDir=/usr/local/zookeeper/data</p>
@@ -272,7 +287,7 @@
 <p>server.1=10.10.15.106:2888:3888</p>
 <p>server.2=10.10.15.107:2888:3888</p>
 <p>server.3=10.10.12.120:2888:3888</p>
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_zoo_edit.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_zoo_edit.png" alt></p>
 <p>创建目录</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/zookeeper/</span><br><span class="line">mkdir data</span><br><span class="line">mkdir log</span><br></pre></td></tr></table></figure>
 
@@ -286,20 +301,20 @@
 <p>查看状态</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/zookeeper/bin/zkServer.sh status</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/zookeeper_start.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/zookeeper_start.png" alt></p>
 <h1 id="3、-ZK-UI安装"><a href="#3、-ZK-UI安装" class="headerlink" title="3、 ZK UI安装"></a>3、 ZK UI安装</h1><p>3.1、安装</p>
 <p>zkui文件夹上传至服务器上/opt/</p>
 <p>3.2、配置</p>
 <p>配置config.cfg</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi config.cfg</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/zk_ui_edit.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/zk_ui_edit.png" alt></p>
 <p>3.3、启动</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java -jar zkui-2.0-SNAPSHOT-jar-with-dependencies.jar &amp;</span><br></pre></td></tr></table></figure>
 
 <p>3.4、登陆</p>
 <p><a href="http://10.10.15.106:9090" target="_blank" rel="noopener">http://10.10.15.106:9090</a>   用户名/密码：admin/manager</p>
-<p> <img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/zk_ui_ui.png" alt></p>
+<p> <img src="//www.itzones.cn/2019/12/23/Kafka安装部署/zk_ui_ui.png" alt></p>
 <h1 id="4、-Kafka安装"><a href="#4、-Kafka安装" class="headerlink" title="4、 Kafka安装"></a>4、 Kafka安装</h1><p>4.1、安装</p>
 <p>安装包上传至服务器上/home/software/</p>
 <p>解压kafka_2.13-2.4.0.tgz至/usr/local/</p>
@@ -313,11 +328,11 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/kafka/config/server.properties</span><br></pre></td></tr></table></figure>
 
 <p>配置broker.id区分broker</p>
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_edit_1.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_edit_1.png" alt></p>
 <p>配置数据存放目录</p>
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_edit_2.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_edit_2.png" alt></p>
 <p>配置zookeeper</p>
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_edit_3.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_edit_3.png" alt></p>
 <p>其他两台服务器一样配置，注意broker.id和监听地址都是配置本机的IP  </p>
 <p>创建目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/kafka/store</span><br></pre></td></tr></table></figure>
@@ -339,21 +354,21 @@
 <p>system-config.properties文件 </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/ke/conf/system-config.properties</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_edit_1.png" alt></p>
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_edit_2.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_edit_1.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_edit_2.png" alt></p>
 <p>配置环境变量</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bash_profile</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_ev_edit.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_ev_edit.png" alt></p>
 <p>环境变量生效</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
 
 <p>5.3、启动</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/ke/</span><br><span class="line">bin/ke.sh start</span><br></pre></td></tr></table></figure>
 
-<p> <img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_start.png" alt></p>
+<p> <img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_start.png" alt></p>
 <p>5.4、登陆</p>
-<p><img src="//mingxungu.github.io/2019/12/23/Kafka安装部署/kafka_eagle_ui.png" alt></p>
+<p><img src="//www.itzones.cn/2019/12/23/Kafka安装部署/kafka_eagle_ui.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -366,7 +381,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2019/12/23/Kafka安装部署/" title="Kafka安装部署" target="_blank">https://itzones.cn/2019/12/23/Kafka安装部署/</a>
+			<a href="https://www.itzones.cn/2019/12/23/Kafka安装部署/" title="Kafka安装部署" target="_blank">https://www.itzones.cn/2019/12/23/Kafka安装部署/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -462,7 +477,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2019/12/23/Kafka安装部署/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2019/12/23/Kafka安装部署/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -650,14 +665,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -670,7 +677,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -682,7 +693,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -691,10 +710,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -714,14 +729,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -734,11 +741,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -750,7 +769,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -762,19 +785,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -794,11 +809,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -806,7 +817,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -822,6 +837,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -830,15 +849,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -855,22 +886,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

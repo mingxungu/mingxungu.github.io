@@ -6,27 +6,27 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>RocketMQ权限控制 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="RocketMQ作为一款优秀的中间件，应用领域非常广泛，金融、电商、电信、医疗、社科、安保等不同的领域都有其大规模的应用，无疑安全性很受质疑，因为内部没有安全相关的业务模块，消息的发送和消费得不到很好的安全管控需要业务方自己去封装安全模块，无形中增加了使用成本。在RocketMQ4.4.0版本升级中加入了ACL权限管控，这个功能的完善直接推动了RocketMQ在各个领域的推广使用，特别是金融、电商">
 <meta name="keywords" content="RocketMQ权限控制,RocketMQ ACL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RocketMQ权限控制">
-<meta property="og:url" content="https://itzones.cn/2019/07/18/RocketMQ权限控制/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ作为一款优秀的中间件，应用领域非常广泛，金融、电商、电信、医疗、社科、安保等不同的领域都有其大规模的应用，无疑安全性很受质疑，因为内部没有安全相关的业务模块，消息的发送和消费得不到很好的安全管控需要业务方自己去封装安全模块，无形中增加了使用成本。在RocketMQ4.4.0版本升级中加入了ACL权限管控，这个功能的完善直接推动了RocketMQ在各个领域的推广使用，特别是金融、电商">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/18/RocketMQ权限控制/RocketMQacl%E6%9D%83%E9%99%90%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_deny_result.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_sub_result.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_group_result.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_broker_%E8%A7%A3%E6%9E%90.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/RocketMQacl%E6%9D%83%E9%99%90%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_deny_result.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_sub_result.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_group_result.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_broker_%E8%A7%A3%E6%9E%90.png">
 <meta property="og:updated_time" content="2019-07-18T11:09:31.703Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ权限控制">
 <meta name="twitter:description" content="RocketMQ作为一款优秀的中间件，应用领域非常广泛，金融、电商、电信、医疗、社科、安保等不同的领域都有其大规模的应用，无疑安全性很受质疑，因为内部没有安全相关的业务模块，消息的发送和消费得不到很好的安全管控需要业务方自己去封装安全模块，无形中增加了使用成本。在RocketMQ4.4.0版本升级中加入了ACL权限管控，这个功能的完善直接推动了RocketMQ在各个领域的推广使用，特别是金融、电商">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/18/RocketMQ权限控制/RocketMQacl%E6%9D%83%E9%99%90%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/RocketMQacl%E6%9D%83%E9%99%90%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -45,6 +45,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -310,7 +325,7 @@
 </tr>
 </tbody></table>
 <p>处理流程</p>
-<p><img src="//mingxungu.github.io/2019/07/18/RocketMQ权限控制/RocketMQacl%E6%9D%83%E9%99%90%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/18/RocketMQ权限控制/RocketMQacl%E6%9D%83%E9%99%90%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt></p>
 <blockquote>
 <p>特殊的请求例如 UPDATE_AND_CREATE_TOPIC 等，只能由 admin 账户进行操作； </p>
 <p>对于某个资源，如果有显性配置权限，则采用配置的权限；如果没有显性配置权限，则采用默认的权限</p>
@@ -320,16 +335,16 @@
 <h2 id="1-3、代码示例"><a href="#1-3、代码示例" class="headerlink" title="1.3、代码示例"></a>1.3、代码示例</h2><h3 id="1-3-1、生产者代码"><a href="#1-3-1、生产者代码" class="headerlink" title="1.3.1、生产者代码"></a>1.3.1、生产者代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AclProducer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MQClientException, InterruptedException </span>&#123;</span><br><span class="line">        DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"please_rename_unique_group_name"</span>, getAclRPCHook());</span><br><span class="line">        producer.setNamesrvAddr(<span class="string">"10.10.15.246:9876;10.10.15.247:9876"</span>);</span><br><span class="line">        producer.start();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Message msg = <span class="keyword">new</span> Message(<span class="string">"topicA"</span> ,<span class="string">"TagA"</span> , (<span class="string">"Hello RocketMQ "</span> + i).getBytes(RemotingHelper.DEFAULT_CHARSET));</span><br><span class="line">                SendResult sendResult = producer.send(msg);</span><br><span class="line">                System.out.printf(<span class="string">"%s%n"</span>, sendResult);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        producer.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> RPCHook <span class="title">getAclRPCHook</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AclClientRPCHook(<span class="keyword">new</span> SessionCredentials(<span class="string">"RocketMQ"</span>,<span class="string">"12345678"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>查看结果</p>
-<p><img src="//mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_deny_result.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_deny_result.png" alt></p>
 <p>报错提示topicA没有权限，我们在plain_acl.yml文件中配置的也确实是RocketMQ用户拒绝，生产消费topicA主题信息，我们改变主题为topicB,则发现发送消息成功，topicB=PUB|SUB设置的权限是生产消费都可以。</p>
 <p>查看结果</p>
-<p><img src="//mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_sub_result.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_sub_result.png" alt></p>
 <h3 id="1-3-2、消费者代码"><a href="#1-3-2、消费者代码" class="headerlink" title="1.3.2、消费者代码"></a>1.3.2、消费者代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AclConsumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, MQClientException </span>&#123;</span><br><span class="line">        DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(<span class="string">"groupA"</span>, getAclRPCHook(),<span class="keyword">new</span> AllocateMessageQueueAveragely());</span><br><span class="line">        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);</span><br><span class="line">        consumer.subscribe(<span class="string">"topicB"</span>, <span class="string">"*"</span>);</span><br><span class="line">        consumer.setNamesrvAddr(<span class="string">"10.10.15.246:9876;10.10.15.247:9876"</span>);</span><br><span class="line">        consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; msgs,</span></span></span><br><span class="line"><span class="function"><span class="params">                ConsumeConcurrentlyContext context)</span> </span>&#123;</span><br><span class="line">                System.out.printf(<span class="string">"%s Receive New Messages: %s %n"</span>, Thread.currentThread().getName(), msgs);</span><br><span class="line">                <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        consumer.start();</span><br><span class="line">        System.out.printf(<span class="string">"Consumer Started.%n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> RPCHook <span class="title">getAclRPCHook</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AclClientRPCHook(<span class="keyword">new</span> SessionCredentials(<span class="string">"RocketMQ"</span>,<span class="string">"12345678"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>查看结果：发现没有任何消息被消费，也没有报错信息，对于RocketMQ用户topicB设置的就是可以可以生产可以消费的，但是我们发现其groupA=DENY是拒绝的，说明消费组是groupA则拒绝消费任何消息，我们改成groupB或者groupC查看结果。</p>
-<p><img src="//mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_group_result.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_group_result.png" alt></p>
 <h1 id="2、源码分析"><a href="#2、源码分析" class="headerlink" title="2、源码分析"></a>2、源码分析</h1><p>Broker端ACL原理图</p>
-<p><img src="//mingxungu.github.io/2019/07/18/RocketMQ权限控制/acl_broker_%E8%A7%A3%E6%9E%90.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/18/RocketMQ权限控制/acl_broker_%E8%A7%A3%E6%9E%90.png" alt></p>
 <h2 id="2-1、Broker初始化时ACL相关操作"><a href="#2-1、Broker初始化时ACL相关操作" class="headerlink" title="2.1、Broker初始化时ACL相关操作"></a>2.1、Broker初始化时ACL相关操作</h2><p>Broker服务启动时创建BrokerController并初始化initialize()时调用acl相关的初始化方法initialAcl（）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialAcl</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//broker配置文件中是否开启ACL功能，默认关闭</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.brokerConfig.isAclEnable()) &#123;</span><br><span class="line">        log.info(<span class="string">"The broker dose not enable acl"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获取权限访问校验器的列表，加载的META-INF/service/org.apache.rocketmq.acl.AccessValidator文件中指向</span></span><br><span class="line">    <span class="comment">//org.apache.rocketmq.acl.plain.PlainAccessValidator，默认只有一个</span></span><br><span class="line">    List&lt;AccessValidator&gt; accessValidators = ServiceProvider.load(ServiceProvider.ACL_VALIDATOR_ID, AccessValidator.class);</span><br><span class="line">    <span class="keyword">if</span> (accessValidators == <span class="keyword">null</span> || accessValidators.isEmpty()) &#123;</span><br><span class="line">        log.info(<span class="string">"The broker dose not load the AccessValidator"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (AccessValidator accessValidator: accessValidators) &#123;</span><br><span class="line">        <span class="keyword">final</span> AccessValidator validator = accessValidator;</span><br><span class="line">        <span class="comment">//注册服务端就的“钩子”对象，对权限进行校验</span></span><br><span class="line">        <span class="keyword">this</span>.registerServerRPCHook(<span class="keyword">new</span> RPCHook() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBeforeRequest</span><span class="params">(String remoteAddr, RemotingCommand request)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//Do not catch the exception</span></span><br><span class="line">                validator.validate(validator.parse(request, remoteAddr));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAfterResponse</span><span class="params">(String remoteAddr, RemotingCommand request, RemotingCommand response)</span> </span>&#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -379,7 +394,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2019/07/18/RocketMQ权限控制/" title="RocketMQ权限控制" target="_blank">https://itzones.cn/2019/07/18/RocketMQ权限控制/</a>
+			<a href="https://www.itzones.cn/2019/07/18/RocketMQ权限控制/" title="RocketMQ权限控制" target="_blank">https://www.itzones.cn/2019/07/18/RocketMQ权限控制/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -475,7 +490,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2019/07/18/RocketMQ权限控制/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2019/07/18/RocketMQ权限控制/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -663,14 +678,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -683,7 +690,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -695,7 +706,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -704,10 +723,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -727,14 +742,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -747,11 +754,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -763,7 +782,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -775,19 +798,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -807,11 +822,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -819,7 +830,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -835,6 +850,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -843,15 +862,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -868,22 +899,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

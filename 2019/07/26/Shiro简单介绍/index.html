@@ -6,25 +6,25 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Shiro简单介绍 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Shiro是apache旗下一个开源框架，它将软件系统的安全认证相关的功能抽取出来，实现用户身份认证，权限授权、加密、会话管理等功能，组成了一个通用的安全认证框架。">
 <meta name="keywords" content="shiro入门">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shiro简单介绍">
-<meta property="og:url" content="https://itzones.cn/2019/07/26/Shiro简单介绍/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2019/07/26/Shiro简单介绍/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Shiro是apache旗下一个开源框架，它将软件系统的安全认证相关的功能抽取出来，实现用户身份认证，权限授权、加密、会话管理等功能，组成了一个通用的安全认证框架。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/26/Shiro简单介绍/578160805.png">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/26/Shiro简单介绍/12617-20161206222914835-1184096667.jpg">
-<meta property="og:image" content="https://mingxungu.github.io/2019/07/26/Shiro简单介绍/20151205213147424.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/26/Shiro简单介绍/578160805.png">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/26/Shiro简单介绍/12617-20161206222914835-1184096667.jpg">
+<meta property="og:image" content="https://www.itzones.cn/2019/07/26/Shiro简单介绍/20151205213147424.png">
 <meta property="og:updated_time" content="2019-07-27T02:36:05.204Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shiro简单介绍">
 <meta name="twitter:description" content="Shiro是apache旗下一个开源框架，它将软件系统的安全认证相关的功能抽取出来，实现用户身份认证，权限授权、加密、会话管理等功能，组成了一个通用的安全认证框架。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2019/07/26/Shiro简单介绍/578160805.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2019/07/26/Shiro简单介绍/578160805.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -43,6 +43,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -224,7 +239,7 @@
 <p>​         权限管理包括用户身份认证和授权两部分，简称认证授权。对于需要访问控制的资源用户首先经过身份认证，认证通过后用户具有该资源的访问权限方可访问。</p>
 <p>Apache Shiro是Java的一个安全框架。对比另一个安全框架Spring Sercurity，它更简单和灵活。</p>
 <p>Shiro可以帮助我们完成：认证、授权、加密、会话管理、Web集成、缓存等。</p>
-<p><img src="//mingxungu.github.io/2019/07/26/Shiro简单介绍/578160805.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/26/Shiro简单介绍/578160805.png" alt></p>
 <p>Shiro 开发团队称为“应用程序的四大基石” ——<strong>身份验证</strong>，<strong>授权</strong>，<strong>会话管理</strong>和<strong>加密</strong>作为其目标。</p>
 <ul>
 <li>Authentication：有时也简称为“登录”，这是一个证明用户是他们所说的他们是谁的行为。</li>
@@ -242,7 +257,7 @@
 <li>“Remember Me”：在会话中记住用户的身份，所以他们只需要在强制时候登录。 </li>
 </ul>
 <h1 id="2、shiro架构"><a href="#2、shiro架构" class="headerlink" title="2、shiro架构"></a>2、shiro架构</h1><p>shiro的架构图展示：</p>
-<p><img src="//mingxungu.github.io/2019/07/26/Shiro简单介绍/12617-20161206222914835-1184096667.jpg" alt></p>
+<p><img src="//www.itzones.cn/2019/07/26/Shiro简单介绍/12617-20161206222914835-1184096667.jpg" alt></p>
 <h2 id="2-1、术语介绍"><a href="#2-1、术语介绍" class="headerlink" title="2.1、术语介绍"></a>2.1、术语介绍</h2><p><strong>Subject</strong></p>
 <p>Subject即主体，外部应用与subject进行交互，subject记录了当前操作用户，将用户的概念理解为当前操作的主体，可能是一个通过浏览器请求的用户，也可能是一个运行的程序。Subject在shiro中是一个接口，接口中定义了很多认证授相关的方法，外部程序通过subject进行认证授，而subject是通过SecurityManager安全管理器进行认证授权</p>
 <p><strong>SecurityManager</strong></p>
@@ -262,7 +277,7 @@
 <p><strong>Cryptography</strong></p>
 <p>Cryptography即密码管理，shiro提供了一套加密/解密的组件，方便开发。比如提供常用的散列、加/解密等功能。</p>
 <h2 id="2-2、工作机制"><a href="#2-2、工作机制" class="headerlink" title="2.2、工作机制"></a>2.2、工作机制</h2><p>这张图是从内部解读Shiro的框架结构，我们关注两点，一是上面的淡黄色的部分，每类应用里面都有一个Subject（指明当前登录用户），是需要我们在代码中经常使用的，然后SecurityManager我们打交道不多，往下紫色那个Pluggable Realms，是一个安全域的插件集，这里才有真正的安全逻辑（为什么张三可以登录（做了认证），为什么李四可以删数据（做了授权），等等，都是realm说了算）。</p>
-<p><img src="//mingxungu.github.io/2019/07/26/Shiro简单介绍/20151205213147424.png" alt></p>
+<p><img src="//www.itzones.cn/2019/07/26/Shiro简单介绍/20151205213147424.png" alt></p>
 <p>这张图大家也经常看到，它从一个方面说明了Shiro的简单易用。我们的APP只需要与Subject打交道，其它事情都交给他做了，它委托securityManager进行管理，后者呢，又去找真正的后台realm，咨询安全方面的事情（可不可以认证通过，他有什么样的授权等）</p>
 
       
@@ -276,7 +291,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2019/07/26/Shiro简单介绍/" title="Shiro简单介绍" target="_blank">https://itzones.cn/2019/07/26/Shiro简单介绍/</a>
+			<a href="https://www.itzones.cn/2019/07/26/Shiro简单介绍/" title="Shiro简单介绍" target="_blank">https://www.itzones.cn/2019/07/26/Shiro简单介绍/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -368,7 +383,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2019/07/26/Shiro简单介绍/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2019/07/26/Shiro简单介绍/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -556,14 +571,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -576,7 +583,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -588,7 +599,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -597,10 +616,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -620,14 +635,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -640,11 +647,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -656,7 +675,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -668,19 +691,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -700,11 +715,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -712,7 +723,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -728,6 +743,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -736,15 +755,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -761,22 +792,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

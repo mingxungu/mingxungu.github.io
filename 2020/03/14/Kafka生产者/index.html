@@ -6,31 +6,31 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Kafka生产者 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="kafka客户端有新旧版本，老版本采用scala编写，新版本采用java编写。随着kafka版本的升级，旧版本客户端已经快被完全替代了。因此，我们以新客户端为例进行介绍。">
 <meta name="keywords" content="kafka分区算法,kafka生产者拦截器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka生产者">
-<meta property="og:url" content="https://itzones.cn/2020/03/14/Kafka生产者/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2020/03/14/Kafka生产者/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="kafka客户端有新旧版本，老版本采用scala编写，新版本采用java编写。随着kafka版本的升级，旧版本客户端已经快被完全替代了。因此，我们以新客户端为例进行介绍。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_para.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_mehod.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_round.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_sticky.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_key.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_custom_partition_result.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_interceptor_result.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_interceptor_result1.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_para.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_mehod.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_round.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_sticky.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_key.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_custom_partition_result.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_interceptor_result.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_interceptor_result1.png">
 <meta property="og:updated_time" content="2020-03-15T06:54:10.721Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka生产者">
 <meta name="twitter:description" content="kafka客户端有新旧版本，老版本采用scala编写，新版本采用java编写。随着kafka版本的升级，旧版本客户端已经快被完全替代了。因此，我们以新客户端为例进行介绍。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_para.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_para.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -49,6 +49,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -230,7 +245,7 @@
 <p>实例代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaProducerTest</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Producer&lt;String,String&gt; producer;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span>&#123;</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		<span class="comment">//kafka 地址</span></span><br><span class="line">		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		<span class="comment">//确认有几个副本接收到消息 </span></span><br><span class="line">		<span class="comment">//1：一个副本 （默认值）</span></span><br><span class="line">		<span class="comment">//0：直接返回  </span></span><br><span class="line">		<span class="comment">//-1或all：所有副本接收到</span></span><br><span class="line">		props.put(ProducerConfig.ACKS_CONFIG,<span class="string">"all"</span>);</span><br><span class="line">		<span class="comment">//客户端发送失败重试次数默认是0(可重试的异常才起效果，如网络问题等)</span></span><br><span class="line">		props.put(ProducerConfig.RETRIES_CONFIG,<span class="number">3</span>);</span><br><span class="line">		<span class="comment">//key序列化</span></span><br><span class="line">		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">		<span class="comment">//value序列化</span></span><br><span class="line">		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);	</span><br><span class="line">		producer = <span class="keyword">new</span> KafkaProducer&lt;String,String&gt;(props);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//同步发送</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RecordMetadata <span class="title">sendMessageSync</span><span class="params">(String topic ,String key ,String message)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>&#123;</span><br><span class="line">		Future&lt;RecordMetadata&gt; future = producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message));</span><br><span class="line">		RecordMetadata pecordMetadata = future.get();</span><br><span class="line">		System.out.println(<span class="string">"同步发送==="</span>+pecordMetadata.offset());</span><br><span class="line">		<span class="keyword">return</span> pecordMetadata;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="1、重要参数分析"><a href="#1、重要参数分析" class="headerlink" title="1、重要参数分析"></a>1、重要参数分析</h1><p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_para.png" alt></p>
+<h1 id="1、重要参数分析"><a href="#1、重要参数分析" class="headerlink" title="1、重要参数分析"></a>1、重要参数分析</h1><p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_para.png" alt></p>
 <p>我们分析源码看看其中有很多生产端的参数，我们重点分析几个常用的，后续遇到再进行分析。</p>
 <h2 id="1-1、bootstrap-servers"><a href="#1-1、bootstrap-servers" class="headerlink" title="1.1、bootstrap.servers"></a>1.1、bootstrap.servers</h2><p>指定生产者客户端连接Kafka集群的所需的broker地址的清单，格式为host1:port1，host2:port2，设置一个或者多个地址中间用逗号隔开。建议设置两个，防止其中一台broker宕机导致找不到broker集群导致消息发送失败。</p>
 <h2 id="1-2、key-serializer和value-serializer"><a href="#1-2、key-serializer和value-serializer" class="headerlink" title="1.2、key.serializer和value.serializer"></a><strong>1.2、key.serializer和value.serializer</strong></h2><p>broker端接收消息的格式必须是字节数组byte[]的形式。key.serializer和value.serializer分别用来指定key和value序列化操作的序列化器，这两个参数<strong>没有默认值</strong>。注意这里必须填写序列化器的<strong>全限名</strong>。</p>
@@ -245,15 +260,15 @@
 <p>Partition Leader接收到消息之后，还必须要求ISR列表里跟Leader保持一定同步的那些Follower都要把消息同步过去，才能认为这条消息是写入成功了。如果说Partition Leader刚接收到了消息，但是结果Follower没有收到消息，此时Leader宕机了，那么客户端会感知到这个消息没发送成功，他会重试再次发送消息过去。此时可能Partition 2的Follower变成Leader了，此时ISR列表里只有最新的这个Follower转变成的Leader了，那么只要这个新的Leader接收消息就算成功了</p>
 <h1 id="2、分区器"><a href="#2、分区器" class="headerlink" title="2、分区器"></a>2、分区器</h1><p>消息发送的过程中需要经过拦截器、序列化器、分区器的一系列作用后才能被真正发送到broker。其中拦截器我们一会说明，序列化器没有什么说的我们也可以自定义序列化器，重点我们将介绍分区器。</p>
 <p>我们重点看一下生产者发送的消息实体ProducerRecord的构造方法。</p>
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition.png" alt></p>
 <p>我们发送消息时可以指定分区号，如果不指定那就需要我们的分区器，这个很重要，一条消息该发往哪一个分区，关系到后面我们要讲的顺序消息。下面我们分析消息分区策略是决定生产者将消息发送到哪个分区的算法。</p>
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_mehod.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_mehod.png" alt></p>
 <p>分析源码我们查看到提供了三种分区策略。</p>
 <h2 id="2-1、轮询算法（RoundRobinPartitioner）"><a href="#2-1、轮询算法（RoundRobinPartitioner）" class="headerlink" title="2.1、轮询算法（RoundRobinPartitioner）"></a>2.1、轮询算法（RoundRobinPartitioner）</h2><p>这就是RoundRobinPartitioner的源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoundRobinPartitioner</span> <span class="keyword">implements</span> <span class="title">Partitioner</span> </span>&#123;</span><br><span class="line">    <span class="comment">//线程安全的,存储Map键值对，&lt;topic,原子的Intger&gt;</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;String, AtomicInteger&gt; topicCounterMap = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Object key, <span class="keyword">byte</span>[] keyBytes, Object value, <span class="keyword">byte</span>[] valueBytes, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//获取主题对应的所有分区列表</span></span><br><span class="line">        List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);</span><br><span class="line">        <span class="keyword">int</span> numPartitions = partitions.size();</span><br><span class="line">        <span class="comment">//根据主题获取下一个原子数+1</span></span><br><span class="line">        <span class="keyword">int</span> nextValue = nextValue(topic);</span><br><span class="line">        <span class="comment">//获取可用的分区列表</span></span><br><span class="line">        List&lt;PartitionInfo&gt; availablePartitions = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">        <span class="keyword">if</span> (!availablePartitions.isEmpty()) &#123;</span><br><span class="line">            <span class="comment">//取余，这样获取的就是一个轮询的方式，从可用的分区列表中获取分区</span></span><br><span class="line">            <span class="keyword">int</span> part = Utils.toPositive(nextValue) % availablePartitions.size();</span><br><span class="line">            <span class="keyword">return</span> availablePartitions.get(part).partition();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// no partitions are available, give a non-available partition</span></span><br><span class="line">            <span class="comment">//取余，这样获取的就是一个轮询的方式，从分区列表中获取分区</span></span><br><span class="line">            <span class="keyword">return</span> Utils.toPositive(nextValue) % numPartitions;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">nextValue</span><span class="params">(String topic)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//根据Topic获取Map中的AtomicInteger的值，获取不到就默认是0</span></span><br><span class="line">        AtomicInteger counter = topicCounterMap.computeIfAbsent(topic, k -&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//AtomicInteger+1</span></span><br><span class="line">        <span class="keyword">return</span> counter.getAndIncrement();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//其他代码省略。。。</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 
 <p>Round-robin 策略，即顺序分配。比如一个主题下有 3 个分区，那么第一条消息被发送到分区 0，第二条被发送到分区 1，第三条被发送到分区 2，以此类推。当生产第 4 条消息时又会重新开始，即将其分配到分区 0，就像下面这张图展示的那样。</p>
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_round.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_round.png" alt></p>
 <p>轮询策略有非常优秀的负载均衡表现，它总是能保证消息最大限度地被平均分配到所有分区上，故默认情况下它是最合理的分区策略，也是我们最常用的分区策略之一。</p>
 <h2 id="2-2、随机算法（UniformStickyPartitioner）"><a href="#2-2、随机算法（UniformStickyPartitioner）" class="headerlink" title="2.2、随机算法（UniformStickyPartitioner）"></a>2.2、随机算法（UniformStickyPartitioner）</h2><p>查看源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UniformStickyPartitioner</span> <span class="keyword">implements</span> <span class="title">Partitioner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> StickyPartitionCache stickyPartitionCache = <span class="keyword">new</span> StickyPartitionCache();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Map&lt;String, ?&gt; configs)</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Object key, <span class="keyword">byte</span>[] keyBytes, Object value, <span class="keyword">byte</span>[] valueBytes, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stickyPartitionCache.partition(topic, cluster);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNewBatch</span><span class="params">(String topic, Cluster cluster, <span class="keyword">int</span> prevPartition)</span> </span>&#123;</span><br><span class="line">        stickyPartitionCache.nextPartition(topic, cluster, prevPartition);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -262,7 +277,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        Integer part = indexCache.get(topic);</span><br><span class="line">        <span class="keyword">if</span> (part == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> nextPartition(topic, cluster, -<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> part;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">nextPartition</span><span class="params">(String topic, Cluster cluster, <span class="keyword">int</span> prevPartition)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//根据主题获取所有分区</span></span><br><span class="line">        List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);</span><br><span class="line">        <span class="comment">//获取上一次发送消息的的分区系数</span></span><br><span class="line">        Integer oldPart = indexCache.get(topic);</span><br><span class="line">        Integer newPart = oldPart;</span><br><span class="line">        <span class="comment">// Check that the current sticky partition for the topic is either not set or that the partition that </span></span><br><span class="line">        <span class="comment">// triggered the new batch matches the sticky partition that needs to be changed.</span></span><br><span class="line">        <span class="keyword">if</span> (oldPart == <span class="keyword">null</span> || oldPart == prevPartition) &#123;</span><br><span class="line">            List&lt;PartitionInfo&gt; availablePartitions = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">            <span class="keyword">if</span> (availablePartitions.size() &lt; <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">//获取随机数</span></span><br><span class="line">                Integer random = Utils.toPositive(ThreadLocalRandom.current().nextInt());</span><br><span class="line">                <span class="comment">//根据随机数和分区总数取余，获取系数</span></span><br><span class="line">                newPart = random % partitions.size();</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (availablePartitions.size() == <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">//如果只有一个可用的分区，那么默认只能选择这个分区</span></span><br><span class="line">                newPart = availablePartitions.get(<span class="number">0</span>).partition();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//获取的分区系数和上一次的不能一样</span></span><br><span class="line">                <span class="keyword">while</span> (newPart == <span class="keyword">null</span> || newPart.equals(oldPart)) &#123;</span><br><span class="line">                    <span class="comment">//获取随机数</span></span><br><span class="line">                    Integer random = Utils.toPositive(ThreadLocalRandom.current().nextInt());</span><br><span class="line">                    <span class="comment">//根据随机数和可用的分区总数取余，获取系数</span></span><br><span class="line">                    newPart = availablePartitions.get(random % availablePartitions.size()).partition();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Only change the sticky partition if it is null or prevPartition matches the current sticky partition.</span></span><br><span class="line">            <span class="comment">//Topic对应的信息如果不存在MapCache就放入，存在就替换</span></span><br><span class="line">            <span class="keyword">if</span> (oldPart == <span class="keyword">null</span>) &#123;</span><br><span class="line">                indexCache.putIfAbsent(topic, newPart);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                indexCache.replace(topic, prevPartition, newPart);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> indexCache.get(topic);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> indexCache.get(topic);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>通过获取随机数来获取分区id,所谓随机就是我们随意地将消息放置到任意一个分区上，如下面这张图所示。</p>
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_sticky.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_sticky.png" alt></p>
 <p>本质上看随机策略也是力求将数据均匀地打散到各个分区，但从实际表现来看，它要逊于轮询策略，所以如果追求数据的均匀分布，还是使用轮询策略比较好。事实上，java客户端开始轮询策略是老版本（0.9.0-.2.3）生产者使用的分区策略，在新版本（2.4以后）中已经改为随机策略了。</p>
 <h2 id="2-3、默认分区算法（DefaultPartitioner）"><a href="#2-3、默认分区算法（DefaultPartitioner）" class="headerlink" title="2.3、默认分区算法（DefaultPartitioner）"></a>2.3、默认分区算法（DefaultPartitioner）</h2><p>分析源码kafka_2.5版本，从2.4开始使用</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultPartitioner</span> <span class="keyword">implements</span> <span class="title">Partitioner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> StickyPartitionCache stickyPartitionCache = <span class="keyword">new</span> StickyPartitionCache();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Map&lt;String, ?&gt; configs)</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Object key, <span class="keyword">byte</span>[] keyBytes, Object value, <span class="keyword">byte</span>[] valueBytes, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//key如果不存在使用随机算法</span></span><br><span class="line">        <span class="keyword">if</span> (keyBytes == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> stickyPartitionCache.partition(topic, cluster);</span><br><span class="line">        &#125; </span><br><span class="line">        List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);</span><br><span class="line">        <span class="keyword">int</span> numPartitions = partitions.size();</span><br><span class="line">        <span class="comment">// hash the keyBytes to choose a partition</span></span><br><span class="line">        <span class="comment">//根据key的字节数计算获取分区</span></span><br><span class="line">        <span class="keyword">return</span> Utils.toPositive(Utils.murmur2(keyBytes)) % numPartitions;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -271,7 +286,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultPartitioner</span> <span class="keyword">implements</span> <span class="title">Partitioner</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger counter = <span class="keyword">new</span> AtomicInteger(<span class="keyword">new</span> Random().nextInt());</span><br><span class="line">	<span class="comment">//分配分区</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Object key, <span class="keyword">byte</span>[] keyBytes, Object value, <span class="keyword">byte</span>[] valueBytes, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);</span><br><span class="line">        <span class="keyword">int</span> numPartitions = partitions.size();</span><br><span class="line">        <span class="keyword">if</span> (keyBytes == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//自增</span></span><br><span class="line">            <span class="keyword">int</span> nextValue = counter.getAndIncrement();</span><br><span class="line">            List&lt;PartitionInfo&gt; availablePartitions = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">            <span class="keyword">if</span> (availablePartitions.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">//取余</span></span><br><span class="line">                <span class="keyword">int</span> part = DefaultPartitioner.toPositive(nextValue) % availablePartitions.size();</span><br><span class="line">                <span class="keyword">return</span> availablePartitions.get(part).partition();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// no partitions are available, give a non-available partition</span></span><br><span class="line">                <span class="keyword">return</span> DefaultPartitioner.toPositive(nextValue) % numPartitions;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// hash the keyBytes to choose a partition</span></span><br><span class="line">            <span class="keyword">return</span> DefaultPartitioner.toPositive(Utils.murmur2(keyBytes)) % numPartitions;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>不管是不是老版本还是新版本，一旦消息被定义了 Key，那么你就可以保证同一个 Key 的所有消息都进入到相同的分区里面，由于每个分区下的消息处理都是有顺序的，故这个策略被称为按消息键保序策略。</p>
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_partition_key.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_partition_key.png" alt></p>
 <p>前面提到的 Kafka 默认分区策略实际上同时实现了两种策略：如果指定了 Key，那么默认实现按消息键保序策略；如果没有指定 Key，则版本不同则不一样<strong>0.9.0~2.3版本采用轮询策略，目前2.4、2.5采用随机算法</strong>。</p>
 <h2 id="2-4、自定义分区器"><a href="#2-4、自定义分区器" class="headerlink" title="2.4、自定义分区器"></a>2.4、自定义分区器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomPartitioner</span> <span class="keyword">implements</span> <span class="title">Partitioner</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger counter = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Map&lt;String, ?&gt; configs)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(String topic, Object key, <span class="keyword">byte</span>[] keyBytes, Object value, <span class="keyword">byte</span>[] valueBytes, Cluster cluster)</span> </span>&#123;</span><br><span class="line">        List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);</span><br><span class="line">        <span class="keyword">int</span> numPartitions = partitions.size();</span><br><span class="line">        <span class="keyword">if</span> (keyBytes == <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="keyword">return</span> counter.getAndIncrement() % numPartitions;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        	<span class="comment">//key是“gumx”开头的都放到第一个分区中</span></span><br><span class="line">        	<span class="keyword">if</span>(key.toString().startsWith(<span class="string">"gumx"</span>))&#123;</span><br><span class="line">        		<span class="keyword">return</span> <span class="number">0</span> % numPartitions;</span><br><span class="line">        	&#125;</span><br><span class="line">            <span class="keyword">return</span> Utils.toPositive(ThreadLocalRandom.current().nextInt()) % numPartitions;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -279,7 +294,7 @@
 <p>编写producer</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerPartitioner</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException </span>&#123;</span><br><span class="line">		Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		<span class="comment">//kafka 地址</span></span><br><span class="line">		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">		<span class="comment">//key序列化</span></span><br><span class="line">		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">		<span class="comment">//value序列化</span></span><br><span class="line">		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);	</span><br><span class="line">		<span class="comment">//设置自定义的分区器</span></span><br><span class="line">		props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,<span class="string">"cn.com.mingxungu.kafka.simple.CustomPartitioner"</span>);</span><br><span class="line">		KafkaProducer producer = producer = <span class="keyword">new</span> KafkaProducer&lt;String,String&gt;(props);</span><br><span class="line">		String key;</span><br><span class="line">		String topic = <span class="string">"gumx"</span>;</span><br><span class="line">		String message = <span class="string">"测试数据！"</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>( i % <span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">				key = <span class="string">"test_"</span>+i;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				key = <span class="string">"gumx_"</span>+i;</span><br><span class="line">			&#125;</span><br><span class="line">			Future&lt;RecordMetadata&gt; future = producer.send(<span class="keyword">new</span> ProducerRecord&lt;String,String&gt;(topic,key,message));</span><br><span class="line">			RecordMetadata pecordMetadata = future.get();</span><br><span class="line">			System.out.println(<span class="string">"key:"</span>+key+<span class="string">"   分区编号："</span>+pecordMetadata.partition()+<span class="string">"    偏移量:"</span>+pecordMetadata.offset());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_custom_partition_result.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_custom_partition_result.png" alt></p>
 <h1 id="3、生产者拦截器"><a href="#3、生产者拦截器" class="headerlink" title="3、生产者拦截器"></a>3、生产者拦截器</h1><h2 id="3-1、概述"><a href="#3-1、概述" class="headerlink" title="3.1、概述"></a>3.1、概述</h2><p>kafka拦截器支持链式编程，可以将一组拦截器串联成一个大的拦截器， Kafka会按照添加顺序依次执行拦截器逻辑；<strong>拦截器逻辑最好都是轻量级的；</strong></p>
 <p>生产者拦截器允许在发送消息前及消息提交成功后植入动态逻辑；<br>生产者拦截器配置参数：<code>interceptor.classes</code> ，<strong>指定为拦截器的全限定名；</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line"><span class="comment">// 构建拦截链</span></span><br><span class="line">List&lt;String&gt; interceptors = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">// interceptor 1,消息体前追加时间戳</span></span><br><span class="line">interceptors.add(<span class="string">"cn.com.mingxungu.kafka.simple.TimeStampPrependerInterceptor"</span>); </span><br><span class="line"><span class="comment">// interceptor 2,计算消息发送的成功失败个数</span></span><br><span class="line">interceptors.add(<span class="string">"cn.com.mingxungu.kafka.simple.CounterInterceptor"</span>); </span><br><span class="line">props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);</span><br></pre></td></tr></table></figure>
@@ -296,9 +311,9 @@
 
 <h3 id="3-2-3、消息发送producer"><a href="#3-2-3、消息发送producer" class="headerlink" title="3.2.3、消息发送producer"></a>3.2.3、消息发送producer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,<span class="string">"192.168.115.241:9092;192.168.115.242:9092;192.168.115.243:9092"</span>);</span><br><span class="line">props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);	</span><br><span class="line"><span class="comment">// 构建拦截链</span></span><br><span class="line">List&lt;String&gt; interceptors = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">// interceptor 1,消息体前追加时间戳</span></span><br><span class="line">interceptors.add(<span class="string">"cn.com.mingxungu.kafka.simple.TimeStampPrependerInterceptor"</span>); </span><br><span class="line"><span class="comment">// interceptor 2,计算消息发送的成功失败个数</span></span><br><span class="line">interceptors.add(<span class="string">"cn.com.mingxungu.kafka.simple.CounterInterceptor"</span>); </span><br><span class="line">props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);</span><br><span class="line"></span><br><span class="line">String topic = <span class="string">"gumx"</span>;</span><br><span class="line">Producer&lt;String, String&gt; producer = <span class="keyword">new</span> KafkaProducer&lt;&gt;(props);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    ProducerRecord&lt;String, String&gt; record = <span class="keyword">new</span> ProducerRecord&lt;&gt;(topic, <span class="string">"message"</span> + i);</span><br><span class="line">    producer.send(record).get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 一定要关闭producer，这样才会调用interceptor的close方法</span></span><br><span class="line">producer.close();</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-2-4、查看并分析结果"><a href="#3-2-4、查看并分析结果" class="headerlink" title="3.2.4、查看并分析结果"></a>3.2.4、查看并分析结果</h3><p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_interceptor_result.png" alt></p>
+<h3 id="3-2-4、查看并分析结果"><a href="#3-2-4、查看并分析结果" class="headerlink" title="3.2.4、查看并分析结果"></a>3.2.4、查看并分析结果</h3><p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_interceptor_result.png" alt></p>
 <p>producer关闭后获取的统计数字</p>
-<p><img src="//mingxungu.github.io/2020/03/14/Kafka生产者/kafka_producer_interceptor_result1.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/14/Kafka生产者/kafka_producer_interceptor_result1.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -311,7 +326,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2020/03/14/Kafka生产者/" title="Kafka生产者" target="_blank">https://itzones.cn/2020/03/14/Kafka生产者/</a>
+			<a href="https://www.itzones.cn/2020/03/14/Kafka生产者/" title="Kafka生产者" target="_blank">https://www.itzones.cn/2020/03/14/Kafka生产者/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -407,7 +422,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2020/03/14/Kafka生产者/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/03/14/Kafka生产者/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -595,14 +610,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -615,7 +622,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -627,7 +638,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -636,10 +655,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -659,14 +674,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -679,11 +686,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -695,7 +714,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -707,19 +730,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -739,11 +754,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -751,7 +762,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -767,6 +782,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -775,15 +794,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -800,22 +831,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

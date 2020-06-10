@@ -6,27 +6,27 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Kafka日志清理 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="kafka的消息是持久化到磁盘中的，随着消息的不断写入磁盘空间也在不断增加，需要对消息做一定的清理操作。kafka提供了几种日志清理的操作主要分为两类日志删除和日志压缩。下面我们分别进行分析。">
 <meta name="keywords" content="kafka Log Clean,kafka Log Compaction">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka日志清理">
-<meta property="og:url" content="https://itzones.cn/2020/03/31/Kafka日志清理/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="kafka的消息是持久化到磁盘中的，随着消息的不断写入磁盘空间也在不断增加，需要对消息做一定的清理操作。kafka提供了几种日志清理的操作主要分为两类日志删除和日志压缩。下面我们分别进行分析。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_offset_log_del.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_consumer_offset_topic_compact.jpeg">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_log_compaction.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_log_compaction_msg.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_log_compaction_clean.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/kafka_offset_log_del.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/kafka_consumer_offset_topic_compact.jpeg">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/kafka_log_compaction.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/kafka_log_compaction_msg.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/kafka_log_compaction_clean.png">
 <meta property="og:updated_time" content="2020-04-01T02:42:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka日志清理">
 <meta name="twitter:description" content="kafka的消息是持久化到磁盘中的，随着消息的不断写入磁盘空间也在不断增加，需要对消息做一定的清理操作。kafka提供了几种日志清理的操作主要分为两类日志删除和日志压缩。下面我们分别进行分析。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_offset_log_del.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2020/03/31/Kafka日志清理/kafka_offset_log_del.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -45,6 +45,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -237,7 +252,7 @@
 <p>首先计算日志文件的总的大小和设置的保存的日志大小的差值，计算需要删除的日志总的大小，然后从日志文件的第一日志分段开始查找可删除的日志分段的文件集合，找到后和基于时间的清理一样进行相应的删除操作。</p>
 <h2 id="1-3、基于日志起始偏移量"><a href="#1-3、基于日志起始偏移量" class="headerlink" title="1.3、基于日志起始偏移量"></a>1.3、基于日志起始偏移量</h2><p>一般情况下日志文件的起始偏移量logStartOffset等于第一个日志分段的baseOffset，但并不是绝对的，logStartOffset的值可以通过DeleteRecordsRequest请求、日志清理和截断等操作进行修改</p>
 <p>日志起始偏移量的判断依据是某个日志分段的下一个日志分段的baseOffset是否小于等于logStartOffset，若是则删除此日志分段。</p>
-<p><img src="//mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_offset_log_del.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/31/Kafka日志清理/kafka_offset_log_del.png" alt></p>
 <p>如果我们设置的日志文件的起始偏移量logStartOffset=30，那么我们从头查找则第一个片段是非删除需要根据第二个片段的11比较logStartOffset&gt;11则第一个日志分段加入到deletableSegments中，依次比较就获得了图中所示的前三个片段加入deletableSegments即待删除的日志分段。</p>
 <p>扫描完成后删除日志的操作和基于时间的删除操作一致。</p>
 <h1 id="2、日志压缩"><a href="#2、日志压缩" class="headerlink" title="2、日志压缩"></a>2、日志压缩</h1><p>Kafka中的日志压缩（Log Compaction）是指在默认的日志删除的规则之外提供的一种清理数据的方式。Log Compaction对于相同的Key的不同的value值只保留最后一个版本。</p>
@@ -246,20 +261,20 @@
 <p>Log Compaction是基于key的压缩，使用这种策略要保证每条消息都要有key不能为NULL</p>
 </blockquote>
 <p>我们在位移主题的章节中也强调过位移主题就是使用这个策略，原理如图所示：</p>
-<p><img src="//mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_consumer_offset_topic_compact.jpeg" alt></p>
+<p><img src="//www.itzones.cn/2020/03/31/Kafka日志清理/kafka_consumer_offset_topic_compact.jpeg" alt></p>
 <p>Log Compaction执行前后，日志分段中的每条消息的<strong>偏移量</strong>不变。Log Compaction会生成新的日志片段文件，日志分段中的每条消息的<strong>物理位置</strong>会重新按照新文件来组织。Log Compaction执行后的偏移量不再是连续的。不过并不影响日志的查询。</p>
 <p>kafka的日志存放目录下都有一个<strong>cleaner-offset-checkpoint</strong>的文件，这个文件就是清理检查点文件，用来记录<strong>每个主题每个分区中已经清理的偏移量</strong>。</p>
-<p><img src="//mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_log_compaction.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/31/Kafka日志清理/kafka_log_compaction.png" alt></p>
 <p>logStartOffset到firstDirtyOffset标识已经清理过了clean部分，firstDirtyOffset（与cleaner checkpoint相等）表示dirty部分的起始偏移量，而firstUncleanableOffset为dirty部分的截止偏移量，整个dirty部分的偏移量范围为[firstDirtyOffset, firstUncleanableOffset)，注意这里是左闭右开区间。为了避免当前活跃的日志分段activeSegment成为热点文件，activeSegment不会参与Log Compaction的操作。同时Kafka支持通过参数log.cleaner.min.compaction.lag.ms（默认值为0）来配置消息在被清理前的最小保留时间，<strong>默认情况下firstUncleanableOffset等于activeSegment的baseOffset</strong>。</p>
 <p>每个broker会启动log.cleaner.thread（默认值为1）个日志清理线程负责执行清理任务，这些线程会选择“<strong>污浊率</strong>”最高的日志文件进行清理（判断哪一个主题对应的分区下的日志分段文件需要清理）。用cleanBytes表示clean部分的日志占用大小，dirtyBytes表示dirty部分的日志占用大小，那么这个日志的污浊率（dirtyRatio）为：dirtyRatio = dirtyBytes / (cleanBytes + dirtyBytes)，即<strong>待清理的日志片段的大小/（已经清理的日志片段文件大小+待清理的日志片段的大小）</strong>为了防止日志不必要的频繁清理操作，Kafka还使用了参数<strong>log.cleaner.min.cleanable.ratio</strong>（默认值为0.5）来限定可进行清理操作的最小污浊率。</p>
 <p>Kafka中的每个日志清理线程会使用一个名为“SkimpyOffsetMap”的对象来构建key与offset的映射关系的哈希表。日志清理需要<strong>遍历两次日志</strong>文件，第一次遍历把每个key的哈希值和最后出现的offset都保存在SkimpyOffsetMap中，映射模型如下图所示。第二次遍历检查每个消息是否符合保留条件，如果符合就保留下来，否则就会被清理掉。假设一条消息的offset为offset1，这条消息的key在SkimpyOffsetMap中所对应的offset为offset2，如果offset1&gt;=offset2即为满足保留条件。</p>
-<p><img src="//mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_log_compaction_msg.png" alt></p>
+<p><img src="//www.itzones.cn/2020/03/31/Kafka日志清理/kafka_log_compaction_msg.png" alt></p>
 <p>默认情况下SkimpyOffsetMap使用<strong>MD5来计算key的哈希值</strong>，占用空间大小为16B，根据这个哈希值来从SkimpyOffsetMap中找到对应的槽位，如果发生冲突则用线性探测法处理。为了防止哈希冲突过于频繁，我们也可以通过broker端参数log.cleaner.io.buffer.load.factor（默认值为0.9）来调整负载因子。偏移量占用空间大小为8B，故一个映射项占用大小为24B。每个日志清理线程的SkimpyOffsetMap的内存占用大小为log.cleaner.dedupe.buffer.size / log.cleaner.thread，默认值为 = 128MB/1 = 128MB。所以默认情况下SkimpyOffsetMap可以保存128MB * 0.9 /24B ≈ 5033164个key的记录。假设每条消息的大小为1KB，那么这个SkimpyOffsetMap可以用来映射4.8GB的日志文件，而如果有重复的key，那么这个数值还会增大，整体上来说SkimpyOffsetMap极大的节省了内存空间且非常高效。</p>
 <blockquote>
 <p>虽然使用了MD5来计算key的哈希值，还是可能遇到两个不同的KEY的hash值可能相同，那么可能出现其中一个KEY对应的消息丢失。</p>
 </blockquote>
 <p>Log Compaction会保留key的最新value,那么相同key的其他消息如何清除呢？Kafka中提供了一个墓碑消息（tombstone）的概念，如果一条消息的key不为null，但是其value为null，那么此消息就是墓碑消息<strong>。日志清理线程发现墓碑消息时会先进行常规的清理</strong>，并保留墓碑消息一段时间。</p>
-<p>Log Compaction执行过后的日志分段的大小会比原先的日志分段的要小，为了防止出现太多的小文件，Kafka在实际清理过程中并不对单个的日志分段进行单独清理，而是会将日志文件中offset从0至firstUncleanableOffset的所有日志分段进行分组，每个日志分段只属于一组，分组策略为：按照日志分段的顺序遍历，每组中日志分段的占用空间大小之和不超过segmentSize（可以通过broker端参数log.segments.bytes设置，默认值为1GB），且对应的索引文件占用大小之和不超过maxIndexSize（可以通过broker端参数log.index.interval.bytes设置，默认值为10MB）。同一个组的多个日志分段清理过后，只会生成一个新的日志分段。<br><img src="//mingxungu.github.io/2020/03/31/Kafka日志清理/kafka_log_compaction_clean.png" alt></p>
+<p>Log Compaction执行过后的日志分段的大小会比原先的日志分段的要小，为了防止出现太多的小文件，Kafka在实际清理过程中并不对单个的日志分段进行单独清理，而是会将日志文件中offset从0至firstUncleanableOffset的所有日志分段进行分组，每个日志分段只属于一组，分组策略为：按照日志分段的顺序遍历，每组中日志分段的占用空间大小之和不超过segmentSize（可以通过broker端参数log.segments.bytes设置，默认值为1GB），且对应的索引文件占用大小之和不超过maxIndexSize（可以通过broker端参数log.index.interval.bytes设置，默认值为10MB）。同一个组的多个日志分段清理过后，只会生成一个新的日志分段。<br><img src="//www.itzones.cn/2020/03/31/Kafka日志清理/kafka_log_compaction_clean.png" alt></p>
 <p>第一次清理后日志分段文件大小分别是0.4、0.4、0.3、0.7、0.3。第二次Log Compaction合并日志分段文件[0.4,0.4]、[0.3,0.7]、[0.3]、[1]这四个组都没有超过1G。第三次Log Compaction过程中会将对每个日志分组中需要保留的消息拷贝到一个以“.clean”为后缀的临时文件中，此临时文件以当前日志分组中第一个日志分段的文件名命名，例如：00000000000000000000.log.clean。Log Compaction过后将“.clean”的文件修改为以“.swap”后缀的文件，例如：00000000000000000000.log.swap，然后删除掉原本的日志文件，最后才把文件的“.swap”后缀去掉，整个过程中的索引文件的变换也是如此，至此一个完整Log Compaction操作才算完成。</p>
 
       
@@ -273,7 +288,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2020/03/31/Kafka日志清理/" title="Kafka日志清理" target="_blank">https://itzones.cn/2020/03/31/Kafka日志清理/</a>
+			<a href="https://www.itzones.cn/2020/03/31/Kafka日志清理/" title="Kafka日志清理" target="_blank">https://www.itzones.cn/2020/03/31/Kafka日志清理/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -369,7 +384,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2020/03/31/Kafka日志清理/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/03/31/Kafka日志清理/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -557,14 +572,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -577,7 +584,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -589,7 +600,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -598,10 +617,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -621,14 +636,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -641,11 +648,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -657,7 +676,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -669,19 +692,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -701,11 +716,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -713,7 +724,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -729,6 +744,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -737,15 +756,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -762,22 +793,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>

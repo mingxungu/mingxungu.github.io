@@ -6,30 +6,30 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="https://itzones.cn">
+  <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Redis集群模式安装部署 | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Redis的sentinel哨兵模式虽然可以解决Redis单点故障的问题，但是一主多从的结构必然会导致客户端写入数据只能在Master节点上操作，当写入量特别大的时候主节点压力就会很大，sentinel无法分布式将数据存放到其他服务器上。Redis从3.0版本之后提供了cluster集群模式，解决了这个问题。">
 <meta name="keywords" content="Redis Cluster">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis集群模式安装部署">
-<meta property="og:url" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Redis的sentinel哨兵模式虽然可以解决Redis单点故障的问题，但是一主多从的结构必然会导致客户端写入数据只能在Master节点上操作，当写入量特别大的时候主节点压力就会很大，sentinel无法分布式将数据存放到其他服务器上。Redis从3.0版本之后提供了cluster集群模式，解决了这个问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png">
-<meta property="og:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png">
 <meta property="og:updated_time" content="2020-04-12T05:51:49.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis集群模式安装部署">
 <meta name="twitter:description" content="Redis的sentinel哨兵模式虽然可以解决Redis单点故障的问题，但是一主多从的结构必然会导致客户端写入数据只能在Master节点上操作，当写入量特别大的时候主节点压力就会很大，sentinel无法分布式将数据存放到其他服务器上。Redis从3.0版本之后提供了cluster集群模式，解决了这个问题。">
-<meta name="twitter:image" content="https://mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
+<meta name="twitter:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -48,6 +48,21 @@
 
   
 
+  
+  <script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 </head>
 </html>
 <body>
@@ -288,24 +303,24 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-cluster/bin/</span><br><span class="line">./redis-server ../conf/redis-7004.conf </span><br><span class="line">./redis-server ../conf/redis-7005.conf </span><br><span class="line">./redis-server ../conf/redis-7006.conf</span><br></pre></td></tr></table></figure>
 
 <p>查看进程</p>
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png" alt></p>
 <p>做集群的主从关联</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![redis-cluster-az-2](D:\Program Files\Hexo\source\_posts\Redis集群模式安装部署\redis-cluster-az-2.png)./redis-cli --cluster create --cluster-replicas 1  192.168.115.241:7001 192.168.115.241:7002 192.168.115.241:7003 192.168.115.242:7004 192.168.115.242:7005 192.168.115.242:7006</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png" alt></p>
 <p>结果</p>
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png" alt></p>
 <h2 id="2-4、查看节点信息"><a href="#2-4、查看节点信息" class="headerlink" title="2.4、查看节点信息"></a>2.4、查看节点信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 bin]# ./redis-cli -h 192.168.115.241 -p 7001 -c</span><br><span class="line">192.168.115.241:7001&gt; cluster info</span><br></pre></td></tr></table></figure>
 
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png" alt></p>
 <p>查看各个节点信息</p>
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png" alt></p>
 <h1 id="3、测试故障"><a href="#3、测试故障" class="headerlink" title="3、测试故障"></a>3、测试故障</h1><p>从上面的信息中我们看到主节点分别是7001、7002、7004、分别对应的从节点是7006、7005、7003。任伟杀掉7001主点，那么7006则会升级为主节点，我们测试下。</p>
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png" alt></p>
 <p>查看集群节点信息</p>
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png" alt></p>
 <p>7001节点状态是fail不可用状态，此时的7006节点由slave升级为master</p>
-<p><img src="//mingxungu.github.io/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png" alt></p>
+<p><img src="//www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -318,7 +333,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://itzones.cn/2020/04/11/Redis集群模式安装部署/" title="Redis集群模式安装部署" target="_blank">https://itzones.cn/2020/04/11/Redis集群模式安装部署/</a>
+			<a href="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/" title="Redis集群模式安装部署" target="_blank">https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -410,7 +425,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://itzones.cn/2020/04/11/Redis集群模式安装部署/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -598,14 +613,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
@@ -618,7 +625,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color4">kafka HW</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">kafka Leader Epoch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -630,7 +641,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka消息丢失</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -639,10 +658,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka日志存储</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -662,14 +677,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -682,11 +689,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -698,7 +717,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -710,19 +733,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ安装</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -742,11 +757,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -754,7 +765,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">RocketMQ ACL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -770,6 +785,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
               </li>
              
@@ -778,15 +797,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shiro源码分析</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -803,22 +834,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
             
             <div class="clearfix"></div>
