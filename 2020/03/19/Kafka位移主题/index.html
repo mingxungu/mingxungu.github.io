@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="上一节我们介绍了位移提交，消费的位移如何保存时其中提到了位移主题__consumer_offsets这个是Kafka的内部主题，还有一个内部主题 __transaction_state(事务有关)，后面我们再介绍，内部主题由Kafka自身进行维护，本节我们将揭开内部主题__consumer_offsets神秘的面纱。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/19/Kafka位移主题/kafka_cosnumer_offset_partition.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/19/Kafka位移主题/kafka_consumer_offset_topic_compact.jpeg">
+<meta property="og:image" content="https://itzones.cn/2020/03/19/Kafka位移主题/kafka_cosnumer_offset_partition.png">
+<meta property="og:image" content="https://itzones.cn/2020/03/19/Kafka位移主题/kafka_consumer_offset_topic_compact.jpeg">
 <meta property="og:updated_time" content="2020-03-19T13:37:27.753Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka位移主题">
 <meta name="twitter:description" content="上一节我们介绍了位移提交，消费的位移如何保存时其中提到了位移主题__consumer_offsets这个是Kafka的内部主题，还有一个内部主题 __transaction_state(事务有关)，后面我们再介绍，内部主题由Kafka自身进行维护，本节我们将揭开内部主题__consumer_offsets神秘的面纱。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/03/19/Kafka位移主题/kafka_cosnumer_offset_partition.png">
+<meta name="twitter:image" content="https://itzones.cn/2020/03/19/Kafka位移主题/kafka_cosnumer_offset_partition.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -252,7 +252,7 @@
 <p>其实，这就是因为这个主题是在只有一台 Broker 启动时被创建的。在 0.11 版本之后，社区修正了这个问题。也就是说，0.11 之后，Kafka 会严格遵守 offsets.topic.replication.factor 值。如果当前运行的 Broker 数量小于 offsets.topic.replication.factor 值，Kafka 会创建主题失败，并显式抛出异常。</p>
 <p>你也可以选择手动创建位移主题，具体方法就是，在 Kafka 集群尚未启动任何 Consumer 之前，使用 Kafka API 创建它。手动创建的好处在于，你可以创建满足你实际场景需要的位移主题。比如很多人说 50 个分区对我来讲太多了，我不想要这么多分区，那么你可以自己创建它，不用理会 offsets.topic.num.partitions 的值。不过我给你的建议是，还是让 Kafka 自动创建比较好。</p>
 <p>目前 Kafka 源码中有一些地方硬编码了 50 分区数，因此如果你自行创建了一个不同于默认分区数的位移主题，可能会碰到各种各种奇怪的问题。这是社区的一个 bug，目前代码已经修复了，但依然在审核中。</p>
-<p><img src="https://www.itzones.cn/2020/03/19/Kafka位移主题/kafka_cosnumer_offset_partition.png" alt></p>
+<p><img src="https://itzones.cn/2020/03/19/Kafka位移主题/kafka_cosnumer_offset_partition.png" alt></p>
 <p>主题的副本值已经是 1 了，我们能否把它增加到 3 呢？当然可以。我们来看一下具体的方法。</p>
 <p>第 1 步是创建一个 json 文件，显式提供 50 个分区对应的副本数。注意，replicas 中的 3 台 Broker 排列顺序不同，目的是将 Leader 副本均匀地分散在 Broker 上。该文件具体格式如下：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"version"</span>:<span class="number">1</span>, <span class="attr">"partitions"</span>:[</span><br><span class="line">  &#123;<span class="attr">"topic"</span>:<span class="string">"__consumer_offsets"</span>,<span class="attr">"partition"</span>:<span class="number">0</span>,<span class="attr">"replicas"</span>:[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>]&#125;, </span><br><span class="line">  &#123;<span class="attr">"topic"</span>:<span class="string">"__consumer_offsets"</span>,<span class="attr">"partition"</span>:<span class="number">1</span>,<span class="attr">"replicas"</span>:[<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>]&#125;,</span><br><span class="line">  &#123;<span class="attr">"topic"</span>:<span class="string">"__consumer_offsets"</span>,<span class="attr">"partition"</span>:<span class="number">2</span>,<span class="attr">"replicas"</span>:[<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>]&#125;,</span><br><span class="line">  &#123;<span class="attr">"topic"</span>:<span class="string">"__consumer_offsets"</span>,<span class="attr">"partition"</span>:<span class="number">3</span>,<span class="attr">"replicas"</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>]&#125;,</span><br><span class="line">  ...</span><br><span class="line">  &#123;<span class="attr">"topic"</span>:<span class="string">"__consumer_offsets"</span>,<span class="attr">"partition"</span>:<span class="number">49</span>,<span class="attr">"replicas"</span>:[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>]&#125;</span><br><span class="line">]&#125;</span><br></pre></td></tr></table></figure>
@@ -284,7 +284,7 @@
 <p>我们来举个极端一点的例子。假设 Consumer 当前消费到了某个主题的最新一条消息，位移是 100，之后该主题没有任何新消息产生，故 Consumer 无消息可消费了，所以位移永远保持在 100。由于是自动提交位移，位移主题中会不停地写入位移 =100 的消息。显然 Kafka 只需要保留这类消息中的最新一条就可以了，之前的消息都是可以删除的。这就要求 Kafka 必须要有针对位移主题消息特点的消息删除策略，否则这种消息会越来越多，最终撑爆整个磁盘。</p>
 <p>Kafka 是怎么删除位移主题中的过期消息的呢？答案就是 <strong>Compaction</strong>。国内很多文献都将其翻译成压缩，我个人是有一点保留意见的。在英语中，压缩的专有术语是 Compression，它的原理和 Compaction 很不相同，我更倾向于翻译成压实，或干脆采用 JVM 垃圾回收中的术语：整理。</p>
 <p>不管怎么翻译，<strong><u>Kafka 使用 Compact 策略来删除位移主题中的过期消息，避免该主题无限期膨胀</u></strong>。那么应该如何定义 Compact 策略中的过期呢？对于同一个 Key 的两条消息 M1 和 M2，如果 M1 的发送时间早于 M2，那么 M1 就是过期消息。Compact 的过程就是扫描日志的所有消息，剔除那些过期的消息，然后把剩下的消息整理在一起。我在这里贴一张来自官网的图片，来说明 Compact 过程。</p>
-<p><img src="https://www.itzones.cn/2020/03/19/Kafka位移主题/kafka_consumer_offset_topic_compact.jpeg" alt></p>
+<p><img src="https://itzones.cn/2020/03/19/Kafka位移主题/kafka_consumer_offset_topic_compact.jpeg" alt></p>
 <p>图中位移为 0、2 和 3 的消息的 Key 都是 K1。意味着<strong><u>&lt;Group ID，主题名，分区号 &gt;</u></strong>相同存储了很多次消费位移，对于之前的消费位移我们是不关心的只会获取最新的一个。Compact 之后，分区只需要保存位移为 3 的消息，因为它是最新发送的。Kafka 提供了专门的后台线程定期地巡检待 Compact 的主题，看看是否存在满足条件的可删除数据。<strong>这个后台线程叫 Log Cleaner</strong>。很多实际生产环境中都出现过位移主题无限膨胀占用过多磁盘空间的问题，如果你的环境中也有这个问题，我建议你去检查一下 Log Cleaner 线程的状态，通常都是这个线程挂掉了导致的。</p>
 
       
@@ -621,15 +621,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

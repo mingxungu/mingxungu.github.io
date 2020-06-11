@@ -17,14 +17,14 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/delay_result.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/retry_process.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/22/RocketMQ消息重试/delay_result.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/22/RocketMQ消息重试/retry_process.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png">
 <meta property="og:updated_time" content="2019-07-23T07:55:17.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消息重试">
 <meta name="twitter:description" content="RocketMQ为了保证消息被消费采用ACK确认机制，消费者消费消息时需要给Broker反馈消息消费的情况，成功或失败，对于失败的消息会根据内部算法一段时间后重新消费。会一直消费下去吗？内部是如何实现的？我们具体分析下。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/delay_result.png">
+<meta name="twitter:image" content="https://itzones.cn/2019/07/22/RocketMQ消息重试/delay_result.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -255,10 +255,10 @@
 <h2 id="2-2、消费者"><a href="#2-2、消费者" class="headerlink" title="2.2、消费者"></a>2.2、消费者</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, MQClientException </span>&#123;</span><br><span class="line">        DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(<span class="string">"gumx_test_delay_1"</span>);</span><br><span class="line">        consumer.setNamesrvAddr(<span class="string">"10.10.15.205:9876;10.10.15.206:9876"</span>);</span><br><span class="line">        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);</span><br><span class="line">        consumer.subscribe(<span class="string">"TopicDelayTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">        consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; msgs,</span></span></span><br><span class="line"><span class="function"><span class="params">                ConsumeConcurrentlyContext context)</span> </span>&#123;</span><br><span class="line">            	<span class="keyword">try</span>&#123;</span><br><span class="line">            		</span><br><span class="line">	            	SimpleDateFormat sf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>);</span><br><span class="line">	                System.out.printf(<span class="string">"当前时间：%s 延迟级别：%s 重试次数：%s 主题：%s 延迟主题：%s 消息内容：%s %n"</span>,sf.format(<span class="keyword">new</span> Date()),msgs.get(<span class="number">0</span>).getDelayTimeLevel(),msgs.get(<span class="number">0</span>).getReconsumeTimes(),msgs.get(<span class="number">0</span>).getTopic(),msgs.get(<span class="number">0</span>).getProperties().get(<span class="string">"REAL_TOPIC"</span>), <span class="keyword">new</span> String(msgs.get(<span class="number">0</span>).getBody(),<span class="string">"UTF-8"</span>));</span><br><span class="line">	                <span class="keyword">int</span> i = <span class="number">1</span>/<span class="number">0</span>; <span class="comment">//故意报错</span></span><br><span class="line">	                <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">            	&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            		<span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER;</span><br><span class="line">				&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        consumer.start();</span><br><span class="line">        System.out.printf(<span class="string">"Consumer Started.%n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>查看结果：</p>
-<p><img src="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/delay_result.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/22/RocketMQ消息重试/delay_result.png" alt></p>
 <p>分析其结果其时间规则1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h就是默认配置的对应延迟级别。发现有个问题延迟级别从0直接到3，我们知道普通消息的延迟级别默认是0，第二条才是真正开始重试的消息。为什么从3开始呢？下面我们分析下源码，一探究竟。</p>
 <h1 id="3、源码分析"><a href="#3、源码分析" class="headerlink" title="3、源码分析"></a>3、源码分析</h1><p>我们先看一下其处理流程</p>
-<p><img src="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/retry_process.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/22/RocketMQ消息重试/retry_process.png" alt></p>
 <h2 id="3-1、客户端代码分析"><a href="#3-1、客户端代码分析" class="headerlink" title="3.1、客户端代码分析"></a>3.1、客户端代码分析</h2><p>在RocketMQ的客户端源码DefaultMQPushConsumerImpl.java中，对重试机制做了说明，源码如下:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getMaxReconsumeTimes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// default reconsume times: 16</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.defaultMQPushConsumer.getMaxReconsumeTimes() == -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">16</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.defaultMQPushConsumer.getMaxReconsumeTimes();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -312,7 +312,7 @@
 <p>我们也可以根据业务的需要，定义消费的最大重试次数，每次消费的时候判断当前消费次数是否等于最大重试次数的阈值。</p>
 <p>如：重试三次就认为当前业务存在异常，继续重试下去也没有意义了，那么我们就可以将当前的这条消息进行提交，返回broker状态ConsumeConcurrentlyStatus.CONSUME_SUCCES，让消息不再重发，同时将该消息存入我们业务自定义的死信消息表，将业务参数入库，相关的运营通过查询死信表来进行对应的业务补偿操作。</p>
 <p>RocketMQ 的处理方式为将达到最大重试次数（16次）的消息标记为死信消息，将该死信消息投递到 DLQ 死信队列中，业务需要进行人工干预。实现的逻辑在 SendMessageProcessor 的 consumerSendMsgBack 方法中，大致思路为首先判断重试次数是否超过16或者消息发送延时级别是否小于0，如果已经超过16或者发送延时级别小于0，则将消息设置为新的死信。死信 topic 为：%DLQ%+consumerGroup。</p>
-<p><img src="https://www.itzones.cn/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/22/RocketMQ消息重试/2019-07-23_152200.png" alt></p>
 <p>图中展示的就是整个消息重试涉及的消息在相关主题之间的流转</p>
 
       
@@ -649,15 +649,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

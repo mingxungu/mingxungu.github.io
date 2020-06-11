@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090838349.png">
+<meta property="og:image" content="https://itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
+<meta property="og:image" content="https://itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090838349.png">
 <meta property="og:updated_time" content="2019-07-18T01:13:33.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ简单介绍">
 <meta name="twitter:description" content="一、简介RocketMQ是阿里开源的一款分布式消息中间件，满足线上海量消息堆积的需求， 在2016年底捐赠给Apache开源基金会成为孵化项目，2017年正式成为了Apache顶级项目。是一款纯Java的消息中间件，可靠性、低延迟、可扩展、易于使用的特性而著称。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
+<meta name="twitter:image" content="https://itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -298,7 +298,7 @@
 <td>支持</td>
 </tr>
 </tbody></table>
-<h1 id="二、概况"><a href="#二、概况" class="headerlink" title="二、概况"></a>二、概况</h1><h2 id="1、RocketMQ集群部署结构"><a href="#1、RocketMQ集群部署结构" class="headerlink" title="1、RocketMQ集群部署结构"></a>1、RocketMQ集群部署结构</h2><p><img src="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png" alt="RocketMQ网络部署图"></p>
+<h1 id="二、概况"><a href="#二、概况" class="headerlink" title="二、概况"></a>二、概况</h1><h2 id="1、RocketMQ集群部署结构"><a href="#1、RocketMQ集群部署结构" class="headerlink" title="1、RocketMQ集群部署结构"></a>1、RocketMQ集群部署结构</h2><p><img src="https://itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090638699.png" alt="RocketMQ网络部署图"></p>
 <p><strong>Name Server</strong></p>
 <p>Name Server是一个几乎无状态节点，可集群部署，节点之间无任何信息同步。</p>
 <p><strong>Broker</strong></p>
@@ -320,7 +320,7 @@
 <h3 id="3）单向消息（不可靠）"><a href="#3）单向消息（不可靠）" class="headerlink" title="3）单向消息（不可靠）"></a>3）单向消息（不可靠）</h3><p>​    消息不可靠，性能高，只负责往服务器发送一条消息，不会重试也不关心是否发送成功</p>
 <p>​    此方式发送消息的过程耗时非常短，一般在微秒级别</p>
 <h2 id="3、消费模式（集群-广播）"><a href="#3、消费模式（集群-广播）" class="headerlink" title="3、消费模式（集群/广播）"></a>3、消费模式（集群/广播）</h2><p>RocketMQ物理部署图：</p>
-<p><img src="https://www.itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090838349.png" alt="RocketMQ物理部署图"></p>
+<p><img src="https://itzones.cn/2019/06/24/RocketMQ简单介绍/20190829090838349.png" alt="RocketMQ物理部署图"></p>
 <p><strong>术语解释</strong></p>
 <p><strong>消息主题（Topic）</strong></p>
 <p>Topic是生产者在发送消息和消费者在拉取消息的类别。Topic与生产者和消费者之间的关系非常松散。具体来说，一个Topic可能有0个，一个或多个生产者向它发送消息；相反，一个生产者可以发送不同类型Topic的消息。类似的，消费者组可以订阅一个或多个主题，只要该组的实例保持其订阅一致即可。</p>
@@ -674,15 +674,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

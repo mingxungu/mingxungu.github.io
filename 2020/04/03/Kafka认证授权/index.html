@@ -17,25 +17,25 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="kafka作为一款优秀的消息中间件，安全必然是很重要的一个特性，很多应用场景下我们需要控制生产、消费端、乃至IP进行相关的控制，操作粒度达到主题级别的消息的相关的操作，本节我们将重点介绍kafka的认证和授权。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_type.jpg">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_1.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_2.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_broker.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_msg_result.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_admin_consumer_msg_result.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_gumx_consumer_msg_result.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_list.jpg">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_op.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_consumer_op.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_user_list.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_code.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code_err.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_type.jpg">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_1.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_2.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_broker.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_msg_result.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_admin_consumer_msg_result.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_gumx_consumer_msg_result.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_list.jpg">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_op.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_consumer_op.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_user_list.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_code.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code_err.png">
 <meta property="og:updated_time" content="2020-04-03T09:09:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka认证授权">
 <meta name="twitter:description" content="kafka作为一款优秀的消息中间件，安全必然是很重要的一个特性，很多应用场景下我们需要控制生产、消费端、乃至IP进行相关的控制，操作粒度达到主题级别的消息的相关的操作，本节我们将重点介绍kafka的认证和授权。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_type.jpg">
+<meta name="twitter:image" content="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_type.jpg">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -257,7 +257,7 @@
 <li>OAUTHBEARER：是基于 OAuth 2 认证框架的新机制，在 2.0 版本中被引进。</li>
 <li>Token：补充现有 SASL 机制的轻量级认证机制，是在 1.1.0 版本被引入的。认证机制的比较</li>
 </ol>
-<h2 id="认证机制的比较"><a href="#认证机制的比较" class="headerlink" title="认证机制的比较"></a>认证机制的比较</h2><p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_type.jpg" alt></p>
+<h2 id="认证机制的比较"><a href="#认证机制的比较" class="headerlink" title="认证机制的比较"></a>认证机制的比较</h2><p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_type.jpg" alt></p>
 <p>SASL/SCRAM认证机制支持动态增减认证用户，我们就以 SASL/SCRAM 的一个配置实例，来说明一下如何在 Kafka 集群中开启认证。其他认证机制的设置方法也是类似的，比如它们都涉及认证用户的创建、Broker 端以及 Client 端特定参数的配置等。</p>
 <h2 id="SASL-SCRAM认证"><a href="#SASL-SCRAM认证" class="headerlink" title="SASL/SCRAM认证"></a>SASL/SCRAM认证</h2><p>环境描述</p>
 <table>
@@ -286,11 +286,11 @@
 <p><strong>创建客户端用户gumx</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-configs.sh --zookeeper 10.10.15.235:2181 --alter --add-config 'SCRAM-SHA-256=[password=123456],SCRAM-SHA-512=[password=123456]' --entity-type users --entity-name gumx</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_1.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_1.png" alt></p>
 <p><strong>查看SCRAM证书</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-configs.sh --zookeeper 10.10.15.235:2181 --describe --entity-type users --entity-name gumx</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_2.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_rz_2.png" alt></p>
 <h3 id="2、配置Kafka-Brokers"><a href="#2、配置Kafka-Brokers" class="headerlink" title="2、配置Kafka Brokers"></a>2、配置Kafka Brokers</h3><p><strong>创建 JAAS 文件</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost config]# cd /opt/kafka/config</span><br><span class="line">[root@localhost config]# vi kafka_server_jaas.conf</span><br></pre></td></tr></table></figure>
 
@@ -303,7 +303,7 @@
 <p><strong>配置 Broker 的 server.properties 文件</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 认证配置</span></span><br><span class="line">listeners=SASL_PLAINTEXT://10.10.15.236:9092</span><br><span class="line">security.inter.broker.protocol=SASL_PLAINTEXT</span><br><span class="line">sasl.mechanism.inter.broker.protocol=SCRAM-SHA-256</span><br><span class="line">sasl.enabled.mechanisms=SCRAM-SHA-256</span><br><span class="line"><span class="meta">#</span><span class="bash"> ACL配置</span></span><br><span class="line">allow.everyone.if.no.acl.found=false</span><br><span class="line">super.users=User:admin</span><br><span class="line">authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_broker.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_broker.png" alt></p>
 <p>第 1 项设置 listeners 使用 SASL_PLAINTEXT，依然是不使用 SSL</p>
 <p>第 2 项表示 Broker 间通信不配置 SSL，本例中我们不演示 SSL 的配置；</p>
 <p>第 3 项的意思是为 Broker 间通信也开启 SCRAM 认证，同样使用 SHA-256 算法；</p>
@@ -337,7 +337,7 @@
 <p>生产消息</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-producer-gumx.sh --broker-list 10.10.15.235:9092 --topic test --producer.config config/client-sasl.properties</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_msg_result.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_msg_result.png" alt></p>
 <p>可以看到报错了, 因为fanboshi用户还没有权限</p>
 <h4 id="kafka-console-consumer"><a href="#kafka-console-consumer" class="headerlink" title="kafka-console-consumer"></a>kafka-console-consumer</h4><p>1、创建 config/consumer-admin.properties 文件</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim config/consumer-admin.properties</span><br><span class="line">security.protocol=SASL_PLAINTEXT</span><br><span class="line">sasl.mechanism=SCRAM-SHA-256</span><br><span class="line">group.id=admin-test-group</span><br></pre></td></tr></table></figure>
@@ -348,7 +348,7 @@
 <p>3、测试消费者</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer-admin.sh --bootstrap-server 10.10.15.235:9092 --topic test --consumer.config config/consumer-admin.properties --from-beginning</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_admin_consumer_msg_result.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_admin_consumer_msg_result.png" alt></p>
 <p>我们看到了从头开始消费，都消费下来了</p>
 <p>4、测试“gumx”用户</p>
 <p>我们创建一个config/consumer-gumx.properties文件和bin/kafka-console-consumer-gumx.sh文件</p>
@@ -357,7 +357,7 @@
 <p>5、测试“gumx”用户的消费者</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer-gumx.sh --bootstrap-server 10.10.15.235:9092 --topic test --consumer.config config/consumer-gumx.properties --from-beginning</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_gumx_consumer_msg_result.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_authentication_gumx_consumer_msg_result.png" alt></p>
 <p>我们可以看到没有权限。</p>
 <h1 id="2、kafka授权"><a href="#2、kafka授权" class="headerlink" title="2、kafka授权"></a>2、kafka授权</h1><h2 id="Kafka授权机制"><a href="#Kafka授权机制" class="headerlink" title="Kafka授权机制"></a>Kafka授权机制</h2><p> Kafka 的授权机制（Authorization）。所谓授权，一般是指对与信息安全或计算机安全相关的资源授予访问权限，特别是存取控制。</p>
 <p>具体到权限模型，常见的有四种。</p>
@@ -382,7 +382,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-acls --authorizer-properties zookeeper.connect=10.10.15.235:2181 --add --allow-principal User:'*' --allow-host '*' --deny-principal User:BadUser --deny-host 10.205.96.119 --operation Read --topic test</span><br></pre></td></tr></table></figure>
 
 <p>User 后面的星号表示所有用户，allow-host 后面的星号则表示所有 IP 地址。这个命令的意思是，允许所有的用户使用任意的 IP 地址读取名为 test 的主题数据，同时也禁止 BadUser 用户和 10.205.96.119 的 IP 地址访问 test 下的消息</p>
-<h3 id="4、ACL-权限列表"><a href="#4、ACL-权限列表" class="headerlink" title="4、ACL 权限列表"></a>4、ACL 权限列表</h3><p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_list.jpg" alt></p>
+<h3 id="4、ACL-权限列表"><a href="#4、ACL-权限列表" class="headerlink" title="4、ACL 权限列表"></a>4、ACL 权限列表</h3><p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_list.jpg" alt></p>
 <p>Kafka 当前提供的授权机制是非常细粒度的。现在，我来跟你分享一下这个表格的使用方法。</p>
 <p>举个例子，假如你要为你的生产者程序赋予写权限，那么首先，你要在 Resource 列找到 Topic 类型的权限，然后在 Operation 列寻找 WRITE 操作权限。这个 WRITE 权限是限制 Producer 程序能否向对应主题发送消息的关键。通常情况下，Producer 程序还可能有创建主题、获取主题数据的权限，所以 Kafka 为 Producer 需要的这些常见权限创建了快捷方式，即 –producer。也就是说，在执行 kafka-acls 命令时，直接指定 –producer 就能同时获得这三个权限了。 –consumer 也是类似的，指定 –consumer 可以同时获得 Consumer 端应用所需的权限。</p>
 <h3 id="5、授权"><a href="#5、授权" class="headerlink" title="5、授权"></a>5、授权</h3><p>我们根据在认证中使用的用户“gumx”授予权限</p>
@@ -395,7 +395,7 @@
 <p><strong>授予gumx用户, gumx-test-group 消费者组 对test topic 读权限, 只允许 10.10.15.* 网段</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-acls.sh --authorizer kafka.security.auth.SimpleAclAuthorizer --authorizer-properties zookeeper.connect=10.10.15.235:2181 --add --allow-principal User:gumx --operation Read --group gumx-test-group --allow-host 10.10.15.*</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_op.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_op.png" alt></p>
 <p><strong>查看acl配置</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-acls.sh --authorizer kafka.security.auth.SimpleAclAuthorizer --authorizer-properties zookeeper.connect=10.10.15.235:2181 --list</span><br></pre></td></tr></table></figure>
 
@@ -408,9 +408,9 @@
 <p>消费者</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer-gumx.sh --bootstrap-server 10.10.15.235:9092 --topic test --consumer.config config/consumer-gumx.properties --from-beginning</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_consumer_op.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_consumer_op.png" alt></p>
 <h1 id="3、代码实现"><a href="#3、代码实现" class="headerlink" title="3、代码实现"></a>3、代码实现</h1><p>我们先看看gumx这个用户所有什么权限</p>
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_user_list.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_user_list.png" alt></p>
 <h2 id="生产者producer"><a href="#生产者producer" class="headerlink" title="生产者producer"></a>生产者producer</h2><p>根据上面配置的“gumx”用户我们使用代码实现，生产消息</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ACLProducerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">static</span> &#123;</span><br><span class="line">        System.setProperty(<span class="string">"java.security.auth.login.config"</span>, <span class="string">"D://JCZ//workspace_zxgk_master//kafka_test//src//main//resources//producer_jaas.conf"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		props.put(<span class="string">"bootstrap.servers"</span>,<span class="string">"10.10.15.235:9092;10.10.15.236:9092;10.10.15.237:9092"</span>);</span><br><span class="line">		props.put(ProducerConfig.ACKS_CONFIG,<span class="string">"all"</span>);</span><br><span class="line">		props.put(ProducerConfig.RETRIES_CONFIG,<span class="number">3</span>);</span><br><span class="line">		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line"> </span><br><span class="line">		props.put(<span class="string">"security.protocol"</span>, <span class="string">"SASL_PLAINTEXT"</span>);</span><br><span class="line">		props.put(<span class="string">"sasl.mechanism"</span>, <span class="string">"SCRAM-SHA-256"</span>);</span><br><span class="line">    	 	</span><br><span class="line">        KafkaProducer&lt;String, String&gt; producer = <span class="keyword">new</span> KafkaProducer&lt;&gt;(props);</span><br><span class="line">        ProducerRecord&lt;String, String&gt; record = <span class="keyword">new</span> ProducerRecord&lt;&gt;(<span class="string">"test"</span>, <span class="string">"hello"</span>);</span><br><span class="line">        Future&lt;RecordMetadata&gt; future = producer.send(record);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            RecordMetadata recordMetadata = future.get();</span><br><span class="line">            System.out.println(recordMetadata.offset()+<span class="string">"=="</span>+recordMetadata.topic());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;     </span><br><span class="line">        producer.flush();</span><br><span class="line">        producer.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -418,16 +418,16 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">KafkaClient &#123;</span><br><span class="line">  org.apache.kafka.common.security.scram.ScramLoginModule required</span><br><span class="line">  username=<span class="string">"gumx"</span></span><br><span class="line">  password=<span class="string">"123456"</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>如果我们改变主题为“gumx”,因为这个主题我们没有授权就会报错</p>
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_code.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_producer_code.png" alt></p>
 <h2 id="消费者consumer"><a href="#消费者consumer" class="headerlink" title="消费者consumer"></a>消费者consumer</h2><p>注意使用的消费组需要进行授权</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ACLConsumerTest</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.setProperty(<span class="string">"java.security.auth.login.config"</span>, <span class="string">"D://JCZ//workspace_zxgk_master//kafka_test//src//main//resources//consumer_jaas.conf"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    	Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, <span class="string">"10.10.15.235:9092;10.10.15.236:9092;10.10.15.237:9092"</span>);</span><br><span class="line">		props.put(ConsumerConfig.GROUP_ID_CONFIG, <span class="string">"gumx-test-group"</span>);</span><br><span class="line">		</span><br><span class="line">		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, <span class="string">"earliest"</span>);</span><br><span class="line">		</span><br><span class="line">		props.put(<span class="string">"security.protocol"</span>, <span class="string">"SASL_PLAINTEXT"</span>);</span><br><span class="line">		props.put(<span class="string">"sasl.mechanism"</span>, <span class="string">"SCRAM-SHA-256"</span>);</span><br><span class="line">		</span><br><span class="line">        KafkaConsumer&lt;String, String&gt; consumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">        consumer.subscribe(Collections.singleton(<span class="string">"test"</span>));</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        	ConsumerRecords&lt;String,String&gt; records = consumer.poll(Duration.ofMillis(<span class="number">2000</span>));</span><br><span class="line">            records.forEach(record -&gt;&#123;</span><br><span class="line">                System.out.println(record.key()+<span class="string">"========="</span>+record.value()+<span class="string">"========"</span>+record.offset()+<span class="string">"========"</span>+record.partition());</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>引用的配置文件</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">KafkaClient &#123;</span><br><span class="line">  org.apache.kafka.common.security.scram.ScramLoginModule required</span><br><span class="line">  username=<span class="string">"gumx"</span></span><br><span class="line">  password=<span class="string">"123456"</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code.png" alt></p>
 <p>更换消费组为data_record,就没有权限</p>
-<p><img src="https://www.itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code_err.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/03/Kafka认证授权/kafka_acl_msg_consumer_code_err.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -767,15 +767,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

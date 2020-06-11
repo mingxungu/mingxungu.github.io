@@ -17,19 +17,19 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Redis的sentinel哨兵模式虽然可以解决Redis单点故障的问题，但是一主多从的结构必然会导致客户端写入数据只能在Master节点上操作，当写入量特别大的时候主节点压力就会很大，sentinel无法分布式将数据存放到其他服务器上。Redis从3.0版本之后提供了cluster集群模式，解决了这个问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png">
+<meta property="og:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png">
 <meta property="og:updated_time" content="2020-04-12T05:51:49.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis集群模式安装部署">
 <meta name="twitter:description" content="Redis的sentinel哨兵模式虽然可以解决Redis单点故障的问题，但是一主多从的结构必然会导致客户端写入数据只能在Master节点上操作，当写入量特别大的时候主节点压力就会很大，sentinel无法分布式将数据存放到其他服务器上。Redis从3.0版本之后提供了cluster集群模式，解决了这个问题。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
+<meta name="twitter:image" content="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -303,24 +303,24 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-cluster/bin/</span><br><span class="line">./redis-server ../conf/redis-7004.conf </span><br><span class="line">./redis-server ../conf/redis-7005.conf </span><br><span class="line">./redis-server ../conf/redis-7006.conf</span><br></pre></td></tr></table></figure>
 
 <p>查看进程</p>
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az.png" alt></p>
 <p>做集群的主从关联</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![redis-cluster-az-2](D:\Program Files\Hexo\source\_posts\Redis集群模式安装部署\redis-cluster-az-2.png)./redis-cli --cluster create --cluster-replicas 1  192.168.115.241:7001 192.168.115.241:7002 192.168.115.241:7003 192.168.115.242:7004 192.168.115.242:7005 192.168.115.242:7006</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-1.png" alt></p>
 <p>结果</p>
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-2.png" alt></p>
 <h2 id="2-4、查看节点信息"><a href="#2-4、查看节点信息" class="headerlink" title="2.4、查看节点信息"></a>2.4、查看节点信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 bin]# ./redis-cli -h 192.168.115.241 -p 7001 -c</span><br><span class="line">192.168.115.241:7001&gt; cluster info</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-3.png" alt></p>
 <p>查看各个节点信息</p>
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-4.png" alt></p>
 <h1 id="3、测试故障"><a href="#3、测试故障" class="headerlink" title="3、测试故障"></a>3、测试故障</h1><p>从上面的信息中我们看到主节点分别是7001、7002、7004、分别对应的从节点是7006、7005、7003。任伟杀掉7001主点，那么7006则会升级为主节点，我们测试下。</p>
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-5.png" alt></p>
 <p>查看集群节点信息</p>
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-6.png" alt></p>
 <p>7001节点状态是fail不可用状态，此时的7006节点由slave升级为master</p>
-<p><img src="https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png" alt></p>
+<p><img src="https://itzones.cn/2020/04/11/Redis集群模式安装部署/redis-cluster-az-7.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -656,15 +656,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

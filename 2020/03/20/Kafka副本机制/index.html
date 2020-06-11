@@ -17,15 +17,15 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="学习Kafka那必然绕不开的就是副本机制，实现系统的高可用，副本是不可缺少的一环。在 Kafka 中采用了多副本的机制。我们来试想一下 Kafka 中为什么要实现副本机制？上几节我们也都不同程度的提到副本，特别是在《Kafka主题管理》中创建主题时我们没有深入讲解。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_leader-based.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_1.png">
-<meta property="og:image" content="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_2.png">
+<meta property="og:image" content="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication.png">
+<meta property="og:image" content="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_leader-based.png">
+<meta property="og:image" content="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_1.png">
+<meta property="og:image" content="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_2.png">
 <meta property="og:updated_time" content="2020-03-19T22:52:13.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka副本机制">
 <meta name="twitter:description" content="学习Kafka那必然绕不开的就是副本机制，实现系统的高可用，副本是不可缺少的一环。在 Kafka 中采用了多副本的机制。我们来试想一下 Kafka 中为什么要实现副本机制？上几节我们也都不同程度的提到副本，特别是在《Kafka主题管理》中创建主题时我们没有深入讲解。">
-<meta name="twitter:image" content="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication.png">
+<meta name="twitter:image" content="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -246,11 +246,11 @@
 <p>副本定义在讨论具体的副本机制之前，我们先花一点时间明确一下副本的含义。我们之前谈到过，Kafka 是有主题概念的，而每个主题又进一步划分成若干个分区。副本的概念实际上是在分区层级下定义的，每个分区配置有若干个副本。</p>
 <p><strong><u>所谓副本（Replica），本质就是一个只能追加写消息的提交日志</u></strong>。根据 Kafka 副本机制的定义，同一个分区下的所有副本保存有相同的消息序列，这些副本分散保存在不同的 Broker 上，从而能够对抗部分 Broker 宕机带来的数据不可用。</p>
 <p>在实际生产环境中，每台 Broker 都可能保存有各个主题下不同分区的不同副本，因此，单个 Broker 上存有成百上千个副本的现象是非常正常的。接下来我们来看一张图，它展示的是一个有 3 台 Broker 的 Kafka 集群上的副本分布情况。</p>
-<p><img src="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication.png" alt></p>
+<p><img src="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication.png" alt></p>
 <p>从这张图中，我们可以看到，主题 1 分区 0 的 3 个副本分散在 3 台 Broker 上，其他主题分区的副本也都散落在不同的 Broker 上，从而实现数据冗余。</p>
 <h1 id="2、副本角色"><a href="#2、副本角色" class="headerlink" title="2、副本角色"></a>2、副本角色</h1><p>副本角色既然分区下能够配置多个副本，而且这些副本的内容还要一致，那么很自然的一个问题就是：我们该如何确保副本中所有的数据都是一致的呢？特别是对 Kafka 而言，当生产者发送消息到某个主题后，消息是如何同步到对应的所有副本中的呢？</p>
 <p>针对这个问题，最常见的解决方案就是采用<strong><u>基于领导者（Leader-based）的副本机制</u></strong>。Apache Kafka 就是这样的设计。基于领导者的副本机制的工作原理如下图所示，我来简单解释一下这张图里面的内容。</p>
-<p><img src="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_leader-based.png" alt></p>
+<p><img src="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_leader-based.png" alt></p>
 <p>第一，在 Kafka 中，副本分成两类：<strong>领导者副本（Leader Replica）</strong>和<strong>追随者副本（Follower Replica）</strong>。每个分区在创建时都要选举一个副本，称为领导者副本，其余的副本自动称为追随者副本。</p>
 <p>第二，Kafka 的副本机制比其他分布式系统要更严格一些。在 Kafka 中，<strong><u>追随者副本是不对外提供服务的</u></strong>。这就是说，任何一个追随者副本都不能响应消费者和生产者的读写请求。所有的请求都必须由领导者副本来处理，或者说，所有的读写请求都必须发往领导者副本所在的 Broker，由该 Broker 负责处理。<strong><u>追随者副本不处理客户端请求，它唯一的任务就是从领导者副本异步拉取消息</u></strong>，并写入到自己的提交日志中，从而实现与领导者副本的同步。</p>
 <p>第三，当领导者副本挂掉了，或者说领导者副本所在的 Broker 宕机时，Kafka 依托于 ZooKeeper 提供的监控功能能够实时感知到，并立即开启新一轮的领导者选举，从追随者副本中选一个作为新的领导者。老 Leader 副本重启回来后，只能作为追随者副本加入到集群中。</p>
@@ -266,10 +266,10 @@
 <p>允许追随者副本提供读服务，那么假设当前有 2 个追随者副本 F1 和 F2，它们异步地拉取领导者副本数据。倘若 F1 拉取了 Leader 的最新消息而 F2 还未及时拉取，那么，此时如果有一个消费者先从 F1 读取消息之后又从 F2 拉取消息，它可能会看到这样的现象：第一次消费时看到的最新消息在第二次消费时不见了，这就不是单调读一致性。但是，如果所有的读请求都是由 Leader 来处理，那么 Kafka 就很容易实现单调读一致性。</p>
 <h1 id="3、ISR（In-Sync-Replicas）"><a href="#3、ISR（In-Sync-Replicas）" class="headerlink" title="3、ISR（In-Sync Replicas）"></a>3、ISR（In-Sync Replicas）</h1><p>分区中的所有副本统称为AR（Assigned Repllicas）。所有与leader副本<strong>保持一定程度同步的副本</strong>（包括Leader）组成ISR（In-Sync Replicas），ISR集合是AR集合中的一个子集。</p>
 <p>ISR产生的原因，追随者副本不提供服务，只是定期地异步拉取领导者副本中的数据而已。既然是异步的，就存在着不可能与 Leader 实时同步的风险。我们知道消费者的数据是从Leader副本中拉取的，如果Leader副本所在的Broker宕机，如何保证新选举的新Leader副本中的消费位点的数据就是从前Leader副本中一致。如图所示</p>
-<p><img src="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_1.png" alt></p>
+<p><img src="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_1.png" alt></p>
 <p>图中所分析的正式存在的问题，我们将如何避免这种情况就必须让消费者拉取消息的位点要低于Follower1和Follower2我们不知道谁才是将来的Leader副本，如果有多个Follower我们就需要按照最低的Follower副本的位置为为标准拉取吗？如果副本出现问题导致同步Leader副本特别慢则会出现消费者消费不了数据，如何保证消息的实时性？那我们如何有效的平衡着两者呢？我们将一部分和Leader副本保持一定同步Follower副本认为是可用的副本，这样的副本组成的集合认为是<strong>“可用副本集合”</strong>，消费时拉取这个<strong>“可用副本集合”</strong>中同步最慢的那个副本中的消息，选举Leader时也从这个<strong>“可用副本集合”</strong>中选举，认为同步慢的Follower副本认为不可用，这样就会解决我们的问题。</p>
 <p>以上是我们自己分析的，那么<strong>“可用副本集合”</strong>在Kafka中就是 In-sync Replicas，也就是所谓的 ISR 副本集合。ISR 中的副本都是与 Leader 同步的副本，相反，不在 ISR 中的追随者副本就被认为是与 Leader 不同步的。那么，到底什么副本能够进入到 ISR 中呢？我们首先要明确的是，Leader 副本天然就在 ISR 中。也就是说，<strong><u>ISR 不只是追随者副本集合，它必然包括 Leader 副本。甚至在某些情况下，ISR 只有 Leader 这一个副本。</u></strong></p>
-<p><img src="https://www.itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_2.png" alt></p>
+<p><img src="https://itzones.cn/2020/03/20/Kafka副本机制/kafka_replication_ISR_2.png" alt></p>
 <p>那么图中的绿色、红色、紫色框出的那个才是ISR，这个所谓的与leader副本保持<strong><u>一定程度同步</u></strong>的副本如何理解？</p>
 <p>答案是，要根据具体情况来定。换成英文，就是那句著名的“It depends”。看上去好像 Follower2 的消息数比 Leader 少了很多，它是最有可能与 Leader 不同步的。的确是这样的，但仅仅是可能。</p>
 <p>事实上，这张图中的 2 个 Follower 副本都有可能与 Leader 不同步，但也都有可能与 Leader 同步。也就是说，Kafka 判断 Follower 是否与 Leader 同步的标准，不是看相差的消息数，而是另有“玄机”。</p>
@@ -622,15 +622,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

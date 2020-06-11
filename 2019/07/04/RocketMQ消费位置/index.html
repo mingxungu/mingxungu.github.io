@@ -17,15 +17,15 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="RocketMQ创建消费者的时指定了Topic主题及Tag,我们发现新创建的消费者消费不了历史的数据，只能消费掉创建以后消费者发送的数据。这是什么原因，我们能把所有的消息都消费吗？，我们可以指定需要消费的消息的时间吗？答案是肯定的，下面我们具体分析一下。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/consumer_last.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/service_offset.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/service_offset_1.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/first_offset.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/04/RocketMQ消费位置/consumer_last.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/04/RocketMQ消费位置/service_offset.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/04/RocketMQ消费位置/service_offset_1.png">
+<meta property="og:image" content="https://itzones.cn/2019/07/04/RocketMQ消费位置/first_offset.png">
 <meta property="og:updated_time" content="2019-07-04T07:42:48.660Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ消费位置">
 <meta name="twitter:description" content="RocketMQ创建消费者的时指定了Topic主题及Tag,我们发现新创建的消费者消费不了历史的数据，只能消费掉创建以后消费者发送的数据。这是什么原因，我们能把所有的消息都消费吗？，我们可以指定需要消费的消息的时间吗？答案是肯定的，下面我们具体分析一下。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/consumer_last.png">
+<meta name="twitter:image" content="https://itzones.cn/2019/07/04/RocketMQ消费位置/consumer_last.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -242,7 +242,7 @@
 
 <p>分析源码我们看到有6种方式，其他三种已经废弃掉了，不做讨论。</p>
 <h1 id="1、从队列尾部消费（默认）"><a href="#1、从队列尾部消费（默认）" class="headerlink" title="1、从队列尾部消费（默认）"></a>1、从队列尾部消费（默认）</h1><p>我们从新创建一个消费组来消费某个主题下的消息时，历史消息没有被消费，当生产者重新发送消息时则会接收到最新的，我们分析下其在哪设置的。</p>
-<p><img src="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/consumer_last.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/04/RocketMQ消费位置/consumer_last.png" alt></p>
 <p>当创建消费者的时候内置了一些参数，从队列尾部消费。</p>
 <blockquote>
 <p>从队列尾部消费导致历史消息消费不了，会丢失一部分数据，如果仅仅是状态数据则可以这样设置，如果是业务数据导致数据丢失。</p>
@@ -250,16 +250,16 @@
 </blockquote>
 <p>查看消费进度文件的位置,我们根据上几节的内容查看TopicTest主题下的这个consumer_test_clustering消费组的消息消费的进度。查看Broker-a服务器节点上的信息。</p>
 <p>查看消费的消费进度先根据可视化界面查看</p>
-<p><img src="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/service_offset.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/04/RocketMQ消费位置/service_offset.png" alt></p>
 <p>查看服务器文件上的消费进度信息：/usr/local/rocketmq-all-4.2.0/store/config/consumerOffset.json</p>
-<p><img src="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/service_offset_1.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/04/RocketMQ消费位置/service_offset_1.png" alt></p>
 <h1 id="2、从队列头部消费"><a href="#2、从队列头部消费" class="headerlink" title="2、从队列头部消费"></a>2、从队列头部消费</h1><p>编写Consumer</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer1</span> </span>&#123;	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer();</span><br><span class="line">			consumer.setConsumerGroup(<span class="string">"consumer_first_offset"</span>);</span><br><span class="line">			consumer.setNamesrvAddr(<span class="string">"10.10.12.203:9876;10.10.12.204:9876"</span>);</span><br><span class="line">			consumer.subscribe(<span class="string">"TopicTest"</span>, <span class="string">"*"</span>);</span><br><span class="line">			consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);</span><br><span class="line">			consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently()&#123;</span><br><span class="line"></span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; paramList,</span></span></span><br><span class="line"><span class="function"><span class="params">						ConsumeConcurrentlyContext paramConsumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">					    <span class="keyword">for</span>(MessageExt msg : paramList)&#123;</span><br><span class="line">					    	String msgbody = <span class="keyword">new</span> String(msg.getBody(), <span class="string">"utf-8"</span>);</span><br><span class="line">					    	SimpleDateFormat sd = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>);</span><br><span class="line">					    	Date date = <span class="keyword">new</span> Date(msg.getStoreTimestamp());</span><br><span class="line">					    	System.out.println(<span class="string">"Consumer1===  存入时间 :  "</span>+ sd.format(date) +<span class="string">" == MessageBody: "</span>+ msgbody);<span class="comment">//输出消息内容</span></span><br><span class="line">					    &#125;</span><br><span class="line">					&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					    e.printStackTrace();</span><br><span class="line">					    <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER; <span class="comment">//稍后再试</span></span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS; <span class="comment">//消费成功</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">			consumer.start();</span><br><span class="line">			System.out.println(<span class="string">"Consumer1===启动成功!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>设置了消费组：<strong>consumer.setConsumerGroup(“consumer_first_offset”);</strong></p>
 <p>设置了消费位置：<strong>consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);</strong></p>
 <p>查看其结果</p>
-<p><img src="https://www.itzones.cn/2019/07/04/RocketMQ消费位置/first_offset.png" alt></p>
+<p><img src="https://itzones.cn/2019/07/04/RocketMQ消费位置/first_offset.png" alt></p>
 <blockquote>
 <p>从头开始消费是指目前还储存在broker的上的消息全部消费一遍，因为RocketMQ会将消息持久化到磁盘文件中，时间长就会导致磁盘文件会很多，RocketMQ有一种机制，只是保留一段时间的消息，之前的消息会删除，可以指定时间点删除（无论消息是否被消费，到时间点文件都会被删除）</p>
 </blockquote>
@@ -605,15 +605,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

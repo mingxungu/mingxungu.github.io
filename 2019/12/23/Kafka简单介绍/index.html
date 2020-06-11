@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="一、简介1.1、概述Kafka是最初由Linkedin公司开发，是一个分布式、分区的、多副本的、多订阅者，基于zookeeper协调的分布式日志系统（也可以当做MQ系统），常见可以用于web/nginx日志、访问日志，消息服务等等，Linkedin于2010年贡献给了Apache基金会并成为顶级开源项目。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka简单介绍/kafka_pub_sub.png">
-<meta property="og:image" content="https://www.itzones.cn/2019/12/23/Kafka简单介绍/kafka_jgt.png">
+<meta property="og:image" content="https://itzones.cn/2019/12/23/Kafka简单介绍/kafka_pub_sub.png">
+<meta property="og:image" content="https://itzones.cn/2019/12/23/Kafka简单介绍/kafka_jgt.png">
 <meta property="og:updated_time" content="2019-12-23T06:35:01.898Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka简单介绍">
 <meta name="twitter:description" content="一、简介1.1、概述Kafka是最初由Linkedin公司开发，是一个分布式、分区的、多副本的、多订阅者，基于zookeeper协调的分布式日志系统（也可以当做MQ系统），常见可以用于web/nginx日志、访问日志，消息服务等等，Linkedin于2010年贡献给了Apache基金会并成为顶级开源项目。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/12/23/Kafka简单介绍/kafka_pub_sub.png">
+<meta name="twitter:image" content="https://itzones.cn/2019/12/23/Kafka简单介绍/kafka_pub_sub.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -244,7 +244,7 @@
 <li>Scale out:支持在线水平扩展</li>
 </ul>
 <p>一个消息系统负责将数据从一个应用传递到另外一个应用，应用只需关注于数据，无需关注数据在两个或多个应用间是如何传递的。分布式消息传递基于可靠的消息队列，在客户端应用和消息系统之间异步传递消息。有两种主要的消息传递模式：<strong>点对点传递模式、发布-订阅模式</strong>。大部分的消息系统选用发布-订阅模式。<strong>Kafka就是一种发布-订阅模式</strong>。</p>
-<p><img src="https://www.itzones.cn/2019/12/23/Kafka简单介绍/kafka_pub_sub.png" alt></p>
+<p><img src="https://itzones.cn/2019/12/23/Kafka简单介绍/kafka_pub_sub.png" alt></p>
 <h2 id="1-2-Kafka的优点"><a href="#1-2-Kafka的优点" class="headerlink" title="1.2 Kafka的优点"></a>1.2 Kafka的优点</h2><p>1）解耦：</p>
 <p>在项目启动之初来预测将来项目会碰到什么需求，是极其困难的。消息系统在处理过程中间插入了一个隐含的、基于数据的接口层，两边的处理过程都要实现这一接口。这允许你独立的扩展或修改两边的处理过程，只要确保它们遵守同样的接口约束。</p>
 <p>2）冗余：（副本）</p>
@@ -261,7 +261,7 @@
 <p>在任何重要的系统中，都会有需要不同的处理时间的元素。例如，加载一张图片比应用过滤器花费更少的时间。消息队列通过一个缓冲层来帮助任务最高效率的执行———写入队列的处理会尽可能的快速。该缓冲有助于控制和优化数据流经过系统的速度。</p>
 <p>8）异步通信</p>
 <p>很多时候，用户不想也不需要立即处理消息。消息队列提供了异步处理机制，允许用户把一个消息放入队列，但并不立即处理它。想向队列中放入多少消息就放多少，然后在需要的时候再去处理它们。</p>
-<h1 id="二、Kafka相关的术语"><a href="#二、Kafka相关的术语" class="headerlink" title="二、Kafka相关的术语"></a>二、Kafka相关的术语</h1><h2 id="2-1、概述"><a href="#2-1、概述" class="headerlink" title="2.1、概述"></a>2.1、概述</h2><p><img src="https://www.itzones.cn/2019/12/23/Kafka简单介绍/kafka_jgt.png" alt></p>
+<h1 id="二、Kafka相关的术语"><a href="#二、Kafka相关的术语" class="headerlink" title="二、Kafka相关的术语"></a>二、Kafka相关的术语</h1><h2 id="2-1、概述"><a href="#2-1、概述" class="headerlink" title="2.1、概述"></a>2.1、概述</h2><p><img src="https://itzones.cn/2019/12/23/Kafka简单介绍/kafka_jgt.png" alt></p>
 <p>上图中一个topic配置了3个partition。Partition1有两个offset：0和1。Partition2有4个offset。Partition3有1个offset。副本的id和副本所在的机器的id恰好相同。</p>
 <p>如果一个topic的副本数为3，那么Kafka将在集群中为每个partition创建3个相同的副本。集群中的每个broker存储一个或多个partition。多个producer和consumer可同时生产和消费数据。</p>
 <h4 id="1-broker"><a href="#1-broker" class="headerlink" title="1 broker"></a>1 broker</h4><p>Kafka 集群包含一个或多个服务器，服务器节点称为broker。</p>
@@ -612,15 +612,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">

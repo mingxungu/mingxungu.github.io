@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="我们知道Java文件后缀是.java文件，JVM则识别的是.class字节码文件，那么我们就需要中间做些转换.java-&amp;gt;.class,下面我们分析下这个编译过程。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113216819.jpg">
-<meta property="og:image" content="https://www.itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113311257.png">
+<meta property="og:image" content="https://itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113216819.jpg">
+<meta property="og:image" content="https://itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113311257.png">
 <meta property="og:updated_time" content="2019-08-14T00:30:02.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java代码编译过程">
 <meta name="twitter:description" content="我们知道Java文件后缀是.java文件，JVM则识别的是.class字节码文件，那么我们就需要中间做些转换.java-&amp;gt;.class,下面我们分析下这个编译过程。">
-<meta name="twitter:image" content="https://www.itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113216819.jpg">
+<meta name="twitter:image" content="https://itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113216819.jpg">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -234,7 +234,7 @@
         <p>我们知道Java文件后缀是.java文件，JVM则识别的是.class字节码文件，那么我们就需要中间做些转换.java-&gt;.class,下面我们分析下这个编译过程。</p>
 <a id="more"></a>
 
-<p><img src="https://www.itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113216819.jpg" alt></p>
+<p><img src="https://itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113216819.jpg" alt></p>
 <p>Javac是一种编译器，能<strong>将一种语言规范转化成另外一种语言规范，通常编译器都是将便于人理解的语言规范转化成机器容易理解的语言规范</strong>，如C/C++或者汇编语言都是将源代码直接编译成目标机器码，这个目标机器代码是CPU直接执行的指令集合。这些指令集合也就是底层的一种语言规范。</p>
 <p>Javac的编译器也是将Java这种对人非常友好的编程语言编译成对对所有机器都非常友好的一种语言。这种语言不是针对某种机器或某个平台。怎么<strong>消除不同种类，不同平台之间的差异这个任务就有JVM来完成，而Javac的任务就是将Java源代码语言转化为JVM能够识别的一种语言</strong>，然后由JVM将JVM语言再转化成当前这个机器能够识别的机器语言。</p>
 <p>Javac的任务就是将Java源代码编译成Java字节码，也就是JVM能够识别的二进制代码，从表面看是将.java文件转化为.class文件。而实际上是将Java源代码转化成一连串二进制数字，这些二进制数字是有格式的，只有JVM能够真确的识别他们到底代表什么意思。</p>
@@ -242,7 +242,7 @@
 <p>2）语法分析：就是对词法分析中得到的token流进行语法分析，这一步就是检查这些关键词组合在一起是不是符合Java语言规范。如if的后面是不是紧跟着一个布尔型判断表达式。<br>语法分析的结果：就是形成一个符合Java语言规定的抽象语法树，抽象语法树是一个结构化的语法表达形式，它的作用是把语言的主要词法用一个结构化的形式组织在一起。这棵语法树可以被后面按照新的规则再重新组织。</p>
 <p>3）语义分析：语法分析完成之后也就不存在语法问题了，语义分析的主要工作就是把一些难懂的，复杂的语法转化成更简单的语法。就如难懂的文言文转化为大家都懂的百话文，或者是注释一下一些不懂的成语。<br>语义分析结果：就是将复杂的语法转化为简单的语法，对应到Java就是将foreach转化为for循环，还有一些注释等。最后生成一棵抽象的语法树，这棵语法树也就更接近目标语言的语法规则。</p>
 <p>4）字节码生成：将会根据经过注释的抽象语法树生成字节码，也就是将一个数据结构转化为另外一个数据结构。就像将所有的中文词语翻译成英文单词后按照英文语法组装文英文语句。代码生成器的结果就是生成符合java虚拟机规范的字节码。这个过程中的需要的组件如下图2所示：</p>
-<p><img src="https://www.itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113311257.png" alt></p>
+<p><img src="https://itzones.cn/2019/08/14/Java代码编译过程/Users/gumx/Desktop/20170205113311257.png" alt></p>
 <p>从上面的描述中我们知道编译就是将一种语言通过分析分解，再按照一定的方式先形成一个简单的框架（将Java源文件的字节流转化为对应的token流）然后在通过详细的分析按照一定的规定在这个框架里添加东西使这个token流形成更加结构化的语法树（就是将前面生成的token流中的一个个单词组装成一句话），但是这棵树离我们的目标—Java字节码还有点差距，所以再进行语义分析使那颗粗糙的树更加完整完善（给类添加默认的构造函数，检查变量在使用前有没有初始化，检查操作变量类型是否匹配），然后javac编译器调用com.sun.tools.javac.jvm.Gen类遍历这棵语法树将java方法中的代码块转换成符合JVM语法的命令形式的二进制数据。按照JVM的文件组织格式将字节码输出到以class为扩展名的文件中，也就是生成最终的java字节码。词法分析就是将关键词组织成token流即检查源码中的的关键词是否真确并组织成token流，而<strong>语法分析就是检查源码是否符合java语法规范并将词组成语句。语义分析就是简化复杂的添加缺少的，检查变量类型是否合法。代码生成器就是遍历这棵树生成符合JVM规范的代码</strong>。</p>
 <p>转载自：<a href="https://blog.csdn.net/fuzhongmin05/article/details/54880257" target="_blank" rel="noopener">https://blog.csdn.net/fuzhongmin05/article/details/54880257</a></p>
 
@@ -580,15 +580,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">
