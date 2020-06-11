@@ -17,19 +17,19 @@
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Redis的部署方式有和多种，一般有单节点模式、主从模式、哨兵模式、集群模式等，一般生产环境中以哨兵模式和集群模式为主，哨兵模式是对主从模式的一种优化升级Redis在2.8版本中提供Sentinel。Redis Sentinel是Redis高可用（HA）的实现方案。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-sentinel-topography.jpg">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-1.png">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-2.png">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-3.png">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-4.png">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-5.png">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-6.png">
-<meta property="og:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-7.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-sentinel-topography.jpg">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-1.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-2.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-3.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-4.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-5.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-6.png">
+<meta property="og:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-7.png">
 <meta property="og:updated_time" content="2020-04-09T13:12:06.549Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis哨兵模式安装部署">
 <meta name="twitter:description" content="Redis的部署方式有和多种，一般有单节点模式、主从模式、哨兵模式、集群模式等，一般生产环境中以哨兵模式和集群模式为主，哨兵模式是对主从模式的一种优化升级Redis在2.8版本中提供Sentinel。Redis Sentinel是Redis高可用（HA）的实现方案。">
-<meta name="twitter:image" content="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-sentinel-topography.jpg">
+<meta name="twitter:image" content="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-sentinel-topography.jpg">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -281,14 +281,14 @@
 <td>哨兵节点-3</td>
 </tr>
 </tbody></table>
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-sentinel-topography.jpg" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-sentinel-topography.jpg" alt></p>
 <h1 id="2、主从数据节点"><a href="#2、主从数据节点" class="headerlink" title="2、主从数据节点"></a>2、主从数据节点</h1><h2 id="2-1、安装Redis"><a href="#2-1、安装Redis" class="headerlink" title="2.1、安装Redis"></a>2.1、安装Redis</h2><p>创建安装目录</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/redis-sentinel</span><br></pre></td></tr></table></figure>
 
 <p>上传redis-5.0.5.tar.gz安装包到新创建的目录下，解压安装包到当前目录</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf redis-5.0.5.tar.gz</span><br></pre></td></tr></table></figure>
 
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-1.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-1.png" alt></p>
 <p>编译、安装到/usr/local/redis-sentinel目录下</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis-sentinel/redis-5.0.5</span><br><span class="line">make</span><br><span class="line">make PREFIX=/usr/local/redis-sentinel install</span><br></pre></td></tr></table></figure>
 
@@ -314,7 +314,7 @@
 <p>查看主从关系</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./redis-cli -h 192.168.115.243 -p 6379 info replication</span><br></pre></td></tr></table></figure>
 
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-2.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-2.png" alt></p>
 <p>至此redis的主从模式就已经部署成功</p>
 <h1 id="3、哨兵节点部署"><a href="#3、哨兵节点部署" class="headerlink" title="3、哨兵节点部署"></a>3、哨兵节点部署</h1><p>三个哨兵节点的配置是一样的</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node3 redis-5.0.5]# cd /usr/local/redis-sentinel/redis-5.0.5</span><br><span class="line">[root@node3 redis-5.0.5]# cp sentinel.conf ../conf/sentinel-26379.conf</span><br><span class="line">[root@node3 redis-5.0.5]# cp sentinel.conf ../conf/sentinel-26380.conf</span><br><span class="line">[root@node3 redis-5.0.5]# cp sentinel.conf ../conf/sentinel-26381.conf</span><br></pre></td></tr></table></figure>
@@ -334,16 +334,16 @@
 <p>查看状态</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./redis-cli -h 192.168.115.243 -p 26379 info Sentinel</span><br></pre></td></tr></table></figure>
 
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-3.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-3.png" alt></p>
 <p>我们看到一主2从3个哨兵节点</p>
 <h1 id="4、验证"><a href="#4、验证" class="headerlink" title="4、验证"></a>4、验证</h1><p>故障转移，模拟master端自动down掉，为此，这边直接使用kill命令演示</p>
 <p>杀掉master节点</p>
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-4.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-4.png" alt></p>
 <p>查看6380节点的日志信息</p>
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-5.png" alt></p>
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-6.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-5.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-6.png" alt></p>
 <p>查看6381节点的日志信息</p>
-<p><img src="http://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-7.png" alt></p>
+<p><img src="https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/redis-install-7.png" alt></p>
 
       
 	 <!-- 添加版权声明 -->
@@ -655,11 +655,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -671,11 +671,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移主题</a>
+                <a href="javascript:void(0)" class="js-tag color1">kafka</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移主题</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -687,7 +687,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">kafka</a>
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -715,6 +715,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka分区算法</a>
               </li>
              
@@ -723,19 +727,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">kafka SASL/SCRAM</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -755,10 +755,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">主从同步</a>
               </li>
              
@@ -767,11 +763,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">MMAP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -799,6 +807,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">rebalance</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">RocketMQ权限控制</a>
               </li>
              
@@ -807,23 +823,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -831,7 +831,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">rebalance</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -844,14 +852,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -871,11 +871,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群消费</a>
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">广播消费</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
