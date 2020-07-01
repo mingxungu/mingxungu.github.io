@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.itzones.cn/2020/06/30/Redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B9%8BHash/</loc>
+    <lastmod>2020-07-01</lastmod>
+  </url>  <url>
+    <loc>https://www.itzones.cn/2020/04/30/Redis%E6%95%B4%E4%BD%93%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%AF%B4%E6%98%8E/</loc>
+    <lastmod>2020-07-01</lastmod>
+  </url>  <url>
+    <loc>https://www.itzones.cn/2020/05/15/Redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B9%8BString/</loc>
+    <lastmod>2020-07-01</lastmod>
+  </url>  <url>
     <loc>https://www.itzones.cn/2019/09/05/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SpringCloud-%E5%88%86%E6%9E%90%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B%E8%BF%87%E7%A8%8B/</loc>
     <lastmod>2020-06-05</lastmod>
   </url>  <url>
@@ -12,9 +21,6 @@
   </url>  <url>
     <loc>https://www.itzones.cn/2020/05/29/RocketMQ%E6%8E%A8%E9%80%81%E6%B6%88%E8%B4%B9%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%B6%88%E6%81%AF%E6%8B%89%E5%8F%96/</loc>
     <lastmod>2020-05-31</lastmod>
-  </url>  <url>
-    <loc>https://www.itzones.cn/2020/04/21/Redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B9%8BString/</loc>
-    <lastmod>2020-04-23</lastmod>
   </url>  <url>
     <loc>https://www.itzones.cn/2020/04/18/Redis%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/</loc>
     <lastmod>2020-04-23</lastmod>

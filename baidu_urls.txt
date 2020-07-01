@@ -1,7 +1,9 @@
+https://www.itzones.cn/2020/06/30/Redis基本数据类型之Hash/
 https://www.itzones.cn/2020/06/01/RocketMQ推送消费源码分析-消费处理/
 https://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/
 https://www.itzones.cn/2020/05/29/RocketMQ推送消费源码分析-消息拉取/
-https://www.itzones.cn/2020/04/21/Redis基本数据类型之String/
+https://www.itzones.cn/2020/05/15/Redis基本数据类型之String/
+https://www.itzones.cn/2020/04/30/Redis整体数据存储说明/
 https://www.itzones.cn/2020/04/18/Redis简单介绍/
 https://www.itzones.cn/2020/04/11/Redis集群模式安装部署/
 https://www.itzones.cn/2020/04/09/Redis哨兵模式安装部署/
