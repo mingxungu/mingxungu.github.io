@@ -9,13 +9,13 @@
   <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Redis基本数据类型之List | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。 1、简单介绍Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边） 一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素) 2、常用命令2.1、LPUSH-从列表头部（左">
+  <meta name="description" content="Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。">
 <meta name="keywords" content="redis LinkedList,redis QuickList">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis基本数据类型之List">
 <meta property="og:url" content="https://www.itzones.cn/2020/07/03/Redis基本数据类型之List/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。 1、简单介绍Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边） 一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素) 2、常用命令2.1、LPUSH-从列表头部（左">
+<meta property="og:description" content="Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lpush.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lpushx.png">
@@ -36,10 +36,10 @@
 <meta property="og:image" content="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_zliplist_node.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_zliplist_node_wz.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_quicklist.png">
-<meta property="og:updated_time" content="2020-07-05T13:55:33.048Z">
+<meta property="og:updated_time" content="2020-07-05T13:57:40.732Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基本数据类型之List">
-<meta name="twitter:description" content="Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。 1、简单介绍Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边） 一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素) 2、常用命令2.1、LPUSH-从列表头部（左">
+<meta name="twitter:description" content="Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。">
 <meta name="twitter:image" content="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lpush.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -249,6 +249,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。</p>
+<a id="more"></a>
+
 <h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边）</p>
 <p>一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素)</p>
 <h1 id="2、常用命令"><a href="#2、常用命令" class="headerlink" title="2、常用命令"></a>2、常用命令</h1><h2 id="2-1、LPUSH-从列表头部（左边）设置值"><a href="#2-1、LPUSH-从列表头部（左边）设置值" class="headerlink" title="2.1、LPUSH-从列表头部（左边）设置值"></a>2.1、LPUSH-从列表头部（左边）设置值</h2><p><strong>LPUSH key value [value …]</strong></p>
