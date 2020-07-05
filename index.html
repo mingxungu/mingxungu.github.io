@@ -209,6 +209,214 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Redis基本数据类型之List" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/03/Redis基本数据类型之List/">Redis基本数据类型之List</a>
+    </h1>
+  
+
+        
+        <a href="/2020/07/03/Redis基本数据类型之List/" class="archive-article-date">
+  	<time datetime="2020-07-03T07:44:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Redis List结构的数据存储是最常使用的一种之一,特别对于一些复杂的场景，如列表、队列、栈通过List结构都可以轻松去实现它。</p>
+<h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边）</p>
+<p>一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素)</p>
+<h1 id="2、常用命令"><a href="#2、常用命令" class="headerlink" title="2、常用命令"></a>2、常用命令</h1><h2 id="2-1、LPUSH-从列表头部（左边）设置值"><a href="#2-1、LPUSH-从列表头部（左边）设置值" class="headerlink" title="2.1、LPUSH-从列表头部（左边）设置值"></a>2.1、LPUSH-从列表头部（左边）设置值</h2><p><strong>LPUSH key value [value …]</strong></p>
+<p>将一个或多个值 <code>value</code> 插入到列表 <code>key</code> 的表头</p>
+<p>如果有多个 <code>value</code> 值，那么各个 <code>value</code> 值按从左到右的顺序依次插入到表头</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lpush.png" alt></p>
+<h2 id="2-2、LPUSHX-存在Key时才从列表头部（左边）设置值"><a href="#2-2、LPUSHX-存在Key时才从列表头部（左边）设置值" class="headerlink" title="2.2、LPUSHX-存在Key时才从列表头部（左边）设置值"></a>2.2、LPUSHX-存在Key时才从列表头部（左边）设置值</h2><p><strong>LPUSHX key value</strong></p>
+<p>将值 <code>value</code> 插入到列表 <code>key</code> 的表头，<u><strong>当且仅当 key存在</strong></u>并且是一个列表</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lpushx.png" alt></p>
+<h2 id="2-3、RPUSH-从列表尾部（右边）设置值"><a href="#2-3、RPUSH-从列表尾部（右边）设置值" class="headerlink" title="2.3、RPUSH-从列表尾部（右边）设置值"></a>2.3、RPUSH-从列表尾部（右边）设置值</h2><p><strong>RPUSH key value [value …]</strong></p>
+<p>将一个或多个值 <code>value</code> 插入到列表 <code>key</code> 的表尾(最右边)。</p>
+<p>如果有多个 <code>value</code> 值，那么各个 <code>value</code> 值按从左到右的顺序依次插入到表尾</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_rpush.png" alt></p>
+<h2 id="2-4、RPUSHX-存在Key时才从列表尾部（右边）设置值"><a href="#2-4、RPUSHX-存在Key时才从列表尾部（右边）设置值" class="headerlink" title="2.4、RPUSHX-存在Key时才从列表尾部（右边）设置值"></a>2.4、RPUSHX-存在Key时才从列表尾部（右边）设置值</h2><p><strong>RPUSHX key value</strong></p>
+<p>将值 <code>value</code> 插入到列表 <code>key</code> 的表尾，<u><strong>当且仅当 key存在</strong></u>并且是一个列表</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_rpushx.png" alt></p>
+<h2 id="2-5、LPOP-从头部弹出一个元素"><a href="#2-5、LPOP-从头部弹出一个元素" class="headerlink" title="2.5、LPOP-从头部弹出一个元素"></a>2.5、LPOP-从头部弹出一个元素</h2><p><strong>LPOP key</strong></p>
+<p>移除并返回列表 <code>key</code> 的头元素，当 <code>key</code> 不存在时，返回 <code>nil</code> 。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lpop.png" alt></p>
+<h2 id="2-6、RPOP-从尾部弹出一个元素"><a href="#2-6、RPOP-从尾部弹出一个元素" class="headerlink" title="2.6、RPOP-从尾部弹出一个元素"></a>2.6、RPOP-从尾部弹出一个元素</h2><p><strong>RPOP key</strong></p>
+<p>移除并返回列表 <code>key</code> 的尾部元素，当 <code>key</code> 不存在时，返回 <code>nil</code> 。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_rpop.png" alt></p>
+<h2 id="2-7、RPOPLPUSH-从源list的尾部弹出一个元素放入到目标list头部，并返回该元素"><a href="#2-7、RPOPLPUSH-从源list的尾部弹出一个元素放入到目标list头部，并返回该元素" class="headerlink" title="2.7、RPOPLPUSH-从源list的尾部弹出一个元素放入到目标list头部，并返回该元素"></a>2.7、RPOPLPUSH-从源list的尾部弹出一个元素放入到目标list头部，并返回该元素</h2><p><strong>RPOPLPUSH source destination</strong></p>
+<p>命令 RPOPLPUSH 在一个<strong><u>原子时间内</u></strong>，执行以下两个动作：</p>
+<ul>
+<li>将列表 <code>source</code> 中的最后一个元素(尾元素)弹出，并返回给客户端。</li>
+<li>将 <code>source</code> 弹出的元素插入到列表 <code>destination</code> ，作为 <code>destination</code> 列表的的头元素</li>
+</ul>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_rpoplpush.png" alt></p>
+<p>如果<code>source</code>不存在，<code>nil</code>则返回该值并且不执行任何操作。如果<code>source</code>和<code>destination</code>相同，该操作相当于从列表中删除最后一个元素，并将其作为列表的第一个元素推入，因此可以将其视为列表旋转命令。</p>
+<h2 id="2-8、LLEN-返回列表的长度"><a href="#2-8、LLEN-返回列表的长度" class="headerlink" title="2.8、LLEN-返回列表的长度"></a>2.8、LLEN-返回列表的长度</h2><p><strong>LLEN key</strong></p>
+<p>返回列表 <code>key</code> 的长度。</p>
+<p>如果 <code>key</code> 不存在，则 <code>key</code> 被解释为一个空列表，返回 <code>0</code> .如果 <code>key</code> 不是列表类型，返回一个错误。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_llen.png" alt></p>
+<h2 id="2-9、LINDEX-获取列表指定下标的元素"><a href="#2-9、LINDEX-获取列表指定下标的元素" class="headerlink" title="2.9、LINDEX-获取列表指定下标的元素"></a>2.9、LINDEX-获取列表指定下标的元素</h2><p><strong>LINDEX key index</strong></p>
+<p>返回列表 <code>key</code> 中，下标为 <code>index</code> 的元素。</p>
+<p>下标(index)参数 <code>start</code> 和 <code>stop</code> 都以 <code>0</code> 为底，也就是说，以 <code>0</code> 表示列表的第一个元素，以 <code>1</code> 表示列表的第二个元素，以此类推。</p>
+<p>你也可以使用负数下标，以 <code>-1</code> 表示列表的最后一个元素， <code>-2</code> 表示列表的倒数第二个元素，以此类推。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lindex.png" alt></p>
+<h2 id="2-10、LRANGE-获取指定区间内的元素"><a href="#2-10、LRANGE-获取指定区间内的元素" class="headerlink" title="2.10、LRANGE-获取指定区间内的元素"></a>2.10、LRANGE-获取指定区间内的元素</h2><p><strong>LRANGE key start stop</strong></p>
+<p>返回列表 <code>key</code> 中指定区间内的元素，区间以偏移量 <code>start</code> 和 <code>stop</code> 指定。</p>
+<p>下标(index)参数 <code>start</code> 和 <code>stop</code> 都以 <code>0</code> 为底，也就是说，以 <code>0</code> 表示列表的第一个元素，以 <code>1</code> 表示列表的第二个元素，以此类推。</p>
+<p>你也可以使用负数下标，以 <code>-1</code> 表示列表的最后一个元素， <code>-2</code> 表示列表的倒数第二个元素，以此类推。</p>
+<blockquote>
+<p>注意：这个区间是一个闭区间，两端的元素都会纳入其中</p>
+</blockquote>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lrange.png" alt></p>
+<h2 id="2-11、LSET设置指定下标的值"><a href="#2-11、LSET设置指定下标的值" class="headerlink" title="2.11、LSET设置指定下标的值"></a>2.11、LSET设置指定下标的值</h2><p><strong>LSET key index value</strong></p>
+<p>将列表 <code>key</code> 下标为 <code>index</code> 的元素的值设置为 <code>value</code> 。</p>
+<p>当 <code>index</code> 参数超出范围，或对一个空列表( <code>key</code> 不存在)进行 <a href="http://redisdoc.com/list/lset.html#lset" target="_blank" rel="noopener">LSET</a> 时，返回一个错误。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_lset.png" alt></p>
+<h2 id="2-12、BLPOP-LPOP阻塞版本，list没有元素时，等待超时返回"><a href="#2-12、BLPOP-LPOP阻塞版本，list没有元素时，等待超时返回" class="headerlink" title="2.12、BLPOP-LPOP阻塞版本，list没有元素时，等待超时返回"></a>2.12、BLPOP-LPOP阻塞版本，list没有元素时，等待超时返回</h2><p><strong>BLPOP key [key …] timeout</strong></p>
+<p>它是 LPOP key 命令的阻塞版本，当给定列表内没有任何元素可供弹出的时候，连接将被 BLPOP命令阻塞，直到等待超时或发现可弹出元素为止。</p>
+<p>当给定多个 <code>key</code> 参数时，按参数 <code>key</code> 的先后顺序依次检查各个列表，弹出第一个非空列表的头元素。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_blpop.png" alt></p>
+<h2 id="2-13、BRPOP-RPOP阻塞版本，list没有元素时，等待超时返回"><a href="#2-13、BRPOP-RPOP阻塞版本，list没有元素时，等待超时返回" class="headerlink" title="2.13、BRPOP-RPOP阻塞版本，list没有元素时，等待超时返回"></a>2.13、BRPOP-RPOP阻塞版本，list没有元素时，等待超时返回</h2><p><strong>BRPOP key [key …] timeout</strong></p>
+<p>它是 RPOP key 命令的阻塞版本，当给定列表内没有任何元素可供弹出的时候，连接将被 BRPOP命令阻塞，直到等待超时或发现可弹出元素为止。</p>
+<p>当给定多个 <code>key</code> 参数时，按参数 <code>key</code> 的先后顺序依次检查各个列表，弹出第一个非空列表的尾部元素。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_brpop.png" alt></p>
+<h2 id="2-14、LTRIM-保留指定区间的元素"><a href="#2-14、LTRIM-保留指定区间的元素" class="headerlink" title="2.14、LTRIM-保留指定区间的元素"></a>2.14、LTRIM-保留指定区间的元素</h2><p><strong>LTRIM key start stop</strong></p>
+<p>对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。</p>
+<p>举个例子，执行命令 <code>LTRIM list 0 2</code> ，表示只保留列表 <code>list</code> 的前三个元素，其余元素全部删除。</p>
+<p>下标(index)参数 <code>start</code> 和 <code>stop</code> 都以 <code>0</code> 为底，也就是说，以 <code>0</code> 表示列表的第一个元素，以 <code>1</code> 表示列表的第二个元素，以此类推。</p>
+<p>你也可以使用负数下标，以 <code>-1</code> 表示列表的最后一个元素， <code>-2</code> 表示列表的倒数第二个元素，以此类推。</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_ltrim.png" alt></p>
+<h1 id="3、内部实现"><a href="#3、内部实现" class="headerlink" title="3、内部实现"></a>3、内部实现</h1><p>Redis中的列表对象在版本3.2之前，列表底层的编码是 ziplist 和 linkedlist 实现的， 但是在版本3.2之后，重新引入了一个 quicklist 的数据结构，列表的底层都由quicklist实现</p>
+<h2 id="3-1、ziplist压缩列表"><a href="#3-1、ziplist压缩列表" class="headerlink" title="3.1、ziplist压缩列表"></a>3.1、ziplist压缩列表</h2><p>在mylist列表中添加三个元素</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpush mylist first second three</span><br></pre></td></tr></table></figure>
+
+<p>具体实现如图所示</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_zliplist.png" alt></p>
+<p>关于ziplist结构及字段含义及内部实现请参照<a href="http://itzones.cn/2020/06/30/Redis基本数据类型之Hash/#3-1、ziplist压缩列表" target="_blank" rel="noopener">《Redis基本数据类型之Hash-压缩列表》</a></p>
+<h2 id="3-2、linkedlist-链表"><a href="#3-2、linkedlist-链表" class="headerlink" title="3.2、linkedlist 链表"></a>3.2、linkedlist 链表</h2><p>在mylist列表中添加三个元素</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpush mylist first second three</span><br></pre></td></tr></table></figure>
+
+<p>具体实现如图所示</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_linklist.png" alt></p>
+<p>下面我们分析下linkedlist </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">    <span class="comment">// 表头节点</span></span><br><span class="line">    listNode *head;</span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    listNode *tail;</span><br><span class="line">    <span class="comment">// 节点值复制函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值释放函数</span></span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值对比函数</span></span><br><span class="line">    <span class="keyword">int</span> (*match)(<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 链表中包含的节点数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;</span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这就是linklist链表的定义，我们看到最关键的就是节点信息</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span></span><br><span class="line">    <span class="comment">//前置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="comment">//后置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="comment">//节点的值</span></span><br><span class="line">    <span class="keyword">void</span> *value;</span><br><span class="line">&#125; listNode;</span><br></pre></td></tr></table></figure>
+
+<p>由此我们发现每个节点中都会记录前后节点的指针信息，通过next和prev就会组成双端链表</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_zliplist_node.png" alt></p>
+<p>完整的结构</p>
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_zliplist_node_wz.png" alt></p>
+<h2 id="3-3、quicklist快速列表"><a href="#3-3、quicklist快速列表" class="headerlink" title="3.3、quicklist快速列表"></a>3.3、quicklist快速列表</h2><p>使用quicklist快速列表的原因：</p>
+<blockquote>
+<p>双向链表在插入节点上复杂度很低，但它的内存开销很大，每个节点的地址不连续，容易产生内存碎片。</p>
+<p>ziplist是存储在一段连续的内存上，存储效率高，但是它不利于修改操作，插入和删除数都很麻烦，复杂度高，而且其需要频繁的申请释放内存，特别是ziplist中数据较多的情况下，搬移内存数据太费时！</p>
+</blockquote>
+<p>quicklist 是一个双向链表，并且是一个 ziplist 的双向链表，也就是说 quicklist 的每个节点都是一个 ziplist。</p>
+<p>我们看下quicklist定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklist</span> &#123;</span></span><br><span class="line">    <span class="comment">// 表头节点</span></span><br><span class="line">    quicklistNode *head;</span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    quicklistNode *tail;</span><br><span class="line">    <span class="comment">// 所有ziplist中entry数量即列表中所有数据项的个数总和</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> count;        <span class="comment">/* total count of all entries in all ziplists */</span></span><br><span class="line">    <span class="comment">// quicklist节点的个数 </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;          <span class="comment">/* number of quicklistNodes */</span></span><br><span class="line">    <span class="comment">// ziplist大小限定，由list-max-ziplist-size给定</span></span><br><span class="line">    <span class="keyword">int</span> fill : QL_FILL_BITS;              <span class="comment">/* fill factor for individual nodes */</span></span><br><span class="line">    <span class="comment">// 节点压缩深度设置，由list-compress-depth给定</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> compress : QL_COMP_BITS; <span class="comment">/* depth of end nodes not to compress;0=off */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> bookmark_count: QL_BM_BITS;</span><br><span class="line">    quicklistBookmark bookmarks[];</span><br><span class="line">&#125; quicklist;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点字段说明</strong>：</p>
+<p><strong>fill</strong> ：ziplist 中 entry 能保存的数量,由 list-max-ziplist-size 配置项控制，表示了单个节点(quicklistNode)的负载比例(fill factor)，<strong><u>负数</u></strong>限制 quicklistNode 中的 ziplist 的<strong><u>字节长度</u></strong>, <strong><u>正数</u></strong>限制 quicklistNode 中的 ziplist 的最大<strong><u>长度</u></strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-5: 最大存储空间: 64 Kb &lt;-- 通常情况下不要设置这个值</span><br><span class="line">-4: 最大存储空间: 32 Kb &lt;-- 非常不推荐</span><br><span class="line">-3: 最大存储空间: 16 Kb &lt;-- 不推荐</span><br><span class="line">-2: 最大存储空间: 8 Kb &lt;-- 推荐</span><br><span class="line">-1: 最大存储空间: 4 Kb &lt;-- 推荐</span><br><span class="line">对于正整数则表示最多能存储到你设置的那个值, 当前的节点就装满了</span><br><span class="line">通常在 -2 (8 Kb size) 或 -1 (4 Kb size) 时, 性能表现最好</span><br></pre></td></tr></table></figure>
+
+<p><strong>compress</strong> ：一般收尾两端操作较频繁，中部操作相对较少，所以redis提供压缩深度配置，压缩深度,由 list-compress-depth 配置项控制，表示 quicklist 中的节点 quicklistNode, 除开最两端的 compress 个节点之后, 中间的节点都会被压缩（LZF压缩算法）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0: 是个特殊值，表示都不压缩。这是Redis的默认值。</span><br><span class="line">1: 表示quicklist两端各有1个节点不压缩，中间的节点压缩。</span><br><span class="line">2: 表示quicklist两端各有2个节点不压缩，中间的节点压缩。</span><br><span class="line">3: 表示quicklist两端各有3个节点不压缩，中间的节点压缩。</span><br><span class="line">依此类推</span><br></pre></td></tr></table></figure>
+
+<p>看完整体我们看下具体节点的信息：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> &#123;</span></span><br><span class="line">    <span class="comment">// 前置节点指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="comment">// 后置节点指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">quicklistNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="comment">// 数据指针，如果没有被压缩，就指向ziplist结构，反之指向quicklistLZF结构</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *zl;</span><br><span class="line">    <span class="comment">// 表示指向ziplist结构的总长度(内存占用长度)</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> sz;             <span class="comment">/* ziplist size in bytes */</span></span><br><span class="line">    <span class="comment">// ziplist里面包含的数据项个数</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> count : <span class="number">16</span>;     <span class="comment">/* count of items in ziplist */</span></span><br><span class="line">    <span class="comment">// 编码方式，1--ziplist，2--quicklistLZF</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> encoding : <span class="number">2</span>;   <span class="comment">/* RAW==1 or LZF==2 */</span></span><br><span class="line">    <span class="comment">// 预留字段，存放数据的方式，1--NONE，2--ziplist</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> container : <span class="number">2</span>;  <span class="comment">/* NONE==1 or ZIPLIST==2 */</span></span><br><span class="line">    <span class="comment">// 解压标记，当查看一个被压缩的数据时，需要暂时解压，标记此参数为1，之后再重新进行压缩</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> recompress : <span class="number">1</span>; <span class="comment">/* was this node previous compressed? */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> attempted_compress : <span class="number">1</span>; <span class="comment">/* node can't compress; too small */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> extra : <span class="number">10</span>; <span class="comment">/* more bits to steal for future usage */</span></span><br><span class="line">&#125; quicklistNode;</span><br></pre></td></tr></table></figure>
+
+<p>quicklistLZF</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">quicklistLZF</span> &#123;</span></span><br><span class="line">    <span class="comment">// LZF压缩后占用的字节数</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> sz; <span class="comment">/* LZF size in bytes*/</span></span><br><span class="line">    <span class="comment">// 柔性数组，指向数据部分</span></span><br><span class="line">    <span class="keyword">char</span> compressed[];</span><br><span class="line">&#125; quicklistLZF;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://itzones.cn/2020/07/03/Redis基本数据类型之List/redis_list_quicklist.png" alt></p>
+<h1 id="4、使用场景"><a href="#4、使用场景" class="headerlink" title="4、使用场景"></a>4、使用场景</h1><p>lpush + lpop = stack(栈)</p>
+<p>lpush + rpop = queue(队列)</p>
+<p>lpush + ltrim = capped collection(有限集合)</p>
+<p>lpush + brpop = message queue(消息队列)</p>
+
+      
+	 <!-- 添加版权声明 -->
+		
+		
+		  <div class="declare" hidden="hidden"></div>
+		
+	<!-- 添加版权声明 -->
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">redis LinkedList</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis QuickList</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/redis//" class="article-tag-list-link color1">redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/03/Redis基本数据类型之List/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Redis基本数据类型之Hash" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -581,102 +789,6 @@
 
 
   
-    <article id="post-Redis基本数据类型之String" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/15/Redis基本数据类型之String/">Redis基本数据类型之String</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/15/Redis基本数据类型之String/" class="archive-article-date">
-  	<time datetime="2020-05-15T00:43:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Redis的基本数据类型有五种，string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)。字符串String又是最简单、最常用的数据类型，本节我们重点探讨其基本使用、底层存储原理、使用场景等。</p>
-        
-          <a class="article-more-a" href="/2020/05/15/Redis基本数据类型之String/#more">more >></a>
-        
-      
-	 <!-- 添加版权声明 -->
-		
-		
-		  <div class="declare" hidden="hidden"></div>
-		
-	<!-- 添加版权声明 -->
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">redis String</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">redis SDS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/redis//" class="article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/15/Redis基本数据类型之String/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -790,7 +902,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
+                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -802,7 +914,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Java基础</a>
+                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -814,15 +926,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -838,15 +950,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Clean</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka Log Compaction</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">kafka消费位移设置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -859,6 +971,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ACL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -878,7 +994,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+                <a href="javascript:void(0)" class="js-tag color2">redis LinkedList</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis QuickList</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -914,10 +1034,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">内存映射</a>
               </li>
              
@@ -931,6 +1047,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -950,11 +1070,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
+                <a href="javascript:void(0)" class="js-tag color3">PushConsumer</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">PushConsumer</a>
+                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -970,19 +1090,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
+                <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -994,7 +1110,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+                <a href="javascript:void(0)" class="js-tag color5">消费位置</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1003,6 +1119,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1019,14 +1147,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Sping属性注入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
