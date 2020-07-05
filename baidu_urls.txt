@@ -1,4 +1,4 @@
-https://www.itzones.cn/2020/07/03/Redis基本数据类型之List/
+https://www.itzones.cn/2020/07/05/Redis基本数据类型之List/
 https://www.itzones.cn/2020/06/30/Redis基本数据类型之Hash/
 https://www.itzones.cn/2020/06/01/RocketMQ推送消费源码分析-消费处理/
 https://www.itzones.cn/2020/05/31/RocketMQ推送消费源码分析-重平衡/
