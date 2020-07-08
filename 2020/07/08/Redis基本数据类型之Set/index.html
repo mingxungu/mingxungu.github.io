@@ -9,13 +9,13 @@
   <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Redis基本数据类型之Set | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。 1、简单介绍Redis 的 Set集合中值的排列是无序的,是唯一的，这就意味着集合中不能出现重复的数据,集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员) 2、常用命令2.1、SADD-添加元素SADD key member [member …] 将一个或多个 m">
+  <meta name="description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。">
 <meta name="keywords" content="redis intset">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis基本数据类型之Set">
 <meta property="og:url" content="https://www.itzones.cn/2020/07/08/Redis基本数据类型之Set/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。 1、简单介绍Redis 的 Set集合中值的排列是无序的,是唯一的，这就意味着集合中不能出现重复的数据,集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员) 2、常用命令2.1、SADD-添加元素SADD key member [member …] 将一个或多个 m">
+<meta property="og:description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sadd.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sismember.png">
@@ -32,10 +32,10 @@
 <meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sdiffstore.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_inset.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_dict.png">
-<meta property="og:updated_time" content="2020-07-08T22:37:35.075Z">
+<meta property="og:updated_time" content="2020-07-08T22:40:02.269Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基本数据类型之Set">
-<meta name="twitter:description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。 1、简单介绍Redis 的 Set集合中值的排列是无序的,是唯一的，这就意味着集合中不能出现重复的数据,集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员) 2、常用命令2.1、SADD-添加元素SADD key member [member …] 将一个或多个 m">
+<meta name="twitter:description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。">
 <meta name="twitter:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sadd.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -245,6 +245,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。</p>
+<a id="more"></a>
+
 <h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis 的 Set集合中值的排列是<strong><u>无序</u></strong>的,是<strong><u>唯一</u></strong>的，这就意味着集合中不能出现重复的数据,集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员)</p>
 <h1 id="2、常用命令"><a href="#2、常用命令" class="headerlink" title="2、常用命令"></a>2、常用命令</h1><h2 id="2-1、SADD-添加元素"><a href="#2-1、SADD-添加元素" class="headerlink" title="2.1、SADD-添加元素"></a>2.1、SADD-添加元素</h2><p><strong>SADD key member [member …]</strong></p>
 <p>将一个或多个 <code>member</code> 元素加入到集合 <code>key</code> 当中，已经存在于集合的 <code>member</code> 元素将被忽略。</p>

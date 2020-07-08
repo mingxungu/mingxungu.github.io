@@ -9,13 +9,13 @@
   <link rel="dns-prefetch" href="https://www.itzones.cn">
   <title>Redis基本数据类型之ZSet | IT小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。 1、简单介绍Redis 有序集合和集合一样也是string类型元素的集合,且不允许重复的成员。 不同的是每个元素都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。 有序集合的成员是唯一的,但分数(score)却可">
+  <meta name="description" content="Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。">
 <meta name="keywords" content="redis SkipList">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis基本数据类型之ZSet">
 <meta property="og:url" content="https://www.itzones.cn/2020/07/11/Redis基本数据类型之ZSet/index.html">
 <meta property="og:site_name" content="IT小栈">
-<meta property="og:description" content="Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。 1、简单介绍Redis 有序集合和集合一样也是string类型元素的集合,且不允许重复的成员。 不同的是每个元素都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。 有序集合的成员是唯一的,但分数(score)却可">
+<meta property="og:description" content="Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之ZSet/redis_zset_zadd.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之ZSet/redis_zset_zscore.png">
@@ -31,10 +31,10 @@
 <meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之ZSet/ziplist_yl.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之ZSet/redis_skiplist_jg.png">
 <meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之ZSet/redis_skiplist.png">
-<meta property="og:updated_time" content="2020-07-08T22:37:49.675Z">
+<meta property="og:updated_time" content="2020-07-08T22:39:40.529Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基本数据类型之ZSet">
-<meta name="twitter:description" content="Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。 1、简单介绍Redis 有序集合和集合一样也是string类型元素的集合,且不允许重复的成员。 不同的是每个元素都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。 有序集合的成员是唯一的,但分数(score)却可">
+<meta name="twitter:description" content="Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。">
 <meta name="twitter:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之ZSet/redis_zset_zadd.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
@@ -244,6 +244,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Redis ZSet相对于其他四种常用的数据类型，更具吸引力，因为其在很多应用场景中都在使用，如最常见的就是网站排名、微博排名、热点话题等等。</p>
+<a id="more"></a>
+
 <h1 id="1、简单介绍"><a href="#1、简单介绍" class="headerlink" title="1、简单介绍"></a>1、简单介绍</h1><p>Redis 有序集合和集合一样也是string类型元素的集合,且不允许重复的成员。</p>
 <p>不同的是每个元素都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。</p>
 <p>有序集合的成员是唯一的,但分数(score)却可以重复。</p>
