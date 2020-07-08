@@ -13,30 +13,30 @@
 <meta name="keywords" content="redis intset">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis基本数据类型之Set">
-<meta property="og:url" content="https://www.itzones.cn/2020/07/11/Redis基本数据类型之Set/index.html">
+<meta property="og:url" content="https://www.itzones.cn/2020/07/08/Redis基本数据类型之Set/index.html">
 <meta property="og:site_name" content="IT小栈">
 <meta property="og:description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。 1、简单介绍Redis 的 Set集合中值的排列是无序的,是唯一的，这就意味着集合中不能出现重复的数据,集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员) 2、常用命令2.1、SADD-添加元素SADD key member [member …] 将一个或多个 m">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sadd.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sismember.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_spop.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_srandmember.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_srem.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_scard.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_smembers.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sinter.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sinterstore.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sunion.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sunionstore.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sdiff.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sdiffstore.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_inset.png">
-<meta property="og:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_dict.png">
-<meta property="og:updated_time" content="2020-07-08T07:54:30.000Z">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sadd.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sismember.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_spop.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_srandmember.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_srem.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_scard.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_smembers.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sinter.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sinterstore.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sunion.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sunionstore.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sdiff.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sdiffstore.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_inset.png">
+<meta property="og:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_dict.png">
+<meta property="og:updated_time" content="2020-07-08T22:37:35.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基本数据类型之Set">
 <meta name="twitter:description" content="Redis 的 Set 最常使用的数据结构之一。特点就是无序、值唯一，可以应用很多场合。 1、简单介绍Redis 的 Set集合中值的排列是无序的,是唯一的，这就意味着集合中不能出现重复的数据,集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员) 2、常用命令2.1、SADD-添加元素SADD key member [member …] 将一个或多个 m">
-<meta name="twitter:image" content="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sadd.png">
+<meta name="twitter:image" content="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sadd.png">
   
     <link rel="alternative" href="/atom.xml" title="IT小栈" type="application/atom+xml">
   
@@ -236,8 +236,8 @@
   
 
         
-        <a href="/2020/07/11/Redis基本数据类型之Set/" class="archive-article-date">
-  	<time datetime="2020-07-11T02:55:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-11</time>
+        <a href="/2020/07/08/Redis基本数据类型之Set/" class="archive-article-date">
+  	<time datetime="2020-07-08T02:55:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-08</time>
 </a>
         
       </header>
@@ -249,48 +249,48 @@
 <h1 id="2、常用命令"><a href="#2、常用命令" class="headerlink" title="2、常用命令"></a>2、常用命令</h1><h2 id="2-1、SADD-添加元素"><a href="#2-1、SADD-添加元素" class="headerlink" title="2.1、SADD-添加元素"></a>2.1、SADD-添加元素</h2><p><strong>SADD key member [member …]</strong></p>
 <p>将一个或多个 <code>member</code> 元素加入到集合 <code>key</code> 当中，已经存在于集合的 <code>member</code> 元素将被忽略。</p>
 <p>假如 <code>key</code> 不存在，则创建一个只包含 <code>member</code> 元素作成员的集合。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sadd.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sadd.png" alt></p>
 <h2 id="2-2、SISMEMBER-元素是否存在集合中"><a href="#2-2、SISMEMBER-元素是否存在集合中" class="headerlink" title="2.2、SISMEMBER-元素是否存在集合中"></a>2.2、SISMEMBER-元素是否存在集合中</h2><p><strong>SISMEMBER key member</strong></p>
 <p>判断 <code>member</code> 元素是否集合 <code>key</code> 的成员。如果 <code>member</code> 元素是集合的成员，返回 <code>1</code> 。 如果 <code>member</code> 元素不是集合的成员，或 <code>key</code> 不存在，返回 <code>0</code> 。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sismember.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sismember.png" alt></p>
 <h2 id="2-3、SPOP-随机移除并返回集合中的一个元素"><a href="#2-3、SPOP-随机移除并返回集合中的一个元素" class="headerlink" title="2.3、SPOP-随机移除并返回集合中的一个元素"></a>2.3、SPOP-随机移除并返回集合中的一个元素</h2><p><strong>SPOP key</strong></p>
 <p><strong><u>移除</u>*</strong>并返回集合中的一个随机元素。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_spop.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_spop.png" alt></p>
 <h2 id="2-4、SRANDMEMBER-随机返回一个元素"><a href="#2-4、SRANDMEMBER-随机返回一个元素" class="headerlink" title="2.4、SRANDMEMBER-随机返回一个元素"></a>2.4、SRANDMEMBER-随机返回一个元素</h2><p><strong>SRANDMEMBER key [count]</strong></p>
 <p>如果命令执行时，只提供了 <code>key</code> 参数，那么返回集合中的一个随机元素</p>
 <ul>
 <li>如果 <code>count</code> 为正数，且小于集合基数，那么命令返回一个包含 <code>count</code> 个元素的数组，数组中的元素<strong>各不相同</strong>。如果 <code>count</code> 大于等于集合基数，那么返回整个集合。</li>
 <li>如果 <code>count</code> 为负数，那么命令返回一个数组，数组中的元素<strong>可能会重复出现多次</strong>，而数组的长度为 <code>count</code> 的绝对值。</li>
 </ul>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_srandmember.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_srandmember.png" alt></p>
 <h2 id="2-5、SREM-移除集合中元素"><a href="#2-5、SREM-移除集合中元素" class="headerlink" title="2.5、SREM-移除集合中元素"></a>2.5、SREM-移除集合中元素</h2><p><strong>SREM key member [member …]</strong></p>
 <p>移除集合 <code>key</code> 中的一个或多个 <code>member</code> 元素，不存在的 <code>member</code> 元素会被忽略。</p>
 <p>当 <code>key</code> 不是集合类型，返回一个错误。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_srem.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_srem.png" alt></p>
 <h2 id="2-6、SCARD-集合中元素的数量"><a href="#2-6、SCARD-集合中元素的数量" class="headerlink" title="2.6、SCARD-集合中元素的数量"></a>2.6、SCARD-集合中元素的数量</h2><p><strong>SCARD key</strong></p>
 <p>集合中元素的数量。当 <code>key</code> 不存在时，返回 <code>0</code> 。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_scard.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_scard.png" alt></p>
 <h2 id="2-7、SMEMBERS-集合中所有元素"><a href="#2-7、SMEMBERS-集合中所有元素" class="headerlink" title="2.7、SMEMBERS-集合中所有元素"></a>2.7、SMEMBERS-集合中所有元素</h2><p><strong>SMEMBERS key</strong></p>
 <p>返回集合 <code>key</code> 中的所有成员。不存在的 <code>key</code> 被视为空集合</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_smembers.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_smembers.png" alt></p>
 <h2 id="2-8、SINTER-多个集合的交集"><a href="#2-8、SINTER-多个集合的交集" class="headerlink" title="2.8、SINTER-多个集合的交集"></a>2.8、SINTER-多个集合的交集</h2><p><strong>SINTER key [key …]</strong></p>
 <p>获取多个集合的交集。当给定集合当中有一个空集时，结果也为空集(根据集合运算定律)</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sinter.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sinter.png" alt></p>
 <h2 id="2-9、SINTERSTORE-多个集合的交集保存到新的集合中"><a href="#2-9、SINTERSTORE-多个集合的交集保存到新的集合中" class="headerlink" title="2.9、SINTERSTORE-多个集合的交集保存到新的集合中"></a>2.9、SINTERSTORE-多个集合的交集保存到新的集合中</h2><p><strong>SINTERSTORE destination key [key …]</strong></p>
 <p>获取多个集合的交集并放入 <code>destination</code> 集合中。如果 <code>destination</code> 集合已经存在，则将其覆盖。<code>destination</code> 可以是 <code>key</code> 本身</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sinterstore.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sinterstore.png" alt></p>
 <h2 id="2-10、SUNION–多个集合的并集"><a href="#2-10、SUNION–多个集合的并集" class="headerlink" title="2.10、SUNION–多个集合的并集"></a>2.10、SUNION–多个集合的并集</h2><p><strong>SUNION key [key …]</strong></p>
 <p>返回一个集合的全部成员，该集合是所有给定集合的并集。不存在的 <code>key</code> 被视为空集。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sunion.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sunion.png" alt></p>
 <h2 id="2-11、SUNIONSTORE-多个集合的并集保存到新的集合中"><a href="#2-11、SUNIONSTORE-多个集合的并集保存到新的集合中" class="headerlink" title="2.11、SUNIONSTORE-多个集合的并集保存到新的集合中"></a>2.11、SUNIONSTORE-多个集合的并集保存到新的集合中</h2><p><strong>SUNIONSTORE destination key [key …]</strong></p>
 <p>获取多个集合的并集并放入 <code>destination</code> 集合中。如果 <code>destination</code> 集合已经存在，则将其覆盖。<code>destination</code> 可以是 <code>key</code> 本身</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sunionstore.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sunionstore.png" alt></p>
 <h2 id="2-12、SDIFF-集合差集"><a href="#2-12、SDIFF-集合差集" class="headerlink" title="2.12、SDIFF-集合差集"></a>2.12、SDIFF-集合差集</h2><p><strong>SDIFF key [key …]</strong></p>
 <p>返回一个集合的全部成员，该集合是所有给定集合之间的差集</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sdiff.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sdiff.png" alt></p>
 <h2 id="2-13、SDIFFSTORE-集合差集保存到新的集合中"><a href="#2-13、SDIFFSTORE-集合差集保存到新的集合中" class="headerlink" title="2.13、SDIFFSTORE-集合差集保存到新的集合中"></a>2.13、SDIFFSTORE-集合差集保存到新的集合中</h2><p><strong>SDIFFSTORE destination key [key …]</strong></p>
 <p>返回一个集合的全部成员，该集合是所有给定集合之间的差集保存到新的集合中。</p>
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_set_sdiffstore.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_set_sdiffstore.png" alt></p>
 <h1 id="3、内部实现"><a href="#3、内部实现" class="headerlink" title="3、内部实现"></a>3、内部实现</h1><p>集合对象的编码可以是 <code>intset</code> 或者 <code>hashtable</code>(字典) 。</p>
 <h2 id="3-1、intset整型集合"><a href="#3-1、intset整型集合" class="headerlink" title="3.1、intset整型集合"></a>3.1、intset整型集合</h2><p>redis中intset是一个整数集合, 只能存储<strong><u>整数类型</u></strong>的数据, 可以是16位, 32位, 或者是64位, 是以升序排列的数组进行保存数据。</p>
 <p>查看其数据结构</p>
@@ -300,8 +300,8 @@
 <p>举例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SADD numbers 1 3 5</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_inset.png" alt></p>
-<h2 id="3-2、hashtable字典"><a href="#3-2、hashtable字典" class="headerlink" title="3.2、hashtable字典"></a>3.2、hashtable字典</h2><p><img src="https://itzones.cn/2020/07/11/Redis基本数据类型之Set/redis_dict.png" alt></p>
+<p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_inset.png" alt></p>
+<h2 id="3-2、hashtable字典"><a href="#3-2、hashtable字典" class="headerlink" title="3.2、hashtable字典"></a>3.2、hashtable字典</h2><p><img src="https://itzones.cn/2020/07/08/Redis基本数据类型之Set/redis_dict.png" alt></p>
 <p>关于字典相关的定义操作请参照<a href="https://itzones.cn/2020/06/30/Redis基本数据类型之Hash/#3-2、hashtable-字典" target="_blank" rel="noopener">《Redis基本数据类型之Hash-字典》</a></p>
 <h2 id="3-3、转换"><a href="#3-3、转换" class="headerlink" title="3.3、转换"></a>3.3、转换</h2><p>当集合对象可以同时满足以下两个条件时， 对象使用 <code>intset</code> 编码：</p>
 <blockquote>
@@ -324,7 +324,7 @@
 			
 			<br>
 			<strong>本文链接：</strong>
-			<a href="https://www.itzones.cn/2020/07/11/Redis基本数据类型之Set/" title="Redis基本数据类型之Set" target="_blank">https://www.itzones.cn/2020/07/11/Redis基本数据类型之Set/</a>
+			<a href="https://www.itzones.cn/2020/07/08/Redis基本数据类型之Set/" title="Redis基本数据类型之Set" target="_blank">https://www.itzones.cn/2020/07/08/Redis基本数据类型之Set/</a>
 			<br>
 			<strong>版权声明：</strong>
 			本作品采用
@@ -416,7 +416,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/07/11/Redis基本数据类型之Set/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://www.itzones.cn/2020/07/08/Redis基本数据类型之Set/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -430,7 +430,7 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/07/12/Redis基本数据类型之ZSet/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/07/11/Redis基本数据类型之ZSet/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
@@ -648,15 +648,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka副本机制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka ISR</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">kafka位移提交</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -684,19 +684,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">kafka分区算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">kafka生产者拦截器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">kafka Rebalance</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -708,6 +704,30 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">redis Ziplist</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis Hashtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">redis LinkedList</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis QuickList</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">redis intset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">redis String</a>
               </li>
              
@@ -716,15 +736,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">redis intset</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">redis SkipList</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -736,11 +748,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
+                <a href="javascript:void(0)" class="js-tag color4">redis 简介</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
+                <a href="javascript:void(0)" class="js-tag color4">Redis Cluster</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -752,11 +764,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+                <a href="javascript:void(0)" class="js-tag color5">事务消息</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -768,11 +776,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
+                <a href="javascript:void(0)" class="js-tag color5">同步刷盘</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+                <a href="javascript:void(0)" class="js-tag color5">异步刷盘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">消息存储文件</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -784,11 +796,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">RocketMQ入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">推拉模式</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">PushConsumer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">消费结果处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">rebalance</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -800,15 +824,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">PushConsumer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">rebalance</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息过滤</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -824,10 +844,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息重试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">运维命令</a>
               </li>
              
@@ -837,14 +853,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shiro入门</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -864,27 +872,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">springCloud</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Eureka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">redis Ziplist</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis Hashtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">redis LinkedList</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis QuickList</a>
               </li>
             
             <div class="clearfix"></div>
